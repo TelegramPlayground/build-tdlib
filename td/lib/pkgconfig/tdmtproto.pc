@@ -1,0 +1,10 @@
+prefix=/home/runner/work/tglib-bench-tdlib-build/td
+
+Name: tdmtproto
+Description: Telegram Library - MTProto implementation
+Version: 1.8.46
+
+CFlags: -I"${prefix}/include"
+Libs: -L"${prefix}/lib" -ltdmtproto
+Requires.private: tdactor tdnet tdutils
+Libs.private: -L"/usr/lib/x86_64-linux-gnu" -l:libcrypto.so -ldl -L"/usr/lib/x86_64-linux-gnu" -l:libz.so

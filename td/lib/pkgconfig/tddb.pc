@@ -1,0 +1,9 @@
+prefix=/home/runner/work/tglib-bench-tdlib-build/td
+
+Name: tddb
+Description: Telegram Library - Database
+Version: 1.8.46
+
+CFlags: -I"${prefix}/include"
+Libs: -L"${prefix}/lib" -ltddb
+Requires.private: tdactor tdutils tdsqlite

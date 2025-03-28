@@ -1,0 +1,9 @@
+prefix=/home/runner/work/tglib-bench-tdlib-build/td
+
+Name: tdjson_private
+Description: Telegram Library - JSON interface (private)
+Version: 1.8.46
+
+CFlags: -I"${prefix}/include"
+Libs: -L"${prefix}/lib" -ltdjson_private
+Requires.private: tdclient tdutils
