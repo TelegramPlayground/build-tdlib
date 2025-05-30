@@ -11,7 +11,7 @@ cmake --build . --target install -j 4
 cd ..
 cd ..
 rm -rf tdlib
-TDV=$(ls -1 td/lib/libtdjson.so* | tail -n1 | cut -d. -f 2)
+TDV=$(ls -1 td/lib/libtdjson.so* | tail -n1 | cut -d. -f 3)
 git add -A td
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
