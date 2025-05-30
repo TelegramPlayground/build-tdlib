@@ -1,8 +1,8 @@
-prefix=/home/runner/work/tglib-bench-tdlib-build/td
+prefix=/home/runner/work/build-tdlib/td
 
 Name: tdmtproto
 Description: Telegram Library - MTProto implementation
-Version: 1.8.46
+Version: 1.8.49
 
 CFlags: -I"${prefix}/include"
 Libs: -L"${prefix}/lib" -ltdmtproto

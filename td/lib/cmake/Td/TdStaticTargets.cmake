@@ -19,7 +19,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_cmake_targets_defined "")
 set(_cmake_targets_not_defined "")
 set(_cmake_expected_targets "")
-foreach(_cmake_expected_target IN ITEMS Td::tdutils Td::tdactor Td::tdnet Td::tdsqlite Td::tddb Td::tdjson_static Td::TdJsonStatic Td::tdjson_private Td::tdcore Td::tdmtproto Td::tdclient Td::TdStatic Td::tdapi)
+foreach(_cmake_expected_target IN ITEMS Td::tdutils Td::tde2e Td::tdactor Td::tdnet Td::tdsqlite Td::tddb Td::tdjson_static Td::TdJsonStatic Td::tdjson_private Td::tdcore Td::tdmtproto Td::tdclient Td::TdStatic Td::tdapi)
   list(APPEND _cmake_expected_targets "${_cmake_expected_target}")
   if(TARGET "${_cmake_expected_target}")
     list(APPEND _cmake_targets_defined "${_cmake_expected_target}")
@@ -60,6 +60,15 @@ add_library(Td::tdutils STATIC IMPORTED)
 
 set_target_properties(Td::tdutils PROPERTIES
   INTERFACE_LINK_LIBRARIES "/usr/lib/x86_64-linux-gnu/libcrypto.so;\$<LINK_ONLY:dl>;/usr/lib/x86_64-linux-gnu/libz.so;/usr/lib/x86_64-linux-gnu/libz.so"
+)
+
+# Create imported target Td::tde2e
+add_library(Td::tde2e STATIC IMPORTED)
+
+set_target_properties(Td::tde2e PROPERTIES
+  INTERFACE_COMPILE_FEATURES "cxx_std_17"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:Td::tdutils>;/usr/lib/x86_64-linux-gnu/libcrypto.so;\$<LINK_ONLY:dl>;/usr/lib/x86_64-linux-gnu/libz.so"
 )
 
 # Create imported target Td::tdactor
@@ -120,7 +129,7 @@ add_library(Td::tdcore STATIC IMPORTED)
 
 set_target_properties(Td::tdcore PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "Td::tdapi;Td::tdnet;Td::tddb;Td::tdactor;Td::tdutils;\$<LINK_ONLY:Td::tdmtproto>"
+  INTERFACE_LINK_LIBRARIES "Td::tdapi;Td::tdnet;Td::tddb;Td::tdactor;Td::tde2e;Td::tdutils;\$<LINK_ONLY:Td::tdmtproto>"
 )
 
 # Create imported target Td::tdmtproto

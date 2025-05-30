@@ -15,6 +15,16 @@ set_target_properties(Td::tdutils PROPERTIES
 list(APPEND _cmake_import_check_targets Td::tdutils )
 list(APPEND _cmake_import_check_files_for_Td::tdutils "${_IMPORT_PREFIX}/lib/libtdutils.a" )
 
+# Import target "Td::tde2e" for configuration "Release"
+set_property(TARGET Td::tde2e APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(Td::tde2e PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libtde2e.a"
+  )
+
+list(APPEND _cmake_import_check_targets Td::tde2e )
+list(APPEND _cmake_import_check_files_for_Td::tde2e "${_IMPORT_PREFIX}/lib/libtde2e.a" )
+
 # Import target "Td::tdactor" for configuration "Release"
 set_property(TARGET Td::tdactor APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(Td::tdactor PROPERTIES

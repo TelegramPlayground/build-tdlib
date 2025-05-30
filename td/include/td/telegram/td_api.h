@@ -234,6 +234,54 @@ class accentColor final : public Object {
 };
 
 /**
+ * Describes gift types that are accepted by a user.
+ */
+class acceptedGiftTypes final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// True, if unlimited regular gifts are accepted.
+  bool unlimited_gifts_;
+  /// True, if limited regular gifts are accepted.
+  bool limited_gifts_;
+  /// True, if upgraded gifts and regular gifts that can be upgraded for free are accepted.
+  bool upgraded_gifts_;
+  /// True, if Telegram Premium subscription is accepted.
+  bool premium_subscription_;
+
+  /**
+   * Describes gift types that are accepted by a user.
+   */
+  acceptedGiftTypes();
+
+  /**
+   * Describes gift types that are accepted by a user.
+   *
+   * \param[in] unlimited_gifts_ True, if unlimited regular gifts are accepted.
+   * \param[in] limited_gifts_ True, if limited regular gifts are accepted.
+   * \param[in] upgraded_gifts_ True, if upgraded gifts and regular gifts that can be upgraded for free are accepted.
+   * \param[in] premium_subscription_ True, if Telegram Premium subscription is accepted.
+   */
+  acceptedGiftTypes(bool unlimited_gifts_, bool limited_gifts_, bool upgraded_gifts_, bool premium_subscription_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1783521300;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
  * Contains basic information about another user that started a chat with the current user.
  */
 class accountInfo final : public Object {
@@ -1903,6 +1951,45 @@ class authorizationStateWaitPhoneNumber final : public AuthorizationState {
 };
 
 /**
+ * The user must buy Telegram Premium as an in-store purchase to log in. Call checkAuthenticationPremiumPurchase and then setAuthenticationPremiumPurchaseTransaction.
+ */
+class authorizationStateWaitPremiumPurchase final : public AuthorizationState {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the store product that must be bought.
+  string store_product_id_;
+
+  /**
+   * The user must buy Telegram Premium as an in-store purchase to log in. Call checkAuthenticationPremiumPurchase and then setAuthenticationPremiumPurchaseTransaction.
+   */
+  authorizationStateWaitPremiumPurchase();
+
+  /**
+   * The user must buy Telegram Premium as an in-store purchase to log in. Call checkAuthenticationPremiumPurchase and then setAuthenticationPremiumPurchaseTransaction.
+   *
+   * \param[in] store_product_id_ Identifier of the store product that must be bought.
+   */
+  explicit authorizationStateWaitPremiumPurchase(string const &store_product_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -862487743;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
  * TDLib needs the user's email address to authorize. Call setAuthenticationEmailAddress to provide the email address, or directly call checkAuthenticationEmailCode with Apple ID/Google ID token if allowed.
  */
 class authorizationStateWaitEmailAddress final : public AuthorizationState {
@@ -2611,6 +2698,97 @@ class autosaveSettingsScopeChat final : public AutosaveSettingsScope {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1632255255;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class gift;
+
+/**
+ * Describes a gift that is available for purchase.
+ */
+class availableGift final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The gift.
+  object_ptr<gift> gift_;
+  /// Number of gifts that are available for resale.
+  int32 resale_count_;
+  /// The minimum price for the gifts available for resale; 0 if there are no such gifts.
+  int53 min_resale_star_count_;
+  /// The title of the upgraded gift; empty if the gift isn't available for resale.
+  string title_;
+
+  /**
+   * Describes a gift that is available for purchase.
+   */
+  availableGift();
+
+  /**
+   * Describes a gift that is available for purchase.
+   *
+   * \param[in] gift_ The gift.
+   * \param[in] resale_count_ Number of gifts that are available for resale.
+   * \param[in] min_resale_star_count_ The minimum price for the gifts available for resale; 0 if there are no such gifts.
+   * \param[in] title_ The title of the upgraded gift; empty if the gift isn't available for resale.
+   */
+  availableGift(object_ptr<gift> &&gift_, int32 resale_count_, int53 min_resale_star_count_, string const &title_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 850530502;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class availableGift;
+
+/**
+ * Contains a list of gifts that can be sent to another user or channel chat.
+ */
+class availableGifts final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The list of gifts.
+  array<object_ptr<availableGift>> gifts_;
+
+  /**
+   * Contains a list of gifts that can be sent to another user or channel chat.
+   */
+  availableGifts();
+
+  /**
+   * Contains a list of gifts that can be sent to another user or channel chat.
+   *
+   * \param[in] gifts_ The list of gifts.
+   */
+  explicit availableGifts(array<object_ptr<availableGift>> &&gifts_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1450341886;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -4528,6 +4706,84 @@ class businessBotManageBar final : public Object {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+/**
+ * Describes rights of a business bot.
+ */
+class businessBotRights final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours.
+  bool can_reply_;
+  /// True, if the bot can mark incoming private messages as read.
+  bool can_read_messages_;
+  /// True, if the bot can delete sent messages.
+  bool can_delete_sent_messages_;
+  /// True, if the bot can delete any message.
+  bool can_delete_all_messages_;
+  /// True, if the bot can edit name of the business account.
+  bool can_edit_name_;
+  /// True, if the bot can edit bio of the business account.
+  bool can_edit_bio_;
+  /// True, if the bot can edit profile photo of the business account.
+  bool can_edit_profile_photo_;
+  /// True, if the bot can edit username of the business account.
+  bool can_edit_username_;
+  /// True, if the bot can view gifts and amount of Telegram Stars owned by the business account.
+  bool can_view_gifts_and_stars_;
+  /// True, if the bot can sell regular gifts received by the business account.
+  bool can_sell_gifts_;
+  /// True, if the bot can change gift receiving settings of the business account.
+  bool can_change_gift_settings_;
+  /// True, if the bot can transfer and upgrade gifts received by the business account.
+  bool can_transfer_and_upgrade_gifts_;
+  /// True, if the bot can transfer Telegram Stars received by the business account to account of the bot, or use them to upgrade and transfer gifts.
+  bool can_transfer_stars_;
+  /// True, if the bot can post, edit and delete stories.
+  bool can_manage_stories_;
+
+  /**
+   * Describes rights of a business bot.
+   */
+  businessBotRights();
+
+  /**
+   * Describes rights of a business bot.
+   *
+   * \param[in] can_reply_ True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours.
+   * \param[in] can_read_messages_ True, if the bot can mark incoming private messages as read.
+   * \param[in] can_delete_sent_messages_ True, if the bot can delete sent messages.
+   * \param[in] can_delete_all_messages_ True, if the bot can delete any message.
+   * \param[in] can_edit_name_ True, if the bot can edit name of the business account.
+   * \param[in] can_edit_bio_ True, if the bot can edit bio of the business account.
+   * \param[in] can_edit_profile_photo_ True, if the bot can edit profile photo of the business account.
+   * \param[in] can_edit_username_ True, if the bot can edit username of the business account.
+   * \param[in] can_view_gifts_and_stars_ True, if the bot can view gifts and amount of Telegram Stars owned by the business account.
+   * \param[in] can_sell_gifts_ True, if the bot can sell regular gifts received by the business account.
+   * \param[in] can_change_gift_settings_ True, if the bot can change gift receiving settings of the business account.
+   * \param[in] can_transfer_and_upgrade_gifts_ True, if the bot can transfer and upgrade gifts received by the business account.
+   * \param[in] can_transfer_stars_ True, if the bot can transfer Telegram Stars received by the business account to account of the bot, or use them to upgrade and transfer gifts.
+   * \param[in] can_manage_stories_ True, if the bot can post, edit and delete stories.
+   */
+  businessBotRights(bool can_reply_, bool can_read_messages_, bool can_delete_sent_messages_, bool can_delete_all_messages_, bool can_edit_name_, bool can_edit_bio_, bool can_edit_profile_photo_, bool can_edit_username_, bool can_view_gifts_and_stars_, bool can_sell_gifts_, bool can_change_gift_settings_, bool can_transfer_and_upgrade_gifts_, bool can_transfer_stars_, bool can_manage_stories_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1224839038;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class formattedText;
 
 /**
@@ -4663,6 +4919,8 @@ class businessChatLinks final : public Object {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class businessBotRights;
+
 class businessRecipients;
 
 /**
@@ -4682,8 +4940,8 @@ class businessConnectedBot final : public Object {
   int53 bot_user_id_;
   /// Private chats that will be accessible to the bot.
   object_ptr<businessRecipients> recipients_;
-  /// True, if the bot can send messages to the private chats; false otherwise.
-  bool can_reply_;
+  /// Rights of the bot.
+  object_ptr<businessBotRights> rights_;
 
   /**
    * Describes a bot connected to a business account.
@@ -4695,12 +4953,12 @@ class businessConnectedBot final : public Object {
    *
    * \param[in] bot_user_id_ User identifier of the bot.
    * \param[in] recipients_ Private chats that will be accessible to the bot.
-   * \param[in] can_reply_ True, if the bot can send messages to the private chats; false otherwise.
+   * \param[in] rights_ Rights of the bot.
    */
-  businessConnectedBot(int53 bot_user_id_, object_ptr<businessRecipients> &&recipients_, bool can_reply_);
+  businessConnectedBot(int53 bot_user_id_, object_ptr<businessRecipients> &&recipients_, object_ptr<businessBotRights> &&rights_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -330241321;
+  static const std::int32_t ID = -1815439021;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -4709,6 +4967,8 @@ class businessConnectedBot final : public Object {
    */
   void store(TlStorerToString &s, const char *field_name) const final;
 };
+
+class businessBotRights;
 
 /**
  * Describes a connection of the bot with a business account.
@@ -4731,8 +4991,8 @@ class businessConnection final : public Object {
   int53 user_chat_id_;
   /// Point in time (Unix timestamp) when the connection was established.
   int32 date_;
-  /// True, if the bot can send messages to the connected user; false otherwise.
-  bool can_reply_;
+  /// Rights of the bot; may be null if the connection was disabled.
+  object_ptr<businessBotRights> rights_;
   /// True, if the connection is enabled; false otherwise.
   bool is_enabled_;
 
@@ -4748,13 +5008,13 @@ class businessConnection final : public Object {
    * \param[in] user_id_ Identifier of the business user that created the connection.
    * \param[in] user_chat_id_ Chat identifier of the private chat with the user.
    * \param[in] date_ Point in time (Unix timestamp) when the connection was established.
-   * \param[in] can_reply_ True, if the bot can send messages to the connected user; false otherwise.
+   * \param[in] rights_ Rights of the bot; may be null if the connection was disabled.
    * \param[in] is_enabled_ True, if the connection is enabled; false otherwise.
    */
-  businessConnection(string const &id_, int53 user_id_, int53 user_chat_id_, int32 date_, bool can_reply_, bool is_enabled_);
+  businessConnection(string const &id_, int53 user_id_, int53 user_chat_id_, int32 date_, object_ptr<businessBotRights> &&rights_, bool is_enabled_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1144447540;
+  static const std::int32_t ID = -995703933;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -5650,8 +5910,6 @@ class call final : public Object {
   bool is_video_;
   /// Call state.
   object_ptr<CallState> state_;
-  /// Identifier of the group call associated with the call; 0 if the group call isn't created yet. The group call can be received through the method getGroupCall.
-  int32 group_call_id_;
 
   /**
    * Describes a call.
@@ -5666,12 +5924,11 @@ class call final : public Object {
    * \param[in] is_outgoing_ True, if the call is outgoing.
    * \param[in] is_video_ True, if the call is a video call.
    * \param[in] state_ Call state.
-   * \param[in] group_call_id_ Identifier of the group call associated with the call; 0 if the group call isn't created yet. The group call can be received through the method getGroupCall.
    */
-  call(int32 id_, int53 user_id_, bool is_outgoing_, bool is_video_, object_ptr<CallState> &&state_, int32 group_call_id_);
+  call(int32 id_, int53 user_id_, bool is_outgoing_, bool is_video_, object_ptr<CallState> &&state_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1643259734;
+  static const std::int32_t ID = 920360804;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -5840,9 +6097,9 @@ class callDiscardReasonHungUp final : public CallDiscardReason {
 };
 
 /**
- * The call was ended because it has been used successfully to transfer private encryption key for the associated group call.
+ * The call was ended because it has been upgraded to a group call.
  */
-class callDiscardReasonAllowGroupCall final : public CallDiscardReason {
+class callDiscardReasonUpgradeToGroupCall final : public CallDiscardReason {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -5852,23 +6109,23 @@ class callDiscardReasonAllowGroupCall final : public CallDiscardReason {
   }
 
  public:
-  /// Encrypted using the call private key encryption key for the associated group call.
-  bytes encrypted_group_call_key_;
+  /// Invite link for the group call.
+  string invite_link_;
 
   /**
-   * The call was ended because it has been used successfully to transfer private encryption key for the associated group call.
+   * The call was ended because it has been upgraded to a group call.
    */
-  callDiscardReasonAllowGroupCall();
+  callDiscardReasonUpgradeToGroupCall();
 
   /**
-   * The call was ended because it has been used successfully to transfer private encryption key for the associated group call.
+   * The call was ended because it has been upgraded to a group call.
    *
-   * \param[in] encrypted_group_call_key_ Encrypted using the call private key encryption key for the associated group call.
+   * \param[in] invite_link_ Invite link for the group call.
    */
-  explicit callDiscardReasonAllowGroupCall(bytes const &encrypted_group_call_key_);
+  explicit callDiscardReasonUpgradeToGroupCall(string const &invite_link_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1357414443;
+  static const std::int32_t ID = 1254509319;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -6510,6 +6767,8 @@ class callStateReady final : public CallState {
   array<string> emojis_;
   /// True, if peer-to-peer connection is allowed by users privacy settings.
   bool allow_p2p_;
+  /// True, if the other party supports upgrading of the call to a group call.
+  bool is_group_call_supported_;
   /// Custom JSON-encoded call parameters to be passed to tgcalls.
   string custom_parameters_;
 
@@ -6527,12 +6786,13 @@ class callStateReady final : public CallState {
    * \param[in] encryption_key_ Call encryption key.
    * \param[in] emojis_ Encryption key fingerprint represented as 4 emoji.
    * \param[in] allow_p2p_ True, if peer-to-peer connection is allowed by users privacy settings.
+   * \param[in] is_group_call_supported_ True, if the other party supports upgrading of the call to a group call.
    * \param[in] custom_parameters_ Custom JSON-encoded call parameters to be passed to tgcalls.
    */
-  callStateReady(object_ptr<callProtocol> &&protocol_, array<object_ptr<callServer>> &&servers_, string const &config_, bytes const &encryption_key_, array<string> &&emojis_, bool allow_p2p_, string const &custom_parameters_);
+  callStateReady(object_ptr<callProtocol> &&protocol_, array<object_ptr<callServer>> &&servers_, string const &config_, bytes const &encryption_key_, array<string> &&emojis_, bool allow_p2p_, bool is_group_call_supported_, string const &custom_parameters_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 731619651;
+  static const std::int32_t ID = -281776921;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -6834,6 +7094,221 @@ class callbackQueryPayloadGame final : public CallbackQueryPayload {
 
 /**
  * This class is an abstract base class.
+ * Represents result of checking whether the current user can post a story on behalf of the specific chat.
+ */
+class CanPostStoryResult: public Object {
+ public:
+};
+
+/**
+ * A story can be sent.
+ */
+class canPostStoryResultOk final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Number of stories that can be posted by the user.
+  int32 story_count_;
+
+  /**
+   * A story can be sent.
+   */
+  canPostStoryResultOk();
+
+  /**
+   * A story can be sent.
+   *
+   * \param[in] story_count_ Number of stories that can be posted by the user.
+   */
+  explicit canPostStoryResultOk(int32 story_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 2083205610;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user must subscribe to Telegram Premium to be able to post stories.
+ */
+class canPostStoryResultPremiumNeeded final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The user must subscribe to Telegram Premium to be able to post stories.
+   */
+  canPostStoryResultPremiumNeeded();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 935130501;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get current boost status of the chat.
+ */
+class canPostStoryResultBoostNeeded final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get current boost status of the chat.
+   */
+  canPostStoryResultBoostNeeded();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 80246195;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The limit for the number of active stories exceeded. The user can buy Telegram Premium, delete an active story, or wait for the oldest story to expire.
+ */
+class canPostStoryResultActiveStoryLimitExceeded final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The limit for the number of active stories exceeded. The user can buy Telegram Premium, delete an active story, or wait for the oldest story to expire.
+   */
+  canPostStoryResultActiveStoryLimitExceeded();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1640759002;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+ */
+class canPostStoryResultWeeklyLimitExceeded final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Time left before the user can post the next story.
+  int32 retry_after_;
+
+  /**
+   * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+   */
+  canPostStoryResultWeeklyLimitExceeded();
+
+  /**
+   * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+   *
+   * \param[in] retry_after_ Time left before the user can post the next story.
+   */
+  explicit canPostStoryResultWeeklyLimitExceeded(int32 retry_after_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 552858605;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+ */
+class canPostStoryResultMonthlyLimitExceeded final : public CanPostStoryResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Time left before the user can post the next story.
+  int32 retry_after_;
+
+  /**
+   * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+   */
+  canPostStoryResultMonthlyLimitExceeded();
+
+  /**
+   * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
+   *
+   * \param[in] retry_after_ Time left before the user can post the next story.
+   */
+  explicit canPostStoryResultMonthlyLimitExceeded(int32 retry_after_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -784208562;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * This class is an abstract base class.
  * Describes result of canSendMessageToUser.
  */
 class CanSendMessageToUserResult: public Object {
@@ -6960,212 +7435,6 @@ class canSendMessageToUserResultUserRestrictsNewChats final : public CanSendMess
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1929699797;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * This class is an abstract base class.
- * Represents result of checking whether the current user can send a story in the specific chat.
- */
-class CanSendStoryResult: public Object {
- public:
-};
-
-/**
- * A story can be sent.
- */
-class canSendStoryResultOk final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * A story can be sent.
-   */
-  canSendStoryResultOk();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1346171133;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The user must subscribe to Telegram Premium to be able to post stories.
- */
-class canSendStoryResultPremiumNeeded final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The user must subscribe to Telegram Premium to be able to post stories.
-   */
-  canSendStoryResultPremiumNeeded();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1451220585;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get current boost status of the chat.
- */
-class canSendStoryResultBoostNeeded final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get current boost status of the chat.
-   */
-  canSendStoryResultBoostNeeded();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1637816017;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The limit for the number of active stories exceeded. The user can buy Telegram Premium, delete an active story, or wait for the oldest story to expire.
- */
-class canSendStoryResultActiveStoryLimitExceeded final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The limit for the number of active stories exceeded. The user can buy Telegram Premium, delete an active story, or wait for the oldest story to expire.
-   */
-  canSendStoryResultActiveStoryLimitExceeded();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1344689450;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
- */
-class canSendStoryResultWeeklyLimitExceeded final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Time left before the user can send the next story.
-  int32 retry_after_;
-
-  /**
-   * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
-   */
-  canSendStoryResultWeeklyLimitExceeded();
-
-  /**
-   * The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
-   *
-   * \param[in] retry_after_ Time left before the user can send the next story.
-   */
-  explicit canSendStoryResultWeeklyLimitExceeded(int32 retry_after_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 323068088;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
- */
-class canSendStoryResultMonthlyLimitExceeded final : public CanSendStoryResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Time left before the user can send the next story.
-  int32 retry_after_;
-
-  /**
-   * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
-   */
-  canSendStoryResultMonthlyLimitExceeded();
-
-  /**
-   * The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified time.
-   *
-   * \param[in] retry_after_ Time left before the user can send the next story.
-   */
-  explicit canSendStoryResultMonthlyLimitExceeded(int32 retry_after_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -578665771;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -8273,7 +8542,7 @@ class chatActiveStories final : public Object {
   int53 chat_id_;
   /// Identifier of the story list in which the stories are shown; may be null if the stories aren't shown in a story list.
   object_ptr<StoryList> list_;
-  /// A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the story list. Stories must be sorted by the pair (order, story_sender_chat_id) in descending order.
+  /// A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
   int53 order_;
   /// Identifier of the last read active story.
   int32 max_read_story_id_;
@@ -8290,7 +8559,7 @@ class chatActiveStories final : public Object {
    *
    * \param[in] chat_id_ Identifier of the chat that posted the stories.
    * \param[in] list_ Identifier of the story list in which the stories are shown; may be null if the stories aren't shown in a story list.
-   * \param[in] order_ A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the story list. Stories must be sorted by the pair (order, story_sender_chat_id) in descending order.
+   * \param[in] order_ A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
    * \param[in] max_read_story_id_ Identifier of the last read active story.
    * \param[in] stories_ Basic information about the stories; use getStory to get full information about the stories. The stories are in chronological order (i.e., in order of increasing story identifiers).
    */
@@ -8691,6 +8960,8 @@ class chatBoostFeatures final : public Object {
   int32 min_custom_background_boost_level_;
   /// The minimum boost level required to set custom emoji sticker set for the chat; for supergroup chats only.
   int32 min_custom_emoji_sticker_set_boost_level_;
+  /// The minimum boost level allowing to enable automatic translation of messages for non-Premium users; for channel chats only.
+  int32 min_automatic_translation_boost_level_;
   /// The minimum boost level allowing to recognize speech in video note and voice note messages for non-Premium users; for supergroup chats only.
   int32 min_speech_recognition_boost_level_;
   /// The minimum boost level allowing to disable sponsored messages in the chat; for channel chats only.
@@ -8711,13 +8982,14 @@ class chatBoostFeatures final : public Object {
    * \param[in] min_chat_theme_background_boost_level_ The minimum boost level required to set a chat theme background as chat background.
    * \param[in] min_custom_background_boost_level_ The minimum boost level required to set custom chat background.
    * \param[in] min_custom_emoji_sticker_set_boost_level_ The minimum boost level required to set custom emoji sticker set for the chat; for supergroup chats only.
+   * \param[in] min_automatic_translation_boost_level_ The minimum boost level allowing to enable automatic translation of messages for non-Premium users; for channel chats only.
    * \param[in] min_speech_recognition_boost_level_ The minimum boost level allowing to recognize speech in video note and voice note messages for non-Premium users; for supergroup chats only.
    * \param[in] min_sponsored_message_disable_boost_level_ The minimum boost level allowing to disable sponsored messages in the chat; for channel chats only.
    */
-  chatBoostFeatures(array<object_ptr<chatBoostLevelFeatures>> &&features_, int32 min_profile_background_custom_emoji_boost_level_, int32 min_background_custom_emoji_boost_level_, int32 min_emoji_status_boost_level_, int32 min_chat_theme_background_boost_level_, int32 min_custom_background_boost_level_, int32 min_custom_emoji_sticker_set_boost_level_, int32 min_speech_recognition_boost_level_, int32 min_sponsored_message_disable_boost_level_);
+  chatBoostFeatures(array<object_ptr<chatBoostLevelFeatures>> &&features_, int32 min_profile_background_custom_emoji_boost_level_, int32 min_background_custom_emoji_boost_level_, int32 min_emoji_status_boost_level_, int32 min_chat_theme_background_boost_level_, int32 min_custom_background_boost_level_, int32 min_custom_emoji_sticker_set_boost_level_, int32 min_automatic_translation_boost_level_, int32 min_speech_recognition_boost_level_, int32 min_sponsored_message_disable_boost_level_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 866182642;
+  static const std::int32_t ID = -940531367;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -8764,6 +9036,8 @@ class chatBoostLevelFeatures final : public Object {
   bool can_set_custom_background_;
   /// True, if custom emoji sticker set can be set for the chat.
   bool can_set_custom_emoji_sticker_set_;
+  /// True, if automatic translation of messages can be enabled in the chat.
+  bool can_enable_automatic_translation_;
   /// True, if speech recognition can be used for video note and voice note messages by all users.
   bool can_recognize_speech_;
   /// True, if sponsored messages can be disabled in the chat.
@@ -8789,13 +9063,14 @@ class chatBoostLevelFeatures final : public Object {
    * \param[in] chat_theme_background_count_ Number of chat theme backgrounds that can be set as chat background.
    * \param[in] can_set_custom_background_ True, if custom background can be set in the chat for all users.
    * \param[in] can_set_custom_emoji_sticker_set_ True, if custom emoji sticker set can be set for the chat.
+   * \param[in] can_enable_automatic_translation_ True, if automatic translation of messages can be enabled in the chat.
    * \param[in] can_recognize_speech_ True, if speech recognition can be used for video note and voice note messages by all users.
    * \param[in] can_disable_sponsored_messages_ True, if sponsored messages can be disabled in the chat.
    */
-  chatBoostLevelFeatures(int32 level_, int32 story_per_day_count_, int32 custom_emoji_reaction_count_, int32 title_color_count_, int32 profile_accent_color_count_, bool can_set_profile_background_custom_emoji_, int32 accent_color_count_, bool can_set_background_custom_emoji_, bool can_set_emoji_status_, int32 chat_theme_background_count_, bool can_set_custom_background_, bool can_set_custom_emoji_sticker_set_, bool can_recognize_speech_, bool can_disable_sponsored_messages_);
+  chatBoostLevelFeatures(int32 level_, int32 story_per_day_count_, int32 custom_emoji_reaction_count_, int32 title_color_count_, int32 profile_accent_color_count_, bool can_set_profile_background_custom_emoji_, int32 accent_color_count_, bool can_set_background_custom_emoji_, bool can_set_emoji_status_, int32 chat_theme_background_count_, bool can_set_custom_background_, bool can_set_custom_emoji_sticker_set_, bool can_enable_automatic_translation_, bool can_recognize_speech_, bool can_disable_sponsored_messages_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -189458156;
+  static const std::int32_t ID = 975439470;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -10744,6 +11019,45 @@ class chatEventShowMessageSenderToggled final : public ChatEventAction {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -794343453;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The has_automatic_translation setting of a channel was toggled.
+ */
+class chatEventAutomaticTranslationToggled final : public ChatEventAction {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// New value of has_automatic_translation.
+  bool has_automatic_translation_;
+
+  /**
+   * The has_automatic_translation setting of a channel was toggled.
+   */
+  chatEventAutomaticTranslationToggled();
+
+  /**
+   * The has_automatic_translation setting of a channel was toggled.
+   *
+   * \param[in] has_automatic_translation_ New value of has_automatic_translation.
+   */
+  explicit chatEventAutomaticTranslationToggled(bool has_automatic_translation_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 194147926;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -13282,10 +13596,10 @@ class chatNotificationSettings final : public Object {
   bool use_default_story_sound_;
   /// Identifier of the notification sound to be played for stories; 0 if sound is disabled.
   int64 story_sound_id_;
-  /// If true, the value for the relevant type of chat is used instead of show_story_sender.
-  bool use_default_show_story_sender_;
-  /// True, if the sender of stories must be displayed in notifications.
-  bool show_story_sender_;
+  /// If true, the value for the relevant type of chat is used instead of show_story_poster.
+  bool use_default_show_story_poster_;
+  /// True, if the chat that posted a story must be displayed in notifications.
+  bool show_story_poster_;
   /// If true, the value for the relevant type of chat or the forum chat is used instead of disable_pinned_message_notifications.
   bool use_default_disable_pinned_message_notifications_;
   /// If true, notifications for incoming pinned messages will be created as for an ordinary unread message.
@@ -13313,17 +13627,17 @@ class chatNotificationSettings final : public Object {
    * \param[in] mute_stories_ True, if story notifications are disabled for the chat.
    * \param[in] use_default_story_sound_ If true, the value for the relevant type of chat is used instead of story_sound_id.
    * \param[in] story_sound_id_ Identifier of the notification sound to be played for stories; 0 if sound is disabled.
-   * \param[in] use_default_show_story_sender_ If true, the value for the relevant type of chat is used instead of show_story_sender.
-   * \param[in] show_story_sender_ True, if the sender of stories must be displayed in notifications.
+   * \param[in] use_default_show_story_poster_ If true, the value for the relevant type of chat is used instead of show_story_poster.
+   * \param[in] show_story_poster_ True, if the chat that posted a story must be displayed in notifications.
    * \param[in] use_default_disable_pinned_message_notifications_ If true, the value for the relevant type of chat or the forum chat is used instead of disable_pinned_message_notifications.
    * \param[in] disable_pinned_message_notifications_ If true, notifications for incoming pinned messages will be created as for an ordinary unread message.
    * \param[in] use_default_disable_mention_notifications_ If true, the value for the relevant type of chat or the forum chat is used instead of disable_mention_notifications.
    * \param[in] disable_mention_notifications_ If true, notifications for messages with mentions will be created as for an ordinary unread message.
    */
-  chatNotificationSettings(bool use_default_mute_for_, int32 mute_for_, bool use_default_sound_, int64 sound_id_, bool use_default_show_preview_, bool show_preview_, bool use_default_mute_stories_, bool mute_stories_, bool use_default_story_sound_, int64 story_sound_id_, bool use_default_show_story_sender_, bool show_story_sender_, bool use_default_disable_pinned_message_notifications_, bool disable_pinned_message_notifications_, bool use_default_disable_mention_notifications_, bool disable_mention_notifications_);
+  chatNotificationSettings(bool use_default_mute_for_, int32 mute_for_, bool use_default_sound_, int64 sound_id_, bool use_default_show_preview_, bool show_preview_, bool use_default_mute_stories_, bool mute_stories_, bool use_default_story_sound_, int64 story_sound_id_, bool use_default_show_story_poster_, bool show_story_poster_, bool use_default_disable_pinned_message_notifications_, bool disable_pinned_message_notifications_, bool use_default_disable_mention_notifications_, bool disable_mention_notifications_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -572779825;
+  static const std::int32_t ID = 1459533846;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -14304,11 +14618,11 @@ class chatStatisticsChannel final : public ChatStatistics {
   object_ptr<statisticalValue> mean_message_share_count_;
   /// Mean number of times reactions were added to the recently sent messages.
   object_ptr<statisticalValue> mean_message_reaction_count_;
-  /// Mean number of times the recently sent stories were viewed.
+  /// Mean number of times the recently posted stories were viewed.
   object_ptr<statisticalValue> mean_story_view_count_;
-  /// Mean number of times the recently sent stories were shared.
+  /// Mean number of times the recently posted stories were shared.
   object_ptr<statisticalValue> mean_story_share_count_;
-  /// Mean number of times reactions were added to the recently sent stories.
+  /// Mean number of times reactions were added to the recently posted stories.
   object_ptr<statisticalValue> mean_story_reaction_count_;
   /// A percentage of users with enabled notifications for the chat; 0-100.
   double enabled_notifications_percentage_;
@@ -14336,7 +14650,7 @@ class chatStatisticsChannel final : public ChatStatistics {
   object_ptr<StatisticalGraph> story_reaction_graph_;
   /// A graph containing number of views of associated with the chat instant views.
   object_ptr<StatisticalGraph> instant_view_interaction_graph_;
-  /// Detailed statistics about number of views and shares of recently sent messages and stories.
+  /// Detailed statistics about number of views and shares of recently sent messages and posted stories.
   array<object_ptr<chatStatisticsInteractionInfo>> recent_interactions_;
 
   /**
@@ -14352,9 +14666,9 @@ class chatStatisticsChannel final : public ChatStatistics {
    * \param[in] mean_message_view_count_ Mean number of times the recently sent messages were viewed.
    * \param[in] mean_message_share_count_ Mean number of times the recently sent messages were shared.
    * \param[in] mean_message_reaction_count_ Mean number of times reactions were added to the recently sent messages.
-   * \param[in] mean_story_view_count_ Mean number of times the recently sent stories were viewed.
-   * \param[in] mean_story_share_count_ Mean number of times the recently sent stories were shared.
-   * \param[in] mean_story_reaction_count_ Mean number of times reactions were added to the recently sent stories.
+   * \param[in] mean_story_view_count_ Mean number of times the recently posted stories were viewed.
+   * \param[in] mean_story_share_count_ Mean number of times the recently posted stories were shared.
+   * \param[in] mean_story_reaction_count_ Mean number of times reactions were added to the recently posted stories.
    * \param[in] enabled_notifications_percentage_ A percentage of users with enabled notifications for the chat; 0-100.
    * \param[in] member_count_graph_ A graph containing number of members in the chat.
    * \param[in] join_graph_ A graph containing number of members joined and left the chat.
@@ -14368,7 +14682,7 @@ class chatStatisticsChannel final : public ChatStatistics {
    * \param[in] story_interaction_graph_ A graph containing number of story views and shares.
    * \param[in] story_reaction_graph_ A graph containing number of reactions on stories.
    * \param[in] instant_view_interaction_graph_ A graph containing number of views of associated with the chat instant views.
-   * \param[in] recent_interactions_ Detailed statistics about number of views and shares of recently sent messages and stories.
+   * \param[in] recent_interactions_ Detailed statistics about number of views and shares of recently sent messages and posted stories.
    */
   chatStatisticsChannel(object_ptr<dateRange> &&period_, object_ptr<statisticalValue> &&member_count_, object_ptr<statisticalValue> &&mean_message_view_count_, object_ptr<statisticalValue> &&mean_message_share_count_, object_ptr<statisticalValue> &&mean_message_reaction_count_, object_ptr<statisticalValue> &&mean_story_view_count_, object_ptr<statisticalValue> &&mean_story_share_count_, object_ptr<statisticalValue> &&mean_story_reaction_count_, double enabled_notifications_percentage_, object_ptr<StatisticalGraph> &&member_count_graph_, object_ptr<StatisticalGraph> &&join_graph_, object_ptr<StatisticalGraph> &&mute_graph_, object_ptr<StatisticalGraph> &&view_count_by_hour_graph_, object_ptr<StatisticalGraph> &&view_count_by_source_graph_, object_ptr<StatisticalGraph> &&join_by_source_graph_, object_ptr<StatisticalGraph> &&language_graph_, object_ptr<StatisticalGraph> &&message_interaction_graph_, object_ptr<StatisticalGraph> &&message_reaction_graph_, object_ptr<StatisticalGraph> &&story_interaction_graph_, object_ptr<StatisticalGraph> &&story_reaction_graph_, object_ptr<StatisticalGraph> &&instant_view_interaction_graph_, array<object_ptr<chatStatisticsInteractionInfo>> &&recent_interactions_);
 
@@ -14434,7 +14748,7 @@ class chatStatisticsAdministratorActionsInfo final : public Object {
 class ChatStatisticsObjectType;
 
 /**
- * Contains statistics about interactions with a message sent in the chat or a story sent by the chat.
+ * Contains statistics about interactions with a message sent in the chat or a story posted on behalf of the chat.
  */
 class chatStatisticsInteractionInfo final : public Object {
   /**
@@ -14456,12 +14770,12 @@ class chatStatisticsInteractionInfo final : public Object {
   int32 reaction_count_;
 
   /**
-   * Contains statistics about interactions with a message sent in the chat or a story sent by the chat.
+   * Contains statistics about interactions with a message sent in the chat or a story posted on behalf of the chat.
    */
   chatStatisticsInteractionInfo();
 
   /**
-   * Contains statistics about interactions with a message sent in the chat or a story sent by the chat.
+   * Contains statistics about interactions with a message sent in the chat or a story posted on behalf of the chat.
    *
    * \param[in] object_type_ Type of the object.
    * \param[in] view_count_ Number of times the object was viewed.
@@ -14616,7 +14930,7 @@ class chatStatisticsObjectTypeMessage final : public ChatStatisticsObjectType {
 };
 
 /**
- * Describes a story sent by the chat.
+ * Describes a story posted on behalf of the chat.
  */
 class chatStatisticsObjectTypeStory final : public ChatStatisticsObjectType {
   /**
@@ -14632,12 +14946,12 @@ class chatStatisticsObjectTypeStory final : public ChatStatisticsObjectType {
   int32 story_id_;
 
   /**
-   * Describes a story sent by the chat.
+   * Describes a story posted on behalf of the chat.
    */
   chatStatisticsObjectTypeStory();
 
   /**
-   * Describes a story sent by the chat.
+   * Describes a story posted on behalf of the chat.
    *
    * \param[in] story_id_ Story identifier.
    */
@@ -16090,6 +16404,45 @@ class customRequestResult final : public Object {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -2009960452;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Contains some binary data.
+ */
+class data final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Data.
+  bytes data_;
+
+  /**
+   * Contains some binary data.
+   */
+  data();
+
+  /**
+   * Contains some binary data.
+   *
+   * \param[in] data_ Data.
+   */
+  explicit data(bytes const &data_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 221197337;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -18464,45 +18817,6 @@ class fileDownloadedPrefixSize final : public Object {
 };
 
 /**
- * Contains a part of a file.
- */
-class filePart final : public Object {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// File bytes.
-  bytes data_;
-
-  /**
-   * Contains a part of a file.
-   */
-  filePart();
-
-  /**
-   * Contains a part of a file.
-   *
-   * \param[in] data_ File bytes.
-   */
-  explicit filePart(bytes const &data_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 911821878;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
  * This class is an abstract base class.
  * Represents the type of file.
  */
@@ -19438,6 +19752,8 @@ class forumTopic final : public Object {
   object_ptr<forumTopicInfo> info_;
   /// Last message in the topic; may be null if unknown.
   object_ptr<message> last_message_;
+  /// A parameter used to determine order of the topic in the topic list. Topics must be sorted by the order in descending order.
+  int64 order_;
   /// True, if the topic is pinned in the topic list.
   bool is_pinned_;
   /// Number of unread messages in the topic.
@@ -19465,6 +19781,7 @@ class forumTopic final : public Object {
    *
    * \param[in] info_ Basic information about the topic.
    * \param[in] last_message_ Last message in the topic; may be null if unknown.
+   * \param[in] order_ A parameter used to determine order of the topic in the topic list. Topics must be sorted by the order in descending order.
    * \param[in] is_pinned_ True, if the topic is pinned in the topic list.
    * \param[in] unread_count_ Number of unread messages in the topic.
    * \param[in] last_read_inbox_message_id_ Identifier of the last read incoming message.
@@ -19474,10 +19791,10 @@ class forumTopic final : public Object {
    * \param[in] notification_settings_ Notification settings for the topic.
    * \param[in] draft_message_ A draft of a message in the topic; may be null if none.
    */
-  forumTopic(object_ptr<forumTopicInfo> &&info_, object_ptr<message> &&last_message_, bool is_pinned_, int32 unread_count_, int53 last_read_inbox_message_id_, int53 last_read_outbox_message_id_, int32 unread_mention_count_, int32 unread_reaction_count_, object_ptr<chatNotificationSettings> &&notification_settings_, object_ptr<draftMessage> &&draft_message_);
+  forumTopic(object_ptr<forumTopicInfo> &&info_, object_ptr<message> &&last_message_, int64 order_, bool is_pinned_, int32 unread_count_, int53 last_read_inbox_message_id_, int53 last_read_outbox_message_id_, int32 unread_mention_count_, int32 unread_reaction_count_, object_ptr<chatNotificationSettings> &&notification_settings_, object_ptr<draftMessage> &&draft_message_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 303279334;
+  static const std::int32_t ID = -2094608976;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -19546,6 +19863,8 @@ class forumTopicInfo final : public Object {
   }
 
  public:
+  /// Identifier of the forum chat to which the topic belongs.
+  int53 chat_id_;
   /// Message thread identifier of the topic.
   int53 message_thread_id_;
   /// Name of the topic.
@@ -19573,6 +19892,7 @@ class forumTopicInfo final : public Object {
   /**
    * Contains basic information about a forum topic.
    *
+   * \param[in] chat_id_ Identifier of the forum chat to which the topic belongs.
    * \param[in] message_thread_id_ Message thread identifier of the topic.
    * \param[in] name_ Name of the topic.
    * \param[in] icon_ Icon of the topic.
@@ -19583,10 +19903,10 @@ class forumTopicInfo final : public Object {
    * \param[in] is_closed_ True, if the topic is closed.
    * \param[in] is_hidden_ True, if the topic is hidden above the topic list and closed; for General topic only.
    */
-  forumTopicInfo(int53 message_thread_id_, string const &name_, object_ptr<forumTopicIcon> &&icon_, int32 creation_date_, object_ptr<MessageSender> &&creator_id_, bool is_general_, bool is_outgoing_, bool is_closed_, bool is_hidden_);
+  forumTopicInfo(int53 chat_id_, int53 message_thread_id_, string const &name_, object_ptr<forumTopicIcon> &&icon_, int32 creation_date_, object_ptr<MessageSender> &&creator_id_, bool is_general_, bool is_outgoing_, bool is_closed_, bool is_hidden_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1879842914;
+  static const std::int32_t ID = -654857606;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -20420,6 +20740,192 @@ class gift final : public Object {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class upgradedGift;
+
+/**
+ * Describes a gift available for resale.
+ */
+class giftForResale final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The gift.
+  object_ptr<upgradedGift> gift_;
+  /// Unique identifier of the received gift for the current user; only for the gifts owned by the current user.
+  string received_gift_id_;
+
+  /**
+   * Describes a gift available for resale.
+   */
+  giftForResale();
+
+  /**
+   * Describes a gift available for resale.
+   *
+   * \param[in] gift_ The gift.
+   * \param[in] received_gift_id_ Unique identifier of the received gift for the current user; only for the gifts owned by the current user.
+   */
+  giftForResale(object_ptr<upgradedGift> &&gift_, string const &received_gift_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1130990515;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * This class is an abstract base class.
+ * Describes order in which upgraded gifts for resale will be sorted.
+ */
+class GiftForResaleOrder: public Object {
+ public:
+};
+
+/**
+ * The gifts will be sorted by their price from the lowest to the highest.
+ */
+class giftForResaleOrderPrice final : public GiftForResaleOrder {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The gifts will be sorted by their price from the lowest to the highest.
+   */
+  giftForResaleOrderPrice();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1371740258;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The gifts will be sorted by the last date when their price was changed from the newest to the oldest.
+ */
+class giftForResaleOrderPriceChangeDate final : public GiftForResaleOrder {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The gifts will be sorted by the last date when their price was changed from the newest to the oldest.
+   */
+  giftForResaleOrderPriceChangeDate();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1694144054;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The gifts will be sorted by their number from the smallest to the largest.
+ */
+class giftForResaleOrderNumber final : public GiftForResaleOrder {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The gifts will be sorted by their number from the smallest to the largest.
+   */
+  giftForResaleOrderNumber();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1301157632;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class acceptedGiftTypes;
+
+/**
+ * Contains settings for gift receiving for a user.
+ */
+class giftSettings final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// True, if a button for sending a gift to the user or by the user must always be shown in the input field.
+  bool show_gift_button_;
+  /// Types of gifts accepted by the user; for Telegram Premium users only.
+  object_ptr<acceptedGiftTypes> accepted_gift_types_;
+
+  /**
+   * Contains settings for gift receiving for a user.
+   */
+  giftSettings();
+
+  /**
+   * Contains settings for gift receiving for a user.
+   *
+   * \param[in] show_gift_button_ True, if a button for sending a gift to the user or by the user must always be shown in the input field.
+   * \param[in] accepted_gift_types_ Types of gifts accepted by the user; for Telegram Premium users only.
+   */
+  giftSettings(bool show_gift_button_, object_ptr<acceptedGiftTypes> &&accepted_gift_types_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 45783168;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class upgradedGiftBackdrop;
 
 class upgradedGiftModel;
@@ -20471,12 +20977,18 @@ class giftUpgradePreview final : public Object {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class gift;
+class giftForResale;
+
+class upgradedGiftBackdropCount;
+
+class upgradedGiftModelCount;
+
+class upgradedGiftSymbolCount;
 
 /**
- * Contains a list of gifts that can be sent to another user or channel chat.
+ * Describes gifts available for resale.
  */
-class gifts final : public Object {
+class giftsForResale final : public Object {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -20486,23 +20998,38 @@ class gifts final : public Object {
   }
 
  public:
-  /// The list of gifts.
-  array<object_ptr<gift>> gifts_;
+  /// Total number of gifts found.
+  int32 total_count_;
+  /// The gifts.
+  array<object_ptr<giftForResale>> gifts_;
+  /// Available models; for searchGiftsForResale requests without offset and attributes only.
+  array<object_ptr<upgradedGiftModelCount>> models_;
+  /// Available symbols; for searchGiftsForResale requests without offset and attributes only.
+  array<object_ptr<upgradedGiftSymbolCount>> symbols_;
+  /// Available backdrops; for searchGiftsForResale requests without offset and attributes only.
+  array<object_ptr<upgradedGiftBackdropCount>> backdrops_;
+  /// The offset for the next request. If empty, then there are no more results.
+  string next_offset_;
 
   /**
-   * Contains a list of gifts that can be sent to another user or channel chat.
+   * Describes gifts available for resale.
    */
-  gifts();
+  giftsForResale();
 
   /**
-   * Contains a list of gifts that can be sent to another user or channel chat.
+   * Describes gifts available for resale.
    *
-   * \param[in] gifts_ The list of gifts.
+   * \param[in] total_count_ Total number of gifts found.
+   * \param[in] gifts_ The gifts.
+   * \param[in] models_ Available models; for searchGiftsForResale requests without offset and attributes only.
+   * \param[in] symbols_ Available symbols; for searchGiftsForResale requests without offset and attributes only.
+   * \param[in] backdrops_ Available backdrops; for searchGiftsForResale requests without offset and attributes only.
+   * \param[in] next_offset_ The offset for the next request. If empty, then there are no more results.
    */
-  explicit gifts(array<object_ptr<gift>> &&gifts_);
+  giftsForResale(int32 total_count_, array<object_ptr<giftForResale>> &&gifts_, array<object_ptr<upgradedGiftModelCount>> &&models_, array<object_ptr<upgradedGiftSymbolCount>> &&symbols_, array<object_ptr<upgradedGiftBackdropCount>> &&backdrops_, string const &next_offset_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1652323382;
+  static const std::int32_t ID = 35082425;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -20972,27 +21499,31 @@ class groupCall final : public Object {
  public:
   /// Group call identifier.
   int32 id_;
-  /// Identifier of one-to-one call from which the group call was created; 0 if unknown.
-  int32 from_call_id_;
-  /// Group call title.
+  /// Group call title; for video chats only.
   string title_;
-  /// Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already active or was ended.
+  /// Invite link for the group call; for group calls that aren't bound to a chat. For video chats call getVideoChatInviteLink to get the link.
+  string invite_link_;
+  /// Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already active or was ended; for video chats only.
   int32 scheduled_start_date_;
-  /// True, if the group call is scheduled and the current user will receive a notification when the group call starts.
+  /// True, if the group call is scheduled and the current user will receive a notification when the group call starts; for video chats only.
   bool enabled_start_notification_;
   /// True, if the call is active.
   bool is_active_;
-  /// True, if the chat is an RTMP stream instead of an ordinary video chat.
+  /// True, if the call is bound to a chat.
+  bool is_video_chat_;
+  /// True, if the call is an RTMP stream instead of an ordinary video chat; for video chats only.
   bool is_rtmp_stream_;
   /// True, if the call is joined.
   bool is_joined_;
   /// True, if user was kicked from the call because of network loss and the call needs to be rejoined.
   bool need_rejoin_;
-  /// True, if the current user can manage the group call.
+  /// True, if the user is the owner of the call and can end the call, change volume level of other users, or ban users there; for group calls that aren't bound to a chat.
+  bool is_owned_;
+  /// True, if the current user can manage the group call; for video chats only.
   bool can_be_managed_;
   /// Number of participants in the group call.
   int32 participant_count_;
-  /// True, if group call participants, which are muted, aren't returned in participant list.
+  /// True, if group call participants, which are muted, aren't returned in participant list; for video chats only.
   bool has_hidden_listeners_;
   /// True, if all group call participants are loaded.
   bool loaded_all_participants_;
@@ -21004,9 +21535,9 @@ class groupCall final : public Object {
   bool is_my_video_paused_;
   /// True, if the current user can broadcast video or share screen.
   bool can_enable_video_;
-  /// True, if only group call administrators can unmute new participants.
+  /// True, if only group call administrators can unmute new participants; for video chats only.
   bool mute_new_participants_;
-  /// True, if the current user can enable or disable mute_new_participants setting.
+  /// True, if the current user can enable or disable mute_new_participants setting; for video chats only.
   bool can_toggle_mute_new_participants_;
   /// Duration of the ongoing group call recording, in seconds; 0 if none. An updateGroupCall update is not triggered when value of this field changes, but the same recording goes on.
   int32 record_duration_;
@@ -21024,32 +21555,102 @@ class groupCall final : public Object {
    * Describes a group call.
    *
    * \param[in] id_ Group call identifier.
-   * \param[in] from_call_id_ Identifier of one-to-one call from which the group call was created; 0 if unknown.
-   * \param[in] title_ Group call title.
-   * \param[in] scheduled_start_date_ Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already active or was ended.
-   * \param[in] enabled_start_notification_ True, if the group call is scheduled and the current user will receive a notification when the group call starts.
+   * \param[in] title_ Group call title; for video chats only.
+   * \param[in] invite_link_ Invite link for the group call; for group calls that aren't bound to a chat. For video chats call getVideoChatInviteLink to get the link.
+   * \param[in] scheduled_start_date_ Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already active or was ended; for video chats only.
+   * \param[in] enabled_start_notification_ True, if the group call is scheduled and the current user will receive a notification when the group call starts; for video chats only.
    * \param[in] is_active_ True, if the call is active.
-   * \param[in] is_rtmp_stream_ True, if the chat is an RTMP stream instead of an ordinary video chat.
+   * \param[in] is_video_chat_ True, if the call is bound to a chat.
+   * \param[in] is_rtmp_stream_ True, if the call is an RTMP stream instead of an ordinary video chat; for video chats only.
    * \param[in] is_joined_ True, if the call is joined.
    * \param[in] need_rejoin_ True, if user was kicked from the call because of network loss and the call needs to be rejoined.
-   * \param[in] can_be_managed_ True, if the current user can manage the group call.
+   * \param[in] is_owned_ True, if the user is the owner of the call and can end the call, change volume level of other users, or ban users there; for group calls that aren't bound to a chat.
+   * \param[in] can_be_managed_ True, if the current user can manage the group call; for video chats only.
    * \param[in] participant_count_ Number of participants in the group call.
-   * \param[in] has_hidden_listeners_ True, if group call participants, which are muted, aren't returned in participant list.
+   * \param[in] has_hidden_listeners_ True, if group call participants, which are muted, aren't returned in participant list; for video chats only.
    * \param[in] loaded_all_participants_ True, if all group call participants are loaded.
    * \param[in] recent_speakers_ At most 3 recently speaking users in the group call.
    * \param[in] is_my_video_enabled_ True, if the current user's video is enabled.
    * \param[in] is_my_video_paused_ True, if the current user's video is paused.
    * \param[in] can_enable_video_ True, if the current user can broadcast video or share screen.
-   * \param[in] mute_new_participants_ True, if only group call administrators can unmute new participants.
-   * \param[in] can_toggle_mute_new_participants_ True, if the current user can enable or disable mute_new_participants setting.
+   * \param[in] mute_new_participants_ True, if only group call administrators can unmute new participants; for video chats only.
+   * \param[in] can_toggle_mute_new_participants_ True, if the current user can enable or disable mute_new_participants setting; for video chats only.
    * \param[in] record_duration_ Duration of the ongoing group call recording, in seconds; 0 if none. An updateGroupCall update is not triggered when value of this field changes, but the same recording goes on.
    * \param[in] is_video_recorded_ True, if a video file is being recorded for the call.
    * \param[in] duration_ Call duration, in seconds; for ended calls only.
    */
-  groupCall(int32 id_, int32 from_call_id_, string const &title_, int32 scheduled_start_date_, bool enabled_start_notification_, bool is_active_, bool is_rtmp_stream_, bool is_joined_, bool need_rejoin_, bool can_be_managed_, int32 participant_count_, bool has_hidden_listeners_, bool loaded_all_participants_, array<object_ptr<groupCallRecentSpeaker>> &&recent_speakers_, bool is_my_video_enabled_, bool is_my_video_paused_, bool can_enable_video_, bool mute_new_participants_, bool can_toggle_mute_new_participants_, int32 record_duration_, bool is_video_recorded_, int32 duration_);
+  groupCall(int32 id_, string const &title_, string const &invite_link_, int32 scheduled_start_date_, bool enabled_start_notification_, bool is_active_, bool is_video_chat_, bool is_rtmp_stream_, bool is_joined_, bool need_rejoin_, bool is_owned_, bool can_be_managed_, int32 participant_count_, bool has_hidden_listeners_, bool loaded_all_participants_, array<object_ptr<groupCallRecentSpeaker>> &&recent_speakers_, bool is_my_video_enabled_, bool is_my_video_paused_, bool can_enable_video_, bool mute_new_participants_, bool can_toggle_mute_new_participants_, int32 record_duration_, bool is_video_recorded_, int32 duration_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 186241327;
+  static const std::int32_t ID = -144438687;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * This class is an abstract base class.
+ * Describes data channel for a group call.
+ */
+class GroupCallDataChannel: public Object {
+ public:
+};
+
+/**
+ * The main data channel for audio and video data.
+ */
+class groupCallDataChannelMain final : public GroupCallDataChannel {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The main data channel for audio and video data.
+   */
+  groupCallDataChannelMain();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -32177779;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The data channel for screen sharing.
+ */
+class groupCallDataChannelScreenSharing final : public GroupCallDataChannel {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The data channel for screen sharing.
+   */
+  groupCallDataChannelScreenSharing();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -601649103;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -21089,6 +21690,96 @@ class groupCallId final : public Object {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 350534469;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Contains information about a just created or just joined group call.
+ */
+class groupCallInfo final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the group call.
+  int32 group_call_id_;
+  /// Join response payload for tgcalls; empty if the call isn't joined.
+  string join_payload_;
+
+  /**
+   * Contains information about a just created or just joined group call.
+   */
+  groupCallInfo();
+
+  /**
+   * Contains information about a just created or just joined group call.
+   *
+   * \param[in] group_call_id_ Identifier of the group call.
+   * \param[in] join_payload_ Join response payload for tgcalls; empty if the call isn't joined.
+   */
+  groupCallInfo(int32 group_call_id_, string const &join_payload_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 892575956;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Describes parameters used to join a group call.
+ */
+class groupCallJoinParameters final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Audio channel synchronization source identifier; received from tgcalls.
+  int32 audio_source_id_;
+  /// Group call join payload; received from tgcalls.
+  string payload_;
+  /// Pass true to join the call with muted microphone.
+  bool is_muted_;
+  /// Pass true if the user's video is enabled.
+  bool is_my_video_enabled_;
+
+  /**
+   * Describes parameters used to join a group call.
+   */
+  groupCallJoinParameters();
+
+  /**
+   * Describes parameters used to join a group call.
+   *
+   * \param[in] audio_source_id_ Audio channel synchronization source identifier; received from tgcalls.
+   * \param[in] payload_ Group call join payload; received from tgcalls.
+   * \param[in] is_muted_ Pass true to join the call with muted microphone.
+   * \param[in] is_my_video_enabled_ Pass true if the user's video is enabled.
+   */
+  groupCallJoinParameters(int32 audio_source_id_, string const &payload_, bool is_muted_, bool is_my_video_enabled_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1763438054;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -21242,6 +21933,50 @@ class groupCallParticipantVideoInfo final : public Object {
 class MessageSender;
 
 /**
+ * Contains identifiers of group call participants.
+ */
+class groupCallParticipants final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Total number of group call participants.
+  int32 total_count_;
+  /// Identifiers of the participants.
+  array<object_ptr<MessageSender>> participant_ids_;
+
+  /**
+   * Contains identifiers of group call participants.
+   */
+  groupCallParticipants();
+
+  /**
+   * Contains identifiers of group call participants.
+   *
+   * \param[in] total_count_ Total number of group call participants.
+   * \param[in] participant_ids_ Identifiers of the participants.
+   */
+  groupCallParticipants(int32 total_count_, array<object_ptr<MessageSender>> &&participant_ids_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1042491570;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class MessageSender;
+
+/**
  * Describes a recently speaking participant in a group call.
  */
 class groupCallRecentSpeaker final : public Object {
@@ -21274,92 +22009,6 @@ class groupCallRecentSpeaker final : public Object {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1819519436;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * Describes an available stream in a group call.
- */
-class groupCallStream final : public Object {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Identifier of an audio/video channel.
-  int32 channel_id_;
-  /// Scale of segment durations in the stream. The duration is 1000/(2**scale) milliseconds.
-  int32 scale_;
-  /// Point in time when the stream currently ends; Unix timestamp in milliseconds.
-  int53 time_offset_;
-
-  /**
-   * Describes an available stream in a group call.
-   */
-  groupCallStream();
-
-  /**
-   * Describes an available stream in a group call.
-   *
-   * \param[in] channel_id_ Identifier of an audio/video channel.
-   * \param[in] scale_ Scale of segment durations in the stream. The duration is 1000/(2**scale) milliseconds.
-   * \param[in] time_offset_ Point in time when the stream currently ends; Unix timestamp in milliseconds.
-   */
-  groupCallStream(int32 channel_id_, int32 scale_, int53 time_offset_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -264564795;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class groupCallStream;
-
-/**
- * Represents a list of group call streams.
- */
-class groupCallStreams final : public Object {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// A list of group call streams.
-  array<object_ptr<groupCallStream>> streams_;
-
-  /**
-   * Represents a list of group call streams.
-   */
-  groupCallStreams();
-
-  /**
-   * Represents a list of group call streams.
-   *
-   * \param[in] streams_ A list of group call streams.
-   */
-  explicit groupCallStreams(array<object_ptr<groupCallStream>> &&streams_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1032959578;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -23611,6 +24260,95 @@ class inputFileGenerated final : public InputFile {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+/**
+ * This class is an abstract base class.
+ * Describes a non-joined group call that isn't bound to a chat.
+ */
+class InputGroupCall: public Object {
+ public:
+};
+
+/**
+ * The group call is accessible through a link.
+ */
+class inputGroupCallLink final : public InputGroupCall {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The link for the group call.
+  string link_;
+
+  /**
+   * The group call is accessible through a link.
+   */
+  inputGroupCallLink();
+
+  /**
+   * The group call is accessible through a link.
+   *
+   * \param[in] link_ The link for the group call.
+   */
+  explicit inputGroupCallLink(string const &link_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -812157480;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The group call is accessible through a message of the type messageGroupCall.
+ */
+class inputGroupCallMessage final : public InputGroupCall {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the chat with the message.
+  int53 chat_id_;
+  /// Identifier of the message of the type messageGroupCall.
+  int53 message_id_;
+
+  /**
+   * The group call is accessible through a message of the type messageGroupCall.
+   */
+  inputGroupCallMessage();
+
+  /**
+   * The group call is accessible through a message of the type messageGroupCall.
+   *
+   * \param[in] chat_id_ Identifier of the chat with the message.
+   * \param[in] message_id_ Identifier of the message of the type messageGroupCall.
+   */
+  inputGroupCallMessage(int53 chat_id_, int53 message_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -341793768;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class InputFile;
 
 class date;
@@ -25407,7 +26145,7 @@ class inputMessageInvoice final : public InputMessageContent {
 };
 
 /**
- * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot.
+ * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot or the Saved Messages chat.
  */
 class inputMessagePoll final : public InputMessageContent {
   /**
@@ -25421,7 +26159,7 @@ class inputMessagePoll final : public InputMessageContent {
  public:
   /// Poll question; 1-255 characters (up to 300 characters for bots). Only custom emoji entities are allowed to be added and only by Premium users.
   object_ptr<formattedText> question_;
-  /// List of poll answer options, 2-10 strings 1-100 characters each. Only custom emoji entities are allowed to be added and only by Premium users.
+  /// List of poll answer options, 2-12 strings 1-100 characters each. Only custom emoji entities are allowed to be added and only by Premium users.
   array<object_ptr<formattedText>> options_;
   /// True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels.
   bool is_anonymous_;
@@ -25435,15 +26173,15 @@ class inputMessagePoll final : public InputMessageContent {
   bool is_closed_;
 
   /**
-   * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot.
+   * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot or the Saved Messages chat.
    */
   inputMessagePoll();
 
   /**
-   * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot.
+   * A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot or the Saved Messages chat.
    *
    * \param[in] question_ Poll question; 1-255 characters (up to 300 characters for bots). Only custom emoji entities are allowed to be added and only by Premium users.
-   * \param[in] options_ List of poll answer options, 2-10 strings 1-100 characters each. Only custom emoji entities are allowed to be added and only by Premium users.
+   * \param[in] options_ List of poll answer options, 2-12 strings 1-100 characters each. Only custom emoji entities are allowed to be added and only by Premium users.
    * \param[in] is_anonymous_ True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels.
    * \param[in] type_ Type of the poll.
    * \param[in] open_period_ Amount of time the poll will be active after creation, in seconds; for bots only.
@@ -25464,7 +26202,7 @@ class inputMessagePoll final : public InputMessageContent {
 };
 
 /**
- * A message with a forwarded story. Stories can't be sent to secret chats. A story can be forwarded only if story.can_be_forwarded.
+ * A message with a forwarded story. Stories can't be forwarded to secret chats. A story can be forwarded only if story.can_be_forwarded.
  */
 class inputMessageStory final : public InputMessageContent {
   /**
@@ -25477,25 +26215,25 @@ class inputMessageStory final : public InputMessageContent {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
 
   /**
-   * A message with a forwarded story. Stories can't be sent to secret chats. A story can be forwarded only if story.can_be_forwarded.
+   * A message with a forwarded story. Stories can't be forwarded to secret chats. A story can be forwarded only if story.can_be_forwarded.
    */
   inputMessageStory();
 
   /**
-   * A message with a forwarded story. Stories can't be sent to secret chats. A story can be forwarded only if story.can_be_forwarded.
+   * A message with a forwarded story. Stories can't be forwarded to secret chats. A story can be forwarded only if story.can_be_forwarded.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Story identifier.
    */
-  inputMessageStory(int53 story_sender_chat_id_, int32 story_id_);
+  inputMessageStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 554278243;
+  static const std::int32_t ID = -370732053;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -25669,8 +26407,8 @@ class inputMessageReplyToStory final : public InputMessageReplyTo {
   }
 
  public:
-  /// The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat and channel stories can't be replied.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story. Currently, stories can be replied only in the chat that posted the story; channel stories can't be replied.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
 
@@ -25682,13 +26420,13 @@ class inputMessageReplyToStory final : public InputMessageReplyTo {
   /**
    * Describes a story to be replied.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat and channel stories can't be replied.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story. Currently, stories can be replied only in the chat that posted the story; channel stories can't be replied.
    * \param[in] story_id_ The identifier of the story.
    */
-  inputMessageReplyToStory(int53 story_sender_chat_id_, int32 story_id_);
+  inputMessageReplyToStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1370410616;
+  static const std::int32_t ID = -1723842320;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -27322,7 +28060,7 @@ class InputFile;
 
 /**
  * This class is an abstract base class.
- * The content of a story to send.
+ * The content of a story to post.
  */
 class InputStoryContent: public Object {
  public:
@@ -28218,6 +28956,45 @@ class internalLinkTypeGame final : public InternalLinkType {
 };
 
 /**
+ * The link is a link to a group call that isn't bound to a chat. Call joinGroupCall with the given invite_link.
+ */
+class internalLinkTypeGroupCall final : public InternalLinkType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Internal representation of the invite link.
+  string invite_link_;
+
+  /**
+   * The link is a link to a group call that isn't bound to a chat. Call joinGroupCall with the given invite_link.
+   */
+  internalLinkTypeGroupCall();
+
+  /**
+   * The link is a link to a group call that isn't bound to a chat. Call joinGroupCall with the given invite_link.
+   *
+   * \param[in] invite_link_ Internal representation of the invite link.
+   */
+  explicit internalLinkTypeGroupCall(string const &invite_link_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1953084438;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
  * The link must be opened in an Instant View. Call getWebPageInstantView with the given URL to process the link. If Instant View is found, then show it, otherwise, open the fallback URL in an external browser.
  */
 class internalLinkTypeInstantView final : public InternalLinkType {
@@ -28484,6 +29261,36 @@ class internalLinkTypeMessageDraft final : public InternalLinkType {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 661633749;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The link is a link to the screen with information about Telegram Star balance and transactions of the current user.
+ */
+class internalLinkTypeMyStars final : public InternalLinkType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The link is a link to the screen with information about Telegram Star balance and transactions of the current user.
+   */
+  internalLinkTypeMyStars();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1613887070;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -28956,7 +29763,7 @@ class internalLinkTypeStickerSet final : public InternalLinkType {
 };
 
 /**
- * The link is a link to a story. Call searchPublicChat with the given sender username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
+ * The link is a link to a story. Call searchPublicChat with the given poster username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
  */
 class internalLinkTypeStory final : public InternalLinkType {
   /**
@@ -28968,26 +29775,26 @@ class internalLinkTypeStory final : public InternalLinkType {
   }
 
  public:
-  /// Username of the sender of the story.
-  string story_sender_username_;
+  /// Username of the poster of the story.
+  string story_poster_username_;
   /// Story identifier.
   int32 story_id_;
 
   /**
-   * The link is a link to a story. Call searchPublicChat with the given sender username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
+   * The link is a link to a story. Call searchPublicChat with the given poster username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
    */
   internalLinkTypeStory();
 
   /**
-   * The link is a link to a story. Call searchPublicChat with the given sender username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
+   * The link is a link to a story. Call searchPublicChat with the given poster username, then call getStory with the received chat identifier and the given story identifier, then show the story if received.
    *
-   * \param[in] story_sender_username_ Username of the sender of the story.
+   * \param[in] story_poster_username_ Username of the poster of the story.
    * \param[in] story_id_ Story identifier.
    */
-  internalLinkTypeStory(string const &story_sender_username_, int32 story_id_);
+  internalLinkTypeStory(string const &story_poster_username_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1471997511;
+  static const std::int32_t ID = 1852042869;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -29259,7 +30066,7 @@ class internalLinkTypeUserToken final : public InternalLinkType {
 };
 
 /**
- * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the given invite hash to process the link.
+ * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinVideoChat with the given invite hash to process the link.
  */
 class internalLinkTypeVideoChat final : public InternalLinkType {
   /**
@@ -29279,12 +30086,12 @@ class internalLinkTypeVideoChat final : public InternalLinkType {
   bool is_live_stream_;
 
   /**
-   * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the given invite hash to process the link.
+   * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinVideoChat with the given invite hash to process the link.
    */
   internalLinkTypeVideoChat();
 
   /**
-   * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the given invite hash to process the link.
+   * The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinVideoChat with the given invite hash to process the link.
    *
    * \param[in] chat_username_ Username of the chat with the video chat.
    * \param[in] invite_hash_ If non-empty, invite hash to be used to join the video chat without being muted by administrators.
@@ -29342,6 +30149,146 @@ class internalLinkTypeWebApp final : public InternalLinkType {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 2062112045;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * This class is an abstract base class.
+ * Describes result of group call participant invitation.
+ */
+class InviteGroupCallParticipantResult: public Object {
+ public:
+};
+
+/**
+ * The user can't be invited due to their privacy settings.
+ */
+class inviteGroupCallParticipantResultUserPrivacyRestricted final : public InviteGroupCallParticipantResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The user can't be invited due to their privacy settings.
+   */
+  inviteGroupCallParticipantResultUserPrivacyRestricted();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 53003769;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user can't be invited because they are already a participant of the call.
+ */
+class inviteGroupCallParticipantResultUserAlreadyParticipant final : public InviteGroupCallParticipantResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The user can't be invited because they are already a participant of the call.
+   */
+  inviteGroupCallParticipantResultUserAlreadyParticipant();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 661526151;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user can't be invited because they were banned by the owner of the call and can be invited back only by the owner of the group call.
+ */
+class inviteGroupCallParticipantResultUserWasBanned final : public InviteGroupCallParticipantResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The user can't be invited because they were banned by the owner of the call and can be invited back only by the owner of the group call.
+   */
+  inviteGroupCallParticipantResultUserWasBanned();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -204345357;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user was invited and a service message of the type messageGroupCall was sent which can be used in declineGroupCallInvitation to cancel the invitation.
+ */
+class inviteGroupCallParticipantResultSuccess final : public InviteGroupCallParticipantResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the chat with the invitation message.
+  int53 chat_id_;
+  /// Identifier of the message.
+  int53 message_id_;
+
+  /**
+   * The user was invited and a service message of the type messageGroupCall was sent which can be used in declineGroupCallInvitation to cancel the invitation.
+   */
+  inviteGroupCallParticipantResultSuccess();
+
+  /**
+   * The user was invited and a service message of the type messageGroupCall was sent which can be used in declineGroupCallInvitation to cancel the invitation.
+   *
+   * \param[in] chat_id_ Identifier of the chat with the invitation message.
+   * \param[in] message_id_ Identifier of the message.
+   */
+  inviteGroupCallParticipantResultSuccess(int53 chat_id_, int53 message_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1914309427;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -31378,6 +32325,36 @@ class linkPreviewTypeExternalVideo final : public LinkPreviewType {
 };
 
 /**
+ * The link is a link to a group call that isn't bound to a chat.
+ */
+class linkPreviewTypeGroupCall final : public LinkPreviewType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The link is a link to a group call that isn't bound to a chat.
+   */
+  linkPreviewTypeGroupCall();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1242459936;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
  * The link is a link to an invoice.
  */
 class linkPreviewTypeInvoice final : public LinkPreviewType {
@@ -31628,7 +32605,7 @@ class linkPreviewTypeStory final : public LinkPreviewType {
 
  public:
   /// The identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
 
@@ -31640,13 +32617,13 @@ class linkPreviewTypeStory final : public LinkPreviewType {
   /**
    * The link is a link to a story. Link preview description is unavailable.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ The identifier of the chat that posted the story.
    * \param[in] story_id_ Story identifier.
    */
-  linkPreviewTypeStory(int53 story_sender_chat_id_, int32 story_id_);
+  linkPreviewTypeStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 513574862;
+  static const std::int32_t ID = 1045709531;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -34042,7 +35019,7 @@ class messageStory final : public MessageContent {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
   /// True, if the story was automatically forwarded because of a mention of the user.
@@ -34056,14 +35033,14 @@ class messageStory final : public MessageContent {
   /**
    * A message with a forwarded story.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Story identifier.
    * \param[in] via_mention_ True, if the story was automatically forwarded because of a mention of the user.
    */
-  messageStory(int53 story_sender_chat_id_, int32 story_id_, bool via_mention_);
+  messageStory(int53 story_poster_chat_id_, int32 story_id_, bool via_mention_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 858387156;
+  static const std::int32_t ID = 1514236353;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -34172,6 +35149,57 @@ class messageCall final : public MessageContent {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 538893824;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active, isn't missed, and has no duration, and getOption(&quot;can_accept_calls&quot;) is true, then incoming call screen must be shown to the user. Use joinGroupCall to accept the call or declineGroupCallInvitation to decline it. If the call become active or missed, then the call screen must be hidden.
+ */
+class messageGroupCall final : public MessageContent {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// True, if the call is active, i.e. the called user joined the call.
+  bool is_active_;
+  /// True, if the called user missed or declined the call.
+  bool was_missed_;
+  /// True, if the call is a video call.
+  bool is_video_;
+  /// Call duration, in seconds; for left calls only.
+  int32 duration_;
+  /// Identifiers of some other call participants.
+  array<object_ptr<MessageSender>> other_participant_ids_;
+
+  /**
+   * A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active, isn't missed, and has no duration, and getOption(&quot;can_accept_calls&quot;) is true, then incoming call screen must be shown to the user. Use joinGroupCall to accept the call or declineGroupCallInvitation to decline it. If the call become active or missed, then the call screen must be hidden.
+   */
+  messageGroupCall();
+
+  /**
+   * A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active, isn't missed, and has no duration, and getOption(&quot;can_accept_calls&quot;) is true, then incoming call screen must be shown to the user. Use joinGroupCall to accept the call or declineGroupCallInvitation to decline it. If the call become active or missed, then the call screen must be hidden.
+   *
+   * \param[in] is_active_ True, if the call is active, i.e. the called user joined the call.
+   * \param[in] was_missed_ True, if the called user missed or declined the call.
+   * \param[in] is_video_ True, if the call is a video call.
+   * \param[in] duration_ Call duration, in seconds; for left calls only.
+   * \param[in] other_participant_ids_ Identifiers of some other call participants.
+   */
+  messageGroupCall(bool is_active_, bool was_missed_, bool is_video_, int32 duration_, array<object_ptr<MessageSender>> &&other_participant_ids_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1370396295;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -36000,7 +37028,7 @@ class messageUpgradedGift final : public MessageContent {
   object_ptr<MessageSender> sender_id_;
   /// Unique identifier of the received gift for the current user; only for the receiver of the gift.
   string received_gift_id_;
-  /// True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+  /// True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
   bool is_upgrade_;
   /// True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
   bool is_saved_;
@@ -36008,8 +37036,14 @@ class messageUpgradedGift final : public MessageContent {
   bool can_be_transferred_;
   /// True, if the gift was transferred to another owner; only for the receiver of the gift.
   bool was_transferred_;
+  /// Number of Telegram Stars that were paid by the sender for the gift; 0 if the gift was upgraded or transferred.
+  int53 last_resale_star_count_;
   /// Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
   int53 transfer_star_count_;
+  /// Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible; only for the receiver of the gift.
+  int32 next_transfer_date_;
+  /// Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
+  int32 next_resale_date_;
   /// Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't possible; only for the receiver of the gift.
   int32 export_date_;
 
@@ -36024,17 +37058,20 @@ class messageUpgradedGift final : public MessageContent {
    * \param[in] gift_ The gift.
    * \param[in] sender_id_ Sender of the gift; may be null for anonymous gifts.
    * \param[in] received_gift_id_ Unique identifier of the received gift for the current user; only for the receiver of the gift.
-   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
    * \param[in] is_saved_ True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
    * \param[in] can_be_transferred_ True, if the gift can be transferred to another owner; only for the receiver of the gift.
    * \param[in] was_transferred_ True, if the gift was transferred to another owner; only for the receiver of the gift.
+   * \param[in] last_resale_star_count_ Number of Telegram Stars that were paid by the sender for the gift; 0 if the gift was upgraded or transferred.
    * \param[in] transfer_star_count_ Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
+   * \param[in] next_transfer_date_ Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible; only for the receiver of the gift.
+   * \param[in] next_resale_date_ Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
    * \param[in] export_date_ Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't possible; only for the receiver of the gift.
    */
-  messageUpgradedGift(object_ptr<upgradedGift> &&gift_, object_ptr<MessageSender> &&sender_id_, string const &received_gift_id_, bool is_upgrade_, bool is_saved_, bool can_be_transferred_, bool was_transferred_, int53 transfer_star_count_, int32 export_date_);
+  messageUpgradedGift(object_ptr<upgradedGift> &&gift_, object_ptr<MessageSender> &&sender_id_, string const &received_gift_id_, bool is_upgrade_, bool is_saved_, bool can_be_transferred_, bool was_transferred_, int53 last_resale_star_count_, int53 transfer_star_count_, int32 next_transfer_date_, int32 next_resale_date_, int32 export_date_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1068647053;
+  static const std::int32_t ID = -1586797067;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -36061,7 +37098,7 @@ class messageRefundedUpgradedGift final : public MessageContent {
   object_ptr<gift> gift_;
   /// Sender of the gift.
   object_ptr<MessageSender> sender_id_;
-  /// True, if the gift was obtained by upgrading of a previously received gift.
+  /// True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
   bool is_upgrade_;
 
   /**
@@ -36074,12 +37111,93 @@ class messageRefundedUpgradedGift final : public MessageContent {
    *
    * \param[in] gift_ The gift.
    * \param[in] sender_id_ Sender of the gift.
-   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift.
+   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
    */
   messageRefundedUpgradedGift(object_ptr<gift> &&gift_, object_ptr<MessageSender> &&sender_id_, bool is_upgrade_);
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1308949479;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Paid messages were refunded.
+ */
+class messagePaidMessagesRefunded final : public MessageContent {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The number of refunded messages.
+  int32 message_count_;
+  /// The number of refunded Telegram Stars.
+  int53 star_count_;
+
+  /**
+   * Paid messages were refunded.
+   */
+  messagePaidMessagesRefunded();
+
+  /**
+   * Paid messages were refunded.
+   *
+   * \param[in] message_count_ The number of refunded messages.
+   * \param[in] star_count_ The number of refunded Telegram Stars.
+   */
+  messagePaidMessagesRefunded(int32 message_count_, int53 star_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 580403343;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * A price for paid messages was changed in the supergroup chat.
+ */
+class messagePaidMessagePriceChanged final : public MessageContent {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message.
+  int53 paid_message_star_count_;
+
+  /**
+   * A price for paid messages was changed in the supergroup chat.
+   */
+  messagePaidMessagePriceChanged();
+
+  /**
+   * A price for paid messages was changed in the supergroup chat.
+   *
+   * \param[in] paid_message_star_count_ The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message.
+   */
+  explicit messagePaidMessagePriceChanged(int53 paid_message_star_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -344945397;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -37819,8 +38937,8 @@ class messageReplyToStory final : public MessageReplyTo {
   }
 
  public:
-  /// The identifier of the sender of the story.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
 
@@ -37832,13 +38950,13 @@ class messageReplyToStory final : public MessageReplyTo {
   /**
    * Describes a story replied by a given message.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story.
    * \param[in] story_id_ The identifier of the story.
    */
-  messageReplyToStory(int53 story_sender_chat_id_, int32 story_id_);
+  messageReplyToStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1888266553;
+  static const std::int32_t ID = -674492596;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -39301,7 +40419,7 @@ class newChatPrivacySettings final : public Object {
  public:
   /// True, if non-contacts users are able to write first to the current user. Telegram Premium subscribers are able to write first regardless of this setting.
   bool allow_new_chats_from_unknown_users_;
-  /// Number of Telegram Stars that must be paid for every incoming private message by non-contacts; 0-getOption(&quot;paid_message_star_count_max&quot;). If positive, then allow_new_chats_from_unknown_users must be true. The current user will receive getOption(&quot;paid_message_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for message sending.
+  /// Number of Telegram Stars that must be paid for every incoming private message by non-contacts; 0-getOption(&quot;paid_message_star_count_max&quot;). If positive, then allow_new_chats_from_unknown_users must be true. The current user will receive getOption(&quot;paid_message_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for message sending. Can be positive, only if getOption(&quot;can_enable_paid_messages&quot;) is true.
   int53 incoming_paid_message_star_count_;
 
   /**
@@ -39313,7 +40431,7 @@ class newChatPrivacySettings final : public Object {
    * Contains privacy settings for chats with non-contacts.
    *
    * \param[in] allow_new_chats_from_unknown_users_ True, if non-contacts users are able to write first to the current user. Telegram Premium subscribers are able to write first regardless of this setting.
-   * \param[in] incoming_paid_message_star_count_ Number of Telegram Stars that must be paid for every incoming private message by non-contacts; 0-getOption(&quot;paid_message_star_count_max&quot;). If positive, then allow_new_chats_from_unknown_users must be true. The current user will receive getOption(&quot;paid_message_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for message sending.
+   * \param[in] incoming_paid_message_star_count_ Number of Telegram Stars that must be paid for every incoming private message by non-contacts; 0-getOption(&quot;paid_message_star_count_max&quot;). If positive, then allow_new_chats_from_unknown_users must be true. The current user will receive getOption(&quot;paid_message_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for message sending. Can be positive, only if getOption(&quot;can_enable_paid_messages&quot;) is true.
    */
   newChatPrivacySettings(bool allow_new_chats_from_unknown_users_, int53 incoming_paid_message_star_count_);
 
@@ -44511,7 +45629,7 @@ class phoneNumberAuthenticationSettings final : public Object {
   bool allow_sms_retriever_api_;
   /// For official Android and iOS applications only; pass null otherwise. Settings for Firebase Authentication.
   object_ptr<FirebaseAuthenticationSettings> firebase_authentication_settings_;
-  /// List of up to 20 authentication tokens, recently received in updateOption(&quot;authentication_token&quot;) in previously logged out sessions.
+  /// List of up to 20 authentication tokens, recently received in updateOption(&quot;authentication_token&quot;) in previously logged out sessions; for setAuthenticationPhoneNumber only.
   array<string> authentication_tokens_;
 
   /**
@@ -44528,7 +45646,7 @@ class phoneNumberAuthenticationSettings final : public Object {
    * \param[in] has_unknown_phone_number_ Pass true if there is a SIM card in the current device, but it is not possible to check whether phone number matches.
    * \param[in] allow_sms_retriever_api_ For official applications only. True, if the application can use Android SMS Retriever API (requires Google Play Services &gt;= 10.2) to automatically receive the authentication code from the SMS. See https://developers.google.com/identity/sms-retriever/ for more details.
    * \param[in] firebase_authentication_settings_ For official Android and iOS applications only; pass null otherwise. Settings for Firebase Authentication.
-   * \param[in] authentication_tokens_ List of up to 20 authentication tokens, recently received in updateOption(&quot;authentication_token&quot;) in previously logged out sessions.
+   * \param[in] authentication_tokens_ List of up to 20 authentication tokens, recently received in updateOption(&quot;authentication_token&quot;) in previously logged out sessions; for setAuthenticationPhoneNumber only.
    */
   phoneNumberAuthenticationSettings(bool allow_flash_call_, bool allow_missed_call_, bool is_current_phone_number_, bool has_unknown_phone_number_, bool allow_sms_retriever_api_, object_ptr<FirebaseAuthenticationSettings> &&firebase_authentication_settings_, array<string> &&authentication_tokens_);
 
@@ -46617,9 +47735,9 @@ class premiumLimitTypeActiveStoryCount final : public PremiumLimitType {
 };
 
 /**
- * The maximum number of stories sent per week.
+ * The maximum number of stories posted per week.
  */
-class premiumLimitTypeWeeklySentStoryCount final : public PremiumLimitType {
+class premiumLimitTypeWeeklyPostedStoryCount final : public PremiumLimitType {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -46631,12 +47749,12 @@ class premiumLimitTypeWeeklySentStoryCount final : public PremiumLimitType {
  public:
 
   /**
-   * The maximum number of stories sent per week.
+   * The maximum number of stories posted per week.
    */
-  premiumLimitTypeWeeklySentStoryCount();
+  premiumLimitTypeWeeklyPostedStoryCount();
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 40485707;
+  static const std::int32_t ID = -506354313;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -46647,9 +47765,9 @@ class premiumLimitTypeWeeklySentStoryCount final : public PremiumLimitType {
 };
 
 /**
- * The maximum number of stories sent per month.
+ * The maximum number of stories posted per month.
  */
-class premiumLimitTypeMonthlySentStoryCount final : public PremiumLimitType {
+class premiumLimitTypeMonthlyPostedStoryCount final : public PremiumLimitType {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -46661,12 +47779,12 @@ class premiumLimitTypeMonthlySentStoryCount final : public PremiumLimitType {
  public:
 
   /**
-   * The maximum number of stories sent per month.
+   * The maximum number of stories posted per month.
    */
-  premiumLimitTypeMonthlySentStoryCount();
+  premiumLimitTypeMonthlyPostedStoryCount();
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 819481475;
+  static const std::int32_t ID = 26329490;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -46677,7 +47795,7 @@ class premiumLimitTypeMonthlySentStoryCount final : public PremiumLimitType {
 };
 
 /**
- * The maximum length of captions of sent stories.
+ * The maximum length of captions of posted stories.
  */
 class premiumLimitTypeStoryCaptionLength final : public PremiumLimitType {
   /**
@@ -46691,7 +47809,7 @@ class premiumLimitTypeStoryCaptionLength final : public PremiumLimitType {
  public:
 
   /**
-   * The maximum length of captions of sent stories.
+   * The maximum length of captions of posted stories.
    */
   premiumLimitTypeStoryCaptionLength();
 
@@ -48880,7 +49998,7 @@ class pushMessageContentUpgradedGift final : public PushMessageContent {
   }
 
  public:
-  /// True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+  /// True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
   bool is_upgrade_;
 
   /**
@@ -48891,7 +50009,7 @@ class pushMessageContentUpgradedGift final : public PushMessageContent {
   /**
    * A message with an upgraded gift.
    *
-   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+   * \param[in] is_upgrade_ True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold gift.
    */
   explicit pushMessageContentUpgradedGift(bool is_upgrade_);
 
@@ -50435,6 +51553,10 @@ class receivedGift final : public Object {
   int53 prepaid_upgrade_star_count_;
   /// Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
   int53 transfer_star_count_;
+  /// Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible; only for the receiver of the gift.
+  int32 next_transfer_date_;
+  /// Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
+  int32 next_resale_date_;
   /// Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't possible; only for the receiver of the gift.
   int32 export_date_;
 
@@ -50460,12 +51582,14 @@ class receivedGift final : public Object {
    * \param[in] sell_star_count_ Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by the current user.
    * \param[in] prepaid_upgrade_star_count_ Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift.
    * \param[in] transfer_star_count_ Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
+   * \param[in] next_transfer_date_ Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible; only for the receiver of the gift.
+   * \param[in] next_resale_date_ Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
    * \param[in] export_date_ Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't possible; only for the receiver of the gift.
    */
-  receivedGift(string const &received_gift_id_, object_ptr<MessageSender> &&sender_id_, object_ptr<formattedText> &&text_, bool is_private_, bool is_saved_, bool is_pinned_, bool can_be_upgraded_, bool can_be_transferred_, bool was_refunded_, int32 date_, object_ptr<SentGift> &&gift_, int53 sell_star_count_, int53 prepaid_upgrade_star_count_, int53 transfer_star_count_, int32 export_date_);
+  receivedGift(string const &received_gift_id_, object_ptr<MessageSender> &&sender_id_, object_ptr<formattedText> &&text_, bool is_private_, bool is_saved_, bool is_pinned_, bool can_be_upgraded_, bool can_be_transferred_, bool was_refunded_, int32 date_, object_ptr<SentGift> &&gift_, int53 sell_star_count_, int53 prepaid_upgrade_star_count_, int53 transfer_star_count_, int32 next_transfer_date_, int32 next_resale_date_, int32 export_date_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 553476056;
+  static const std::int32_t ID = 61550296;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -51040,178 +52164,6 @@ class reportChatResultMessagesRequired final : public ReportChatResult {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class reportOption;
-
-/**
- * This class is an abstract base class.
- * Describes result of sponsored message report.
- */
-class ReportChatSponsoredMessageResult: public Object {
- public:
-};
-
-/**
- * The message was reported successfully.
- */
-class reportChatSponsoredMessageResultOk final : public ReportChatSponsoredMessageResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The message was reported successfully.
-   */
-  reportChatSponsoredMessageResultOk();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1968140831;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The sponsored message is too old or not found.
- */
-class reportChatSponsoredMessageResultFailed final : public ReportChatSponsoredMessageResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The sponsored message is too old or not found.
-   */
-  reportChatSponsoredMessageResultFailed();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 2132777926;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The user must choose an option to report the message and repeat request with the chosen option.
- */
-class reportChatSponsoredMessageResultOptionRequired final : public ReportChatSponsoredMessageResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Title for the option choice.
-  string title_;
-  /// List of available options.
-  array<object_ptr<reportOption>> options_;
-
-  /**
-   * The user must choose an option to report the message and repeat request with the chosen option.
-   */
-  reportChatSponsoredMessageResultOptionRequired();
-
-  /**
-   * The user must choose an option to report the message and repeat request with the chosen option.
-   *
-   * \param[in] title_ Title for the option choice.
-   * \param[in] options_ List of available options.
-   */
-  reportChatSponsoredMessageResultOptionRequired(string const &title_, array<object_ptr<reportOption>> &&options_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1172751995;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * Sponsored messages were hidden for the user in all chats.
- */
-class reportChatSponsoredMessageResultAdsHidden final : public ReportChatSponsoredMessageResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * Sponsored messages were hidden for the user in all chats.
-   */
-  reportChatSponsoredMessageResultAdsHidden();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -387260898;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-/**
- * The user asked to hide sponsored messages, but Telegram Premium is required for this.
- */
-class reportChatSponsoredMessageResultPremiumRequired final : public ReportChatSponsoredMessageResult {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-
-  /**
-   * The user asked to hide sponsored messages, but Telegram Premium is required for this.
-   */
-  reportChatSponsoredMessageResultPremiumRequired();
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1997287120;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
 /**
  * Describes an option to report an entity to Telegram.
  */
@@ -51553,6 +52505,178 @@ class reportReasonCustom final : public ReportReason {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1380459917;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class reportOption;
+
+/**
+ * This class is an abstract base class.
+ * Describes result of sponsored message or chat report.
+ */
+class ReportSponsoredResult: public Object {
+ public:
+};
+
+/**
+ * The message was reported successfully.
+ */
+class reportSponsoredResultOk final : public ReportSponsoredResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The message was reported successfully.
+   */
+  reportSponsoredResultOk();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -128473456;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The sponsored message is too old or not found.
+ */
+class reportSponsoredResultFailed final : public ReportSponsoredResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The sponsored message is too old or not found.
+   */
+  reportSponsoredResultFailed();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1231714278;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user must choose an option to report the message and repeat request with the chosen option.
+ */
+class reportSponsoredResultOptionRequired final : public ReportSponsoredResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Title for the option choice.
+  string title_;
+  /// List of available options.
+  array<object_ptr<reportOption>> options_;
+
+  /**
+   * The user must choose an option to report the message and repeat request with the chosen option.
+   */
+  reportSponsoredResultOptionRequired();
+
+  /**
+   * The user must choose an option to report the message and repeat request with the chosen option.
+   *
+   * \param[in] title_ Title for the option choice.
+   * \param[in] options_ List of available options.
+   */
+  reportSponsoredResultOptionRequired(string const &title_, array<object_ptr<reportOption>> &&options_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1646687318;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Sponsored messages were hidden for the user in all chats.
+ */
+class reportSponsoredResultAdsHidden final : public ReportSponsoredResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * Sponsored messages were hidden for the user in all chats.
+   */
+  reportSponsoredResultAdsHidden();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -372279531;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The user asked to hide sponsored messages, but Telegram Premium is required for this.
+ */
+class reportSponsoredResultPremiumRequired final : public ReportSponsoredResult {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+
+  /**
+   * The user asked to hide sponsored messages, but Telegram Premium is required for this.
+   */
+  reportSponsoredResultPremiumRequired();
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -55411887;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -53103,8 +54227,8 @@ class scopeNotificationSettings final : public Object {
   bool mute_stories_;
   /// Identifier of the notification sound to be played for stories; 0 if sound is disabled.
   int64 story_sound_id_;
-  /// True, if the sender of stories must be displayed in notifications.
-  bool show_story_sender_;
+  /// True, if the chat that posted a story must be displayed in notifications.
+  bool show_story_poster_;
   /// True, if notifications for incoming pinned messages will be created as for an ordinary unread message.
   bool disable_pinned_message_notifications_;
   /// True, if notifications for messages with mentions will be created as for an ordinary unread message.
@@ -53124,14 +54248,14 @@ class scopeNotificationSettings final : public Object {
    * \param[in] use_default_mute_stories_ If true, story notifications are received only for the first 5 chats from topChatCategoryUsers regardless of the value of mute_stories.
    * \param[in] mute_stories_ True, if story notifications are disabled.
    * \param[in] story_sound_id_ Identifier of the notification sound to be played for stories; 0 if sound is disabled.
-   * \param[in] show_story_sender_ True, if the sender of stories must be displayed in notifications.
+   * \param[in] show_story_poster_ True, if the chat that posted a story must be displayed in notifications.
    * \param[in] disable_pinned_message_notifications_ True, if notifications for incoming pinned messages will be created as for an ordinary unread message.
    * \param[in] disable_mention_notifications_ True, if notifications for messages with mentions will be created as for an ordinary unread message.
    */
-  scopeNotificationSettings(int32 mute_for_, int64 sound_id_, bool show_preview_, bool use_default_mute_stories_, bool mute_stories_, int64 story_sound_id_, bool show_story_sender_, bool disable_pinned_message_notifications_, bool disable_mention_notifications_);
+  scopeNotificationSettings(int32 mute_for_, int64 sound_id_, bool show_preview_, bool use_default_mute_stories_, bool mute_stories_, int64 story_sound_id_, bool show_story_poster_, bool disable_pinned_message_notifications_, bool disable_mention_notifications_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -599105185;
+  static const std::int32_t ID = 88369150;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -55001,6 +56125,95 @@ class speechRecognitionResultError final : public SpeechRecognitionResult {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 164774908;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Describes a sponsored chat.
+ */
+class sponsoredChat final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of this result.
+  int53 unique_id_;
+  /// Chat identifier.
+  int53 chat_id_;
+  /// Additional optional information about the sponsor to be shown along with the chat.
+  string sponsor_info_;
+  /// If non-empty, additional information about the sponsored chat to be shown along with the chat.
+  string additional_info_;
+
+  /**
+   * Describes a sponsored chat.
+   */
+  sponsoredChat();
+
+  /**
+   * Describes a sponsored chat.
+   *
+   * \param[in] unique_id_ Unique identifier of this result.
+   * \param[in] chat_id_ Chat identifier.
+   * \param[in] sponsor_info_ Additional optional information about the sponsor to be shown along with the chat.
+   * \param[in] additional_info_ If non-empty, additional information about the sponsored chat to be shown along with the chat.
+   */
+  sponsoredChat(int53 unique_id_, int53 chat_id_, string const &sponsor_info_, string const &additional_info_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -325763489;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class sponsoredChat;
+
+/**
+ * Contains a list of sponsored chats.
+ */
+class sponsoredChats final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// List of sponsored chats.
+  array<object_ptr<sponsoredChat>> chats_;
+
+  /**
+   * Contains a list of sponsored chats.
+   */
+  sponsoredChats();
+
+  /**
+   * Contains a list of sponsored chats.
+   *
+   * \param[in] chats_ List of sponsored chats.
+   */
+  explicit sponsoredChats(array<object_ptr<sponsoredChat>> &&chats_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 536300641;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -56882,6 +58095,93 @@ class starTransactionTypeGiftUpgrade final : public StarTransactionType {
 };
 
 /**
+ * The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+ */
+class starTransactionTypeUpgradedGiftPurchase final : public StarTransactionType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the user that sold the gift.
+  int53 user_id_;
+  /// The gift.
+  object_ptr<upgradedGift> gift_;
+
+  /**
+   * The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+   */
+  starTransactionTypeUpgradedGiftPurchase();
+
+  /**
+   * The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+   *
+   * \param[in] user_id_ Identifier of the user that sold the gift.
+   * \param[in] gift_ The gift.
+   */
+  starTransactionTypeUpgradedGiftPurchase(int53 user_id_, object_ptr<upgradedGift> &&gift_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -59050247;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The transaction is a sale of an upgraded gift; for regular users only.
+ */
+class starTransactionTypeUpgradedGiftSale final : public StarTransactionType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the user that bought the gift.
+  int53 user_id_;
+  /// The gift.
+  object_ptr<upgradedGift> gift_;
+  /// Information about commission received by Telegram from the transaction.
+  object_ptr<affiliateInfo> affiliate_;
+
+  /**
+   * The transaction is a sale of an upgraded gift; for regular users only.
+   */
+  starTransactionTypeUpgradedGiftSale();
+
+  /**
+   * The transaction is a sale of an upgraded gift; for regular users only.
+   *
+   * \param[in] user_id_ Identifier of the user that bought the gift.
+   * \param[in] gift_ The gift.
+   * \param[in] affiliate_ Information about commission received by Telegram from the transaction.
+   */
+  starTransactionTypeUpgradedGiftSale(int53 user_id_, object_ptr<upgradedGift> &&gift_, object_ptr<affiliateInfo> &&affiliate_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 2041948603;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
  * The transaction is a sending of a paid reaction to a message in a channel chat by the current user; for regular users only.
  */
 class starTransactionTypeChannelPaidReactionSend final : public StarTransactionType {
@@ -57098,7 +58398,7 @@ class starTransactionTypePaidMessageReceive final : public StarTransactionType {
 };
 
 /**
- * The transaction is a purchase of Telegram Premium subscription; for regular users only.
+ * The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
  */
 class starTransactionTypePremiumPurchase final : public StarTransactionType {
   /**
@@ -57118,12 +58418,12 @@ class starTransactionTypePremiumPurchase final : public StarTransactionType {
   object_ptr<sticker> sticker_;
 
   /**
-   * The transaction is a purchase of Telegram Premium subscription; for regular users only.
+   * The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
    */
   starTransactionTypePremiumPurchase();
 
   /**
-   * The transaction is a purchase of Telegram Premium subscription; for regular users only.
+   * The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
    *
    * \param[in] user_id_ Identifier of the user that received the Telegram Premium subscription.
    * \param[in] month_count_ Number of months the Telegram Premium subscription will be active.
@@ -57133,6 +58433,84 @@ class starTransactionTypePremiumPurchase final : public StarTransactionType {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 998094851;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The transaction is a transfer of Telegram Stars to a business bot; for regular users only.
+ */
+class starTransactionTypeBusinessBotTransferSend final : public StarTransactionType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the bot that received Telegram Stars.
+  int53 user_id_;
+
+  /**
+   * The transaction is a transfer of Telegram Stars to a business bot; for regular users only.
+   */
+  starTransactionTypeBusinessBotTransferSend();
+
+  /**
+   * The transaction is a transfer of Telegram Stars to a business bot; for regular users only.
+   *
+   * \param[in] user_id_ Identifier of the bot that received Telegram Stars.
+   */
+  explicit starTransactionTypeBusinessBotTransferSend(int53 user_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1221227814;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The transaction is a transfer of Telegram Stars from a business account; for bots only.
+ */
+class starTransactionTypeBusinessBotTransferReceive final : public StarTransactionType {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the user that sent Telegram Stars.
+  int53 user_id_;
+
+  /**
+   * The transaction is a transfer of Telegram Stars from a business account; for bots only.
+   */
+  starTransactionTypeBusinessBotTransferReceive();
+
+  /**
+   * The transaction is a transfer of Telegram Stars from a business account; for bots only.
+   *
+   * \param[in] user_id_ Identifier of the user that sent Telegram Stars.
+   */
+  explicit starTransactionTypeBusinessBotTransferReceive(int53 user_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 532496778;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -58595,6 +59973,98 @@ class storePaymentPurposeGiftedStars final : public StorePaymentPurpose {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+/**
+ * This class is an abstract base class.
+ * Describes an in-store transaction.
+ */
+class StoreTransaction: public Object {
+ public:
+};
+
+/**
+ * A purchase through App Store.
+ */
+class storeTransactionAppStore final : public StoreTransaction {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// App Store receipt.
+  bytes receipt_;
+
+  /**
+   * A purchase through App Store.
+   */
+  storeTransactionAppStore();
+
+  /**
+   * A purchase through App Store.
+   *
+   * \param[in] receipt_ App Store receipt.
+   */
+  explicit storeTransactionAppStore(bytes const &receipt_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1625562441;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * A purchase through Google Play.
+ */
+class storeTransactionGooglePlay final : public StoreTransaction {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Application package name.
+  string package_name_;
+  /// Identifier of the purchased store product.
+  string store_product_id_;
+  /// Google Play purchase token.
+  string purchase_token_;
+
+  /**
+   * A purchase through Google Play.
+   */
+  storeTransactionGooglePlay();
+
+  /**
+   * A purchase through Google Play.
+   *
+   * \param[in] package_name_ Application package name.
+   * \param[in] store_product_id_ Identifier of the purchased store product.
+   * \param[in] purchase_token_ Google Play purchase token.
+   */
+  storeTransactionGooglePlay(string const &package_name_, string const &store_product_id_, string const &purchase_token_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1094018617;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class story;
 
 /**
@@ -58671,21 +60141,21 @@ class story final : public Object {
   }
 
  public:
-  /// Unique story identifier among stories of the given sender.
+  /// Unique story identifier among stories posted by the given chat.
   int32 id_;
   /// Identifier of the chat that posted the story.
-  int53 sender_chat_id_;
-  /// Identifier of the sender of the story; may be null if the story is posted on behalf of the sender_chat_id.
-  object_ptr<MessageSender> sender_id_;
+  int53 poster_chat_id_;
+  /// Identifier of the user or chat that posted the story; may be null if the story is posted on behalf of the poster_chat_id.
+  object_ptr<MessageSender> poster_id_;
   /// Point in time (Unix timestamp) when the story was published.
   int32 date_;
-  /// True, if the story is being sent by the current user.
-  bool is_being_sent_;
+  /// True, if the story is being posted by the current user.
+  bool is_being_posted_;
   /// True, if the story is being edited by the current user.
   bool is_being_edited_;
   /// True, if the story was edited.
   bool is_edited_;
-  /// True, if the story is saved in the sender's profile and will be available there after expiration.
+  /// True, if the story is saved in the profile of the chat that posted it and will be available there after expiration.
   bool is_posted_to_chat_page_;
   /// True, if the story is visible only for the current user.
   bool is_visible_only_for_self_;
@@ -58695,7 +60165,7 @@ class story final : public Object {
   bool can_be_edited_;
   /// True, if the story can be forwarded as a message. Otherwise, screenshots and saving of the story content must be also forbidden.
   bool can_be_forwarded_;
-  /// True, if the story can be replied in the chat with the story sender.
+  /// True, if the story can be replied in the chat with the user that posted the story.
   bool can_be_replied_;
   /// True, if the story's is_posted_to_chat_page value can be changed.
   bool can_toggle_is_posted_to_chat_page_;
@@ -58728,19 +60198,19 @@ class story final : public Object {
   /**
    * Represents a story.
    *
-   * \param[in] id_ Unique story identifier among stories of the given sender.
-   * \param[in] sender_chat_id_ Identifier of the chat that posted the story.
-   * \param[in] sender_id_ Identifier of the sender of the story; may be null if the story is posted on behalf of the sender_chat_id.
+   * \param[in] id_ Unique story identifier among stories posted by the given chat.
+   * \param[in] poster_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] poster_id_ Identifier of the user or chat that posted the story; may be null if the story is posted on behalf of the poster_chat_id.
    * \param[in] date_ Point in time (Unix timestamp) when the story was published.
-   * \param[in] is_being_sent_ True, if the story is being sent by the current user.
+   * \param[in] is_being_posted_ True, if the story is being posted by the current user.
    * \param[in] is_being_edited_ True, if the story is being edited by the current user.
    * \param[in] is_edited_ True, if the story was edited.
-   * \param[in] is_posted_to_chat_page_ True, if the story is saved in the sender's profile and will be available there after expiration.
+   * \param[in] is_posted_to_chat_page_ True, if the story is saved in the profile of the chat that posted it and will be available there after expiration.
    * \param[in] is_visible_only_for_self_ True, if the story is visible only for the current user.
    * \param[in] can_be_deleted_ True, if the story can be deleted.
    * \param[in] can_be_edited_ True, if the story can be edited.
    * \param[in] can_be_forwarded_ True, if the story can be forwarded as a message. Otherwise, screenshots and saving of the story content must be also forbidden.
-   * \param[in] can_be_replied_ True, if the story can be replied in the chat with the story sender.
+   * \param[in] can_be_replied_ True, if the story can be replied in the chat with the user that posted the story.
    * \param[in] can_toggle_is_posted_to_chat_page_ True, if the story's is_posted_to_chat_page value can be changed.
    * \param[in] can_get_statistics_ True, if the story statistics are available through getStoryStatistics.
    * \param[in] can_get_interactions_ True, if interactions with the story can be received through getStoryInteractions.
@@ -58753,10 +60223,10 @@ class story final : public Object {
    * \param[in] areas_ Clickable areas to be shown on the story content.
    * \param[in] caption_ Caption of the story.
    */
-  story(int32 id_, int53 sender_chat_id_, object_ptr<MessageSender> &&sender_id_, int32 date_, bool is_being_sent_, bool is_being_edited_, bool is_edited_, bool is_posted_to_chat_page_, bool is_visible_only_for_self_, bool can_be_deleted_, bool can_be_edited_, bool can_be_forwarded_, bool can_be_replied_, bool can_toggle_is_posted_to_chat_page_, bool can_get_statistics_, bool can_get_interactions_, bool has_expired_viewers_, object_ptr<storyRepostInfo> &&repost_info_, object_ptr<storyInteractionInfo> &&interaction_info_, object_ptr<ReactionType> &&chosen_reaction_type_, object_ptr<StoryPrivacySettings> &&privacy_settings_, object_ptr<StoryContent> &&content_, array<object_ptr<storyArea>> &&areas_, object_ptr<formattedText> &&caption_);
+  story(int32 id_, int53 poster_chat_id_, object_ptr<MessageSender> &&poster_id_, int32 date_, bool is_being_posted_, bool is_being_edited_, bool is_edited_, bool is_posted_to_chat_page_, bool is_visible_only_for_self_, bool can_be_deleted_, bool can_be_edited_, bool can_be_forwarded_, bool can_be_replied_, bool can_toggle_is_posted_to_chat_page_, bool can_get_statistics_, bool can_get_interactions_, bool has_expired_viewers_, object_ptr<storyRepostInfo> &&repost_info_, object_ptr<storyInteractionInfo> &&interaction_info_, object_ptr<ReactionType> &&chosen_reaction_type_, object_ptr<StoryPrivacySettings> &&privacy_settings_, object_ptr<StoryContent> &&content_, array<object_ptr<storyArea>> &&areas_, object_ptr<formattedText> &&caption_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -294015331;
+  static const std::int32_t ID = 1206531707;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -59300,7 +60770,7 @@ class storyContentUnsupported final : public StoryContent {
 };
 
 /**
- * Contains identifier of a story along with identifier of its sender.
+ * Contains identifier of a story along with identifier of the chat that posted it.
  */
 class storyFullId final : public Object {
   /**
@@ -59313,25 +60783,25 @@ class storyFullId final : public Object {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 sender_chat_id_;
-  /// Unique story identifier among stories of the given sender.
+  int53 poster_chat_id_;
+  /// Unique story identifier among stories of the chat.
   int32 story_id_;
 
   /**
-   * Contains identifier of a story along with identifier of its sender.
+   * Contains identifier of a story along with identifier of the chat that posted it.
    */
   storyFullId();
 
   /**
-   * Contains identifier of a story along with identifier of its sender.
+   * Contains identifier of a story along with identifier of the chat that posted it.
    *
-   * \param[in] sender_chat_id_ Identifier of the chat that posted the story.
-   * \param[in] story_id_ Unique story identifier among stories of the given sender.
+   * \param[in] poster_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_id_ Unique story identifier among stories of the chat.
    */
-  storyFullId(int53 sender_chat_id_, int32 story_id_);
+  storyFullId(int53 poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1880961525;
+  static const std::int32_t ID = 765952419;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -59354,7 +60824,7 @@ class storyInfo final : public Object {
   }
 
  public:
-  /// Unique story identifier among stories of the given sender.
+  /// Unique story identifier among stories of the chat.
   int32 story_id_;
   /// Point in time (Unix timestamp) when the story was published.
   int32 date_;
@@ -59369,7 +60839,7 @@ class storyInfo final : public Object {
   /**
    * Contains basic information about a story.
    *
-   * \param[in] story_id_ Unique story identifier among stories of the given sender.
+   * \param[in] story_id_ Unique story identifier among stories of the chat.
    * \param[in] date_ Point in time (Unix timestamp) when the story was published.
    * \param[in] is_for_close_friends_ True, if the story is available only to close friends.
    */
@@ -59749,7 +61219,7 @@ class StoryOrigin: public Object {
 };
 
 /**
- * The original story was a public story with known sender.
+ * The original story was a public story that was posted by a known chat.
  */
 class storyOriginPublicStory final : public StoryOrigin {
   /**
@@ -59767,12 +61237,12 @@ class storyOriginPublicStory final : public StoryOrigin {
   int32 story_id_;
 
   /**
-   * The original story was a public story with known sender.
+   * The original story was a public story that was posted by a known chat.
    */
   storyOriginPublicStory();
 
   /**
-   * The original story was a public story with known sender.
+   * The original story was a public story that was posted by a known chat.
    *
    * \param[in] chat_id_ Identifier of the chat that posted original story.
    * \param[in] story_id_ Story identifier of the original story.
@@ -59791,7 +61261,7 @@ class storyOriginPublicStory final : public StoryOrigin {
 };
 
 /**
- * The original story was sent by an unknown user.
+ * The original story was posted by an unknown user.
  */
 class storyOriginHiddenUser final : public StoryOrigin {
   /**
@@ -59803,23 +61273,23 @@ class storyOriginHiddenUser final : public StoryOrigin {
   }
 
  public:
-  /// Name of the story sender.
-  string sender_name_;
+  /// Name of the user or the chat that posted the story.
+  string poster_name_;
 
   /**
-   * The original story was sent by an unknown user.
+   * The original story was posted by an unknown user.
    */
   storyOriginHiddenUser();
 
   /**
-   * The original story was sent by an unknown user.
+   * The original story was posted by an unknown user.
    *
-   * \param[in] sender_name_ Name of the story sender.
+   * \param[in] poster_name_ Name of the user or the chat that posted the story.
    */
-  explicit storyOriginHiddenUser(string const &sender_name_);
+  explicit storyOriginHiddenUser(string const &poster_name_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1512016364;
+  static const std::int32_t ID = -96348585;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -60079,7 +61549,7 @@ class minithumbnail;
 class thumbnail;
 
 /**
- * Describes a video file sent in a story.
+ * Describes a video file posted as a story.
  */
 class storyVideo final : public Object {
   /**
@@ -60113,12 +61583,12 @@ class storyVideo final : public Object {
   object_ptr<file> video_;
 
   /**
-   * Describes a video file sent in a story.
+   * Describes a video file posted as a story.
    */
   storyVideo();
 
   /**
-   * Describes a video file sent in a story.
+   * Describes a video file posted as a story.
    *
    * \param[in] duration_ Duration of the video, in seconds.
    * \param[in] width_ Video width.
@@ -60143,6 +61613,8 @@ class storyVideo final : public Object {
    */
   void store(TlStorerToString &s, const char *field_name) const final;
 };
+
+class formattedText;
 
 /**
  * This class is an abstract base class.
@@ -60599,6 +62071,54 @@ class suggestedActionExtendStarSubscriptions final : public SuggestedAction {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+/**
+ * A custom suggestion to be shown at the top of the chat list.
+ */
+class suggestedActionCustom final : public SuggestedAction {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique name of the suggestion.
+  string name_;
+  /// Title of the suggestion.
+  object_ptr<formattedText> title_;
+  /// Description of the suggestion.
+  object_ptr<formattedText> description_;
+  /// The link to open when the suggestion is clicked.
+  string url_;
+
+  /**
+   * A custom suggestion to be shown at the top of the chat list.
+   */
+  suggestedActionCustom();
+
+  /**
+   * A custom suggestion to be shown at the top of the chat list.
+   *
+   * \param[in] name_ Unique name of the suggestion.
+   * \param[in] title_ Title of the suggestion.
+   * \param[in] description_ Description of the suggestion.
+   * \param[in] url_ The link to open when the suggestion is clicked.
+   */
+  suggestedActionCustom(string const &name_, object_ptr<formattedText> &&title_, object_ptr<formattedText> &&description_, string const &url_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 2092876611;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ChatMemberStatus;
 
 class usernames;
@@ -60626,10 +62146,12 @@ class supergroup final : public Object {
   int32 date_;
   /// Status of the current user in the supergroup or channel; custom title will always be empty.
   object_ptr<ChatMemberStatus> status_;
-  /// Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats, getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats, getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories from publicForwards and foundStories.
+  /// Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through getChatSimilarChats, getChatsToPostStories, getCreatedPublicChats, getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats, getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories from publicForwards and foundStories.
   int32 member_count_;
   /// Approximate boost level for the chat.
   int32 boost_level_;
+  /// True, if automatic translation of messages is enabled in the channel.
+  bool has_automatic_translation_;
   /// True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel.
   bool has_linked_chat_;
   /// True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup.
@@ -60675,8 +62197,9 @@ class supergroup final : public Object {
    * \param[in] usernames_ Usernames of the supergroup or channel; may be null.
    * \param[in] date_ Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member.
    * \param[in] status_ Status of the current user in the supergroup or channel; custom title will always be empty.
-   * \param[in] member_count_ Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats, getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats, getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories from publicForwards and foundStories.
+   * \param[in] member_count_ Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through getChatSimilarChats, getChatsToPostStories, getCreatedPublicChats, getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats, getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories from publicForwards and foundStories.
    * \param[in] boost_level_ Approximate boost level for the chat.
+   * \param[in] has_automatic_translation_ True, if automatic translation of messages is enabled in the channel.
    * \param[in] has_linked_chat_ True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel.
    * \param[in] has_location_ True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup.
    * \param[in] sign_messages_ True, if messages sent to the channel contains name of the sender. This field is only applicable to channels.
@@ -60694,10 +62217,10 @@ class supergroup final : public Object {
    * \param[in] has_active_stories_ True, if the supergroup or channel has non-expired stories available to the current user.
    * \param[in] has_unread_active_stories_ True, if the supergroup or channel has unread non-expired stories available to the current user.
    */
-  supergroup(int53 id_, object_ptr<usernames> &&usernames_, int32 date_, object_ptr<ChatMemberStatus> &&status_, int32 member_count_, int32 boost_level_, bool has_linked_chat_, bool has_location_, bool sign_messages_, bool show_message_sender_, bool join_to_send_messages_, bool join_by_request_, bool is_slow_mode_enabled_, bool is_channel_, bool is_broadcast_group_, bool is_forum_, object_ptr<verificationStatus> &&verification_status_, bool has_sensitive_content_, string const &restriction_reason_, int53 paid_message_star_count_, bool has_active_stories_, bool has_unread_active_stories_);
+  supergroup(int53 id_, object_ptr<usernames> &&usernames_, int32 date_, object_ptr<ChatMemberStatus> &&status_, int32 member_count_, int32 boost_level_, bool has_automatic_translation_, bool has_linked_chat_, bool has_location_, bool sign_messages_, bool show_message_sender_, bool join_to_send_messages_, bool join_by_request_, bool is_slow_mode_enabled_, bool is_channel_, bool is_broadcast_group_, bool is_forum_, object_ptr<verificationStatus> &&verification_status_, bool has_sensitive_content_, string const &restriction_reason_, int53 paid_message_star_count_, bool has_active_stories_, bool has_unread_active_stories_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 992231696;
+  static const std::int32_t ID = -1355919719;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -61604,7 +63127,7 @@ class telegramPaymentPurposePremiumGift final : public TelegramPaymentPurpose {
   }
 
  public:
-  /// ISO 4217 currency code of the payment currency.
+  /// ISO 4217 currency code of the payment currency, or &quot;XTR&quot; for payments in Telegram Stars.
   string currency_;
   /// Paid amount, in the smallest units of the currency.
   int53 amount_;
@@ -61623,7 +63146,7 @@ class telegramPaymentPurposePremiumGift final : public TelegramPaymentPurpose {
   /**
    * The user gifting Telegram Premium to another user.
    *
-   * \param[in] currency_ ISO 4217 currency code of the payment currency.
+   * \param[in] currency_ ISO 4217 currency code of the payment currency, or &quot;XTR&quot; for payments in Telegram Stars.
    * \param[in] amount_ Paid amount, in the smallest units of the currency.
    * \param[in] user_id_ Identifier of the user which will receive Telegram Premium.
    * \param[in] month_count_ Number of months the Telegram Premium subscription will be active for the user.
@@ -64152,7 +65675,7 @@ class BlockList;
 
 class CallbackQueryPayload;
 
-class CanSendStoryResult;
+class CanPostStoryResult;
 
 class ChatAction;
 
@@ -66730,8 +68253,6 @@ class updateForumTopicInfo final : public Update {
   }
 
  public:
-  /// Chat identifier.
-  int53 chat_id_;
   /// New information about the topic.
   object_ptr<forumTopicInfo> info_;
 
@@ -66743,13 +68264,66 @@ class updateForumTopicInfo final : public Update {
   /**
    * Basic information about a topic in a forum chat was changed.
    *
-   * \param[in] chat_id_ Chat identifier.
    * \param[in] info_ New information about the topic.
    */
-  updateForumTopicInfo(int53 chat_id_, object_ptr<forumTopicInfo> &&info_);
+  explicit updateForumTopicInfo(object_ptr<forumTopicInfo> &&info_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1802448073;
+  static const std::int32_t ID = 1420762696;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Information about a topic in a forum chat was changed.
+ */
+class updateForumTopic final : public Update {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Chat identifier.
+  int53 chat_id_;
+  /// Message thread identifier of the topic.
+  int53 message_thread_id_;
+  /// True, if the topic is pinned in the topic list.
+  bool is_pinned_;
+  /// Identifier of the last read incoming message.
+  int53 last_read_inbox_message_id_;
+  /// Identifier of the last read outgoing message.
+  int53 last_read_outbox_message_id_;
+  /// Notification settings for the topic.
+  object_ptr<chatNotificationSettings> notification_settings_;
+
+  /**
+   * Information about a topic in a forum chat was changed.
+   */
+  updateForumTopic();
+
+  /**
+   * Information about a topic in a forum chat was changed.
+   *
+   * \param[in] chat_id_ Chat identifier.
+   * \param[in] message_thread_id_ Message thread identifier of the topic.
+   * \param[in] is_pinned_ True, if the topic is pinned in the topic list.
+   * \param[in] last_read_inbox_message_id_ Identifier of the last read incoming message.
+   * \param[in] last_read_outbox_message_id_ Identifier of the last read outgoing message.
+   * \param[in] notification_settings_ Notification settings for the topic.
+   */
+  updateForumTopic(int53 chat_id_, int53 message_thread_id_, bool is_pinned_, int53 last_read_inbox_message_id_, int53 last_read_outbox_message_id_, object_ptr<chatNotificationSettings> &&notification_settings_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 266794534;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -67930,7 +69504,7 @@ class updateGroupCall final : public Update {
   }
 
  public:
-  /// New data about a group call.
+  /// New data about the group call.
   object_ptr<groupCall> group_call_;
 
   /**
@@ -67941,7 +69515,7 @@ class updateGroupCall final : public Update {
   /**
    * Information about a group call was updated.
    *
-   * \param[in] group_call_ New data about a group call.
+   * \param[in] group_call_ New data about the group call.
    */
   explicit updateGroupCall(object_ptr<groupCall> &&group_call_);
 
@@ -67969,9 +69543,9 @@ class updateGroupCallParticipant final : public Update {
   }
 
  public:
-  /// Identifier of group call.
+  /// Identifier of the group call.
   int32 group_call_id_;
-  /// New data about a participant.
+  /// New data about the participant.
   object_ptr<groupCallParticipant> participant_;
 
   /**
@@ -67982,13 +69556,100 @@ class updateGroupCallParticipant final : public Update {
   /**
    * Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined.
    *
-   * \param[in] group_call_id_ Identifier of group call.
-   * \param[in] participant_ New data about a participant.
+   * \param[in] group_call_id_ Identifier of the group call.
+   * \param[in] participant_ New data about the participant.
    */
   updateGroupCallParticipant(int32 group_call_id_, object_ptr<groupCallParticipant> &&participant_);
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -803128071;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The list of group call participants that can send and receive encrypted call data has changed; for group calls not bound to a chat only.
+ */
+class updateGroupCallParticipants final : public Update {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the group call.
+  int32 group_call_id_;
+  /// New list of group call participant user identifiers. The identifiers may be invalid or the corresponding users may be unknown. The participants must be shown in the list of group call participants even there is no information about them.
+  array<int64> participant_user_ids_;
+
+  /**
+   * The list of group call participants that can send and receive encrypted call data has changed; for group calls not bound to a chat only.
+   */
+  updateGroupCallParticipants();
+
+  /**
+   * The list of group call participants that can send and receive encrypted call data has changed; for group calls not bound to a chat only.
+   *
+   * \param[in] group_call_id_ Identifier of the group call.
+   * \param[in] participant_user_ids_ New list of group call participant user identifiers. The identifiers may be invalid or the corresponding users may be unknown. The participants must be shown in the list of group call participants even there is no information about them.
+   */
+  updateGroupCallParticipants(int32 group_call_id_, array<int64> &&participant_user_ids_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1874006374;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The verification state of an encrypted group call has changed; for group calls not bound to a chat only.
+ */
+class updateGroupCallVerificationState final : public Update {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the group call.
+  int32 group_call_id_;
+  /// The call state generation to which the emoji corresponds. If generation is different for two users, then their emoji may be also different.
+  int32 generation_;
+  /// Group call state fingerprint represented as 4 emoji; may be empty if the state isn't verified yet.
+  array<string> emojis_;
+
+  /**
+   * The verification state of an encrypted group call has changed; for group calls not bound to a chat only.
+   */
+  updateGroupCallVerificationState();
+
+  /**
+   * The verification state of an encrypted group call has changed; for group calls not bound to a chat only.
+   *
+   * \param[in] group_call_id_ Identifier of the group call.
+   * \param[in] generation_ The call state generation to which the emoji corresponds. If generation is different for two users, then their emoji may be also different.
+   * \param[in] emojis_ Group call state fingerprint represented as 4 emoji; may be empty if the state isn't verified yet.
+   */
+  updateGroupCallVerificationState(int32 group_call_id_, int32 generation_, array<string> &&emojis_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 682965060;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -68234,7 +69895,7 @@ class updateStoryDeleted final : public Update {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
 
@@ -68246,13 +69907,13 @@ class updateStoryDeleted final : public Update {
   /**
    * A story became inaccessible.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Story identifier.
    */
-  updateStoryDeleted(int53 story_sender_chat_id_, int32 story_id_);
+  updateStoryDeleted(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1879567261;
+  static const std::int32_t ID = -582743166;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -68263,9 +69924,9 @@ class updateStoryDeleted final : public Update {
 };
 
 /**
- * A story has been successfully sent.
+ * A story has been successfully posted.
  */
-class updateStorySendSucceeded final : public Update {
+class updateStoryPostSucceeded final : public Update {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -68275,26 +69936,26 @@ class updateStorySendSucceeded final : public Update {
   }
 
  public:
-  /// The sent story.
+  /// The posted story.
   object_ptr<story> story_;
   /// The previous temporary story identifier.
   int32 old_story_id_;
 
   /**
-   * A story has been successfully sent.
+   * A story has been successfully posted.
    */
-  updateStorySendSucceeded();
+  updateStoryPostSucceeded();
 
   /**
-   * A story has been successfully sent.
+   * A story has been successfully posted.
    *
-   * \param[in] story_ The sent story.
+   * \param[in] story_ The posted story.
    * \param[in] old_story_id_ The previous temporary story identifier.
    */
-  updateStorySendSucceeded(object_ptr<story> &&story_, int32 old_story_id_);
+  updateStoryPostSucceeded(object_ptr<story> &&story_, int32 old_story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1188651433;
+  static const std::int32_t ID = -1712432318;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -68305,9 +69966,9 @@ class updateStorySendSucceeded final : public Update {
 };
 
 /**
- * A story failed to send. If the story sending is canceled, then updateStoryDeleted will be received instead of this update.
+ * A story failed to post. If the story posting is canceled, then updateStoryDeleted will be received instead of this update.
  */
-class updateStorySendFailed final : public Update {
+class updateStoryPostFailed final : public Update {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -68317,29 +69978,29 @@ class updateStorySendFailed final : public Update {
   }
 
  public:
-  /// The failed to send story.
+  /// The failed to post story.
   object_ptr<story> story_;
-  /// The cause of the story sending failure.
+  /// The cause of the story posting failure.
   object_ptr<error> error_;
   /// Type of the error; may be null if unknown.
-  object_ptr<CanSendStoryResult> error_type_;
+  object_ptr<CanPostStoryResult> error_type_;
 
   /**
-   * A story failed to send. If the story sending is canceled, then updateStoryDeleted will be received instead of this update.
+   * A story failed to post. If the story posting is canceled, then updateStoryDeleted will be received instead of this update.
    */
-  updateStorySendFailed();
+  updateStoryPostFailed();
 
   /**
-   * A story failed to send. If the story sending is canceled, then updateStoryDeleted will be received instead of this update.
+   * A story failed to post. If the story posting is canceled, then updateStoryDeleted will be received instead of this update.
    *
-   * \param[in] story_ The failed to send story.
-   * \param[in] error_ The cause of the story sending failure.
+   * \param[in] story_ The failed to post story.
+   * \param[in] error_ The cause of the story posting failure.
    * \param[in] error_type_ Type of the error; may be null if unknown.
    */
-  updateStorySendFailed(object_ptr<story> &&story_, object_ptr<error> &&error_, object_ptr<CanSendStoryResult> &&error_type_);
+  updateStoryPostFailed(object_ptr<story> &&story_, object_ptr<error> &&error_, object_ptr<CanPostStoryResult> &&error_type_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -532221543;
+  static const std::int32_t ID = 1248168444;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -69036,6 +70697,54 @@ class updateConnectionState final : public Update {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1469292078;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * The freeze state of the current user's account has changed.
+ */
+class updateFreezeState final : public Update {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// True, if the account is frozen.
+  bool is_frozen_;
+  /// Point in time (Unix timestamp) when the account was frozen; 0 if the account isn't frozen.
+  int32 freezing_date_;
+  /// Point in time (Unix timestamp) when the account will be deleted and can't be unfrozen; 0 if the account isn't frozen.
+  int32 deletion_date_;
+  /// The link to open to send an appeal to unfreeze the account.
+  string appeal_link_;
+
+  /**
+   * The freeze state of the current user's account has changed.
+   */
+  updateFreezeState();
+
+  /**
+   * The freeze state of the current user's account has changed.
+   *
+   * \param[in] is_frozen_ True, if the account is frozen.
+   * \param[in] freezing_date_ Point in time (Unix timestamp) when the account was frozen; 0 if the account isn't frozen.
+   * \param[in] deletion_date_ Point in time (Unix timestamp) when the account will be deleted and can't be unfrozen; 0 if the account isn't frozen.
+   * \param[in] appeal_link_ The link to open to send an appeal to unfreeze the account.
+   */
+  updateFreezeState(bool is_frozen_, int32 freezing_date_, int32 deletion_date_, string const &appeal_link_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1692410540;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -70968,6 +72677,10 @@ class upgradeGiftResult final : public Object {
   bool can_be_transferred_;
   /// Number of Telegram Stars that must be paid to transfer the upgraded gift.
   int53 transfer_star_count_;
+  /// Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible.
+  int32 next_transfer_date_;
+  /// Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
+  int32 next_resale_date_;
   /// Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT.
   int32 export_date_;
 
@@ -70984,12 +72697,14 @@ class upgradeGiftResult final : public Object {
    * \param[in] is_saved_ True, if the gift is displayed on the user's or the channel's profile page.
    * \param[in] can_be_transferred_ True, if the gift can be transferred to another owner.
    * \param[in] transfer_star_count_ Number of Telegram Stars that must be paid to transfer the upgraded gift.
+   * \param[in] next_transfer_date_ Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred immediately or transfer isn't possible.
+   * \param[in] next_resale_date_ Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the receiver of the gift.
    * \param[in] export_date_ Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT.
    */
-  upgradeGiftResult(object_ptr<upgradedGift> &&gift_, string const &received_gift_id_, bool is_saved_, bool can_be_transferred_, int53 transfer_star_count_, int32 export_date_);
+  upgradeGiftResult(object_ptr<upgradedGift> &&gift_, string const &received_gift_id_, bool is_saved_, bool can_be_transferred_, int53 transfer_star_count_, int32 next_transfer_date_, int32 next_resale_date_, int32 export_date_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 664437354;
+  static const std::int32_t ID = 233376346;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -71026,7 +72741,7 @@ class upgradedGift final : public Object {
   int64 id_;
   /// The title of the upgraded gift.
   string title_;
-  /// Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift.
+  /// Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift or sendResoldGift.
   string name_;
   /// Unique number of the upgraded gift among gifts upgraded from the same gift.
   int32 number_;
@@ -71036,11 +72751,11 @@ class upgradedGift final : public Object {
   int32 max_upgraded_count_;
   /// Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
   object_ptr<MessageSender> owner_id_;
-  /// Address of the gift NFT owner in TON blockchain; may be empty if none.
+  /// Address of the gift NFT owner in TON blockchain; may be empty if none. Append the address to getOption(&quot;ton_blockchain_explorer_url&quot;) to get a link with information about the address.
   string owner_address_;
   /// Name of the owner for the case when owner identifier and address aren't known.
   string owner_name_;
-  /// Address of the gift NFT in TON blockchain; may be empty if none.
+  /// Address of the gift NFT in TON blockchain; may be empty if none. Append the address to getOption(&quot;ton_blockchain_explorer_url&quot;) to get a link with information about the address.
   string gift_address_;
   /// Model of the upgraded gift.
   object_ptr<upgradedGiftModel> model_;
@@ -71050,6 +72765,8 @@ class upgradedGift final : public Object {
   object_ptr<upgradedGiftBackdrop> backdrop_;
   /// Information about the originally sent gift; may be null if unknown.
   object_ptr<upgradedGiftOriginalDetails> original_details_;
+  /// Number of Telegram Stars that must be paid to buy the gift and send it to someone else; 0 if resale isn't possible.
+  int53 resale_star_count_;
 
   /**
    * Describes an upgraded gift that can be transferred to another owner or transferred to the TON blockchain as an NFT.
@@ -71061,23 +72778,149 @@ class upgradedGift final : public Object {
    *
    * \param[in] id_ Unique identifier of the gift.
    * \param[in] title_ The title of the upgraded gift.
-   * \param[in] name_ Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift.
+   * \param[in] name_ Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift or sendResoldGift.
    * \param[in] number_ Unique number of the upgraded gift among gifts upgraded from the same gift.
    * \param[in] total_upgraded_count_ Total number of gifts that were upgraded from the same gift.
    * \param[in] max_upgraded_count_ The maximum number of gifts that can be upgraded from the same gift.
    * \param[in] owner_id_ Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
-   * \param[in] owner_address_ Address of the gift NFT owner in TON blockchain; may be empty if none.
+   * \param[in] owner_address_ Address of the gift NFT owner in TON blockchain; may be empty if none. Append the address to getOption(&quot;ton_blockchain_explorer_url&quot;) to get a link with information about the address.
    * \param[in] owner_name_ Name of the owner for the case when owner identifier and address aren't known.
-   * \param[in] gift_address_ Address of the gift NFT in TON blockchain; may be empty if none.
+   * \param[in] gift_address_ Address of the gift NFT in TON blockchain; may be empty if none. Append the address to getOption(&quot;ton_blockchain_explorer_url&quot;) to get a link with information about the address.
    * \param[in] model_ Model of the upgraded gift.
    * \param[in] symbol_ Symbol of the upgraded gift.
    * \param[in] backdrop_ Backdrop of the upgraded gift.
    * \param[in] original_details_ Information about the originally sent gift; may be null if unknown.
+   * \param[in] resale_star_count_ Number of Telegram Stars that must be paid to buy the gift and send it to someone else; 0 if resale isn't possible.
    */
-  upgradedGift(int64 id_, string const &title_, string const &name_, int32 number_, int32 total_upgraded_count_, int32 max_upgraded_count_, object_ptr<MessageSender> &&owner_id_, string const &owner_address_, string const &owner_name_, string const &gift_address_, object_ptr<upgradedGiftModel> &&model_, object_ptr<upgradedGiftSymbol> &&symbol_, object_ptr<upgradedGiftBackdrop> &&backdrop_, object_ptr<upgradedGiftOriginalDetails> &&original_details_);
+  upgradedGift(int64 id_, string const &title_, string const &name_, int32 number_, int32 total_upgraded_count_, int32 max_upgraded_count_, object_ptr<MessageSender> &&owner_id_, string const &owner_address_, string const &owner_name_, string const &gift_address_, object_ptr<upgradedGiftModel> &&model_, object_ptr<upgradedGiftSymbol> &&symbol_, object_ptr<upgradedGiftBackdrop> &&backdrop_, object_ptr<upgradedGiftOriginalDetails> &&original_details_, int53 resale_star_count_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -473646818;
+  static const std::int32_t ID = 992832410;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * This class is an abstract base class.
+ * Contains identifier of an upgraded gift attribute to search for.
+ */
+class UpgradedGiftAttributeId: public Object {
+ public:
+};
+
+/**
+ * Identifier of a gift model.
+ */
+class upgradedGiftAttributeIdModel final : public UpgradedGiftAttributeId {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the sticker representing the model.
+  int64 sticker_id_;
+
+  /**
+   * Identifier of a gift model.
+   */
+  upgradedGiftAttributeIdModel();
+
+  /**
+   * Identifier of a gift model.
+   *
+   * \param[in] sticker_id_ Identifier of the sticker representing the model.
+   */
+  explicit upgradedGiftAttributeIdModel(int64 sticker_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1053287307;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Identifier of a gift symbol.
+ */
+class upgradedGiftAttributeIdSymbol final : public UpgradedGiftAttributeId {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the sticker representing the symbol.
+  int64 sticker_id_;
+
+  /**
+   * Identifier of a gift symbol.
+   */
+  upgradedGiftAttributeIdSymbol();
+
+  /**
+   * Identifier of a gift symbol.
+   *
+   * \param[in] sticker_id_ Identifier of the sticker representing the symbol.
+   */
+  explicit upgradedGiftAttributeIdSymbol(int64 sticker_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1188205608;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Identifier of a gift backdrop.
+ */
+class upgradedGiftAttributeIdBackdrop final : public UpgradedGiftAttributeId {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the backdrop.
+  int32 backdrop_id_;
+
+  /**
+   * Identifier of a gift backdrop.
+   */
+  upgradedGiftAttributeIdBackdrop();
+
+  /**
+   * Identifier of a gift backdrop.
+   *
+   * \param[in] backdrop_id_ Identifier of the backdrop.
+   */
+  explicit upgradedGiftAttributeIdBackdrop(int32 backdrop_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1461997935;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -71102,11 +72945,13 @@ class upgradedGiftBackdrop final : public Object {
   }
 
  public:
+  /// Unique identifier of the backdrop.
+  int32 id_;
   /// Name of the backdrop.
   string name_;
   /// Colors of the backdrop.
   object_ptr<upgradedGiftBackdropColors> colors_;
-  /// The number of upgraded gift that receive this backdrop for each 1000 gifts upgraded.
+  /// The number of upgraded gifts that receive this backdrop for each 1000 gifts upgraded.
   int32 rarity_per_mille_;
 
   /**
@@ -71117,14 +72962,15 @@ class upgradedGiftBackdrop final : public Object {
   /**
    * Describes a backdrop of an upgraded gift.
    *
+   * \param[in] id_ Unique identifier of the backdrop.
    * \param[in] name_ Name of the backdrop.
    * \param[in] colors_ Colors of the backdrop.
-   * \param[in] rarity_per_mille_ The number of upgraded gift that receive this backdrop for each 1000 gifts upgraded.
+   * \param[in] rarity_per_mille_ The number of upgraded gifts that receive this backdrop for each 1000 gifts upgraded.
    */
-  upgradedGiftBackdrop(string const &name_, object_ptr<upgradedGiftBackdropColors> &&colors_, int32 rarity_per_mille_);
+  upgradedGiftBackdrop(int32 id_, string const &name_, object_ptr<upgradedGiftBackdropColors> &&colors_, int32 rarity_per_mille_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -334899886;
+  static const std::int32_t ID = -378289242;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -71182,6 +73028,50 @@ class upgradedGiftBackdropColors final : public Object {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class upgradedGiftBackdrop;
+
+/**
+ * Describes a backdrop of an upgraded gift.
+ */
+class upgradedGiftBackdropCount final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The backdrop.
+  object_ptr<upgradedGiftBackdrop> backdrop_;
+  /// Total number of gifts with the symbol.
+  int32 total_count_;
+
+  /**
+   * Describes a backdrop of an upgraded gift.
+   */
+  upgradedGiftBackdropCount();
+
+  /**
+   * Describes a backdrop of an upgraded gift.
+   *
+   * \param[in] backdrop_ The backdrop.
+   * \param[in] total_count_ Total number of gifts with the symbol.
+   */
+  upgradedGiftBackdropCount(object_ptr<upgradedGiftBackdrop> &&backdrop_, int32 total_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -562274120;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class sticker;
 
 /**
@@ -71201,7 +73091,7 @@ class upgradedGiftModel final : public Object {
   string name_;
   /// The sticker representing the upgraded gift.
   object_ptr<sticker> sticker_;
-  /// The number of upgraded gift that receive this model for each 1000 gifts upgraded.
+  /// The number of upgraded gifts that receive this model for each 1000 gifts upgraded.
   int32 rarity_per_mille_;
 
   /**
@@ -71214,12 +73104,56 @@ class upgradedGiftModel final : public Object {
    *
    * \param[in] name_ Name of the model.
    * \param[in] sticker_ The sticker representing the upgraded gift.
-   * \param[in] rarity_per_mille_ The number of upgraded gift that receive this model for each 1000 gifts upgraded.
+   * \param[in] rarity_per_mille_ The number of upgraded gifts that receive this model for each 1000 gifts upgraded.
    */
   upgradedGiftModel(string const &name_, object_ptr<sticker> &&sticker_, int32 rarity_per_mille_);
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1360156751;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class upgradedGiftModel;
+
+/**
+ * Describes a model of an upgraded gift with the number of gifts found.
+ */
+class upgradedGiftModelCount final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The model.
+  object_ptr<upgradedGiftModel> model_;
+  /// Total number of gifts with the model.
+  int32 total_count_;
+
+  /**
+   * Describes a model of an upgraded gift with the number of gifts found.
+   */
+  upgradedGiftModelCount();
+
+  /**
+   * Describes a model of an upgraded gift with the number of gifts found.
+   *
+   * \param[in] model_ The model.
+   * \param[in] total_count_ Total number of gifts with the model.
+   */
+  upgradedGiftModelCount(object_ptr<upgradedGiftModel> &&model_, int32 total_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1127238023;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -71298,9 +73232,9 @@ class upgradedGiftSymbol final : public Object {
  public:
   /// Name of the symbol.
   string name_;
-  /// The sticker representing the upgraded gift.
+  /// The sticker representing the symbol.
   object_ptr<sticker> sticker_;
-  /// The number of upgraded gift that receive this symbol for each 1000 gifts upgraded.
+  /// The number of upgraded gifts that receive this symbol for each 1000 gifts upgraded.
   int32 rarity_per_mille_;
 
   /**
@@ -71312,13 +73246,57 @@ class upgradedGiftSymbol final : public Object {
    * Describes a symbol shown on the pattern of an upgraded gift.
    *
    * \param[in] name_ Name of the symbol.
-   * \param[in] sticker_ The sticker representing the upgraded gift.
-   * \param[in] rarity_per_mille_ The number of upgraded gift that receive this symbol for each 1000 gifts upgraded.
+   * \param[in] sticker_ The sticker representing the symbol.
+   * \param[in] rarity_per_mille_ The number of upgraded gifts that receive this symbol for each 1000 gifts upgraded.
    */
   upgradedGiftSymbol(string const &name_, object_ptr<sticker> &&sticker_, int32 rarity_per_mille_);
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1128318383;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class upgradedGiftSymbol;
+
+/**
+ * Describes a symbol shown on the pattern of an upgraded gift.
+ */
+class upgradedGiftSymbolCount final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The symbol.
+  object_ptr<upgradedGiftSymbol> symbol_;
+  /// Total number of gifts with the symbol.
+  int32 total_count_;
+
+  /**
+   * Describes a symbol shown on the pattern of an upgraded gift.
+   */
+  upgradedGiftSymbolCount();
+
+  /**
+   * Describes a symbol shown on the pattern of an upgraded gift.
+   *
+   * \param[in] symbol_ The symbol.
+   * \param[in] total_count_ Total number of gifts with the symbol.
+   */
+  upgradedGiftSymbolCount(object_ptr<upgradedGiftSymbol> &&symbol_, int32 total_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -773579874;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -71471,6 +73449,8 @@ class chatPhoto;
 
 class formattedText;
 
+class giftSettings;
+
 /**
  * Contains full information about a user.
  */
@@ -71524,6 +73504,8 @@ class userFullInfo final : public Object {
   int53 incoming_paid_message_star_count_;
   /// Number of Telegram Stars that must be paid by the current user for each sent message to the user.
   int53 outgoing_paid_message_star_count_;
+  /// Settings for gift receiving for the user.
+  object_ptr<giftSettings> gift_settings_;
   /// Information about verification status of the user provided by a bot; may be null if none or unknown.
   object_ptr<botVerification> bot_verification_;
   /// Information about business settings for Telegram Business accounts; may be null if none.
@@ -71559,14 +73541,15 @@ class userFullInfo final : public Object {
    * \param[in] group_in_common_count_ Number of group chats where both the other user and the current user are a member; 0 for the current user.
    * \param[in] incoming_paid_message_star_count_ Number of Telegram Stars that must be paid by the user for each sent message to the current user.
    * \param[in] outgoing_paid_message_star_count_ Number of Telegram Stars that must be paid by the current user for each sent message to the user.
+   * \param[in] gift_settings_ Settings for gift receiving for the user.
    * \param[in] bot_verification_ Information about verification status of the user provided by a bot; may be null if none or unknown.
    * \param[in] business_info_ Information about business settings for Telegram Business accounts; may be null if none.
    * \param[in] bot_info_ For bots, information about the bot; may be null if the user isn't a bot.
    */
-  userFullInfo(object_ptr<chatPhoto> &&personal_photo_, object_ptr<chatPhoto> &&photo_, object_ptr<chatPhoto> &&public_photo_, object_ptr<BlockList> &&block_list_, bool can_be_called_, bool supports_video_calls_, bool has_private_calls_, bool has_private_forwards_, bool has_restricted_voice_and_video_note_messages_, bool has_posted_to_profile_stories_, bool has_sponsored_messages_enabled_, bool need_phone_number_privacy_exception_, bool set_chat_background_, object_ptr<formattedText> &&bio_, object_ptr<birthdate> &&birthdate_, int53 personal_chat_id_, int32 gift_count_, int32 group_in_common_count_, int53 incoming_paid_message_star_count_, int53 outgoing_paid_message_star_count_, object_ptr<botVerification> &&bot_verification_, object_ptr<businessInfo> &&business_info_, object_ptr<botInfo> &&bot_info_);
+  userFullInfo(object_ptr<chatPhoto> &&personal_photo_, object_ptr<chatPhoto> &&photo_, object_ptr<chatPhoto> &&public_photo_, object_ptr<BlockList> &&block_list_, bool can_be_called_, bool supports_video_calls_, bool has_private_calls_, bool has_private_forwards_, bool has_restricted_voice_and_video_note_messages_, bool has_posted_to_profile_stories_, bool has_sponsored_messages_enabled_, bool need_phone_number_privacy_exception_, bool set_chat_background_, object_ptr<formattedText> &&bio_, object_ptr<birthdate> &&birthdate_, int53 personal_chat_id_, int32 gift_count_, int32 group_in_common_count_, int53 incoming_paid_message_star_count_, int53 outgoing_paid_message_star_count_, object_ptr<giftSettings> &&gift_settings_, object_ptr<botVerification> &&bot_verification_, object_ptr<businessInfo> &&business_info_, object_ptr<botInfo> &&bot_info_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 2115323777;
+  static const std::int32_t ID = -121173496;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -73279,7 +75262,7 @@ class video final : public Object {
 class MessageSender;
 
 /**
- * Describes a video chat.
+ * Describes a video chat, i.e. a group call bound to a chat.
  */
 class videoChat final : public Object {
   /**
@@ -73299,12 +75282,12 @@ class videoChat final : public Object {
   object_ptr<MessageSender> default_participant_id_;
 
   /**
-   * Describes a video chat.
+   * Describes a video chat, i.e. a group call bound to a chat.
    */
   videoChat();
 
   /**
-   * Describes a video chat.
+   * Describes a video chat, i.e. a group call bound to a chat.
    *
    * \param[in] group_call_id_ Group call identifier of an active video chat; 0 if none. Full information about the video chat can be received through the method getGroupCall.
    * \param[in] has_participants_ True, if the video chat has participants.
@@ -73314,6 +75297,92 @@ class videoChat final : public Object {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1374319320;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+/**
+ * Describes an available stream in a video chat.
+ */
+class videoChatStream final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of an audio/video channel.
+  int32 channel_id_;
+  /// Scale of segment durations in the stream. The duration is 1000/(2**scale) milliseconds.
+  int32 scale_;
+  /// Point in time when the stream currently ends; Unix timestamp in milliseconds.
+  int53 time_offset_;
+
+  /**
+   * Describes an available stream in a video chat.
+   */
+  videoChatStream();
+
+  /**
+   * Describes an available stream in a video chat.
+   *
+   * \param[in] channel_id_ Identifier of an audio/video channel.
+   * \param[in] scale_ Scale of segment durations in the stream. The duration is 1000/(2**scale) milliseconds.
+   * \param[in] time_offset_ Point in time when the stream currently ends; Unix timestamp in milliseconds.
+   */
+  videoChatStream(int32 channel_id_, int32 scale_, int53 time_offset_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1151707172;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class videoChatStream;
+
+/**
+ * Represents a list of video chat streams.
+ */
+class videoChatStreams final : public Object {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// A list of video chat streams.
+  array<object_ptr<videoChatStream>> streams_;
+
+  /**
+   * Represents a list of video chat streams.
+   */
+  videoChatStreams();
+
+  /**
+   * Represents a list of video chat streams.
+   *
+   * \param[in] streams_ A list of video chat streams.
+   */
+  explicit videoChatStreams(array<object_ptr<videoChatStream>> &&streams_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -434622720;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -75689,14 +77758,16 @@ class applyPremiumGiftCode final : public Function {
 
 class StorePaymentPurpose;
 
+class StoreTransaction;
+
 class ok;
 
 /**
- * Informs server about a purchase through App Store. For official applications only.
+ * Informs server about an in-store purchase. For official applications only.
  *
  * Returns object_ptr<Ok>.
  */
-class assignAppStoreTransaction final : public Function {
+class assignStoreTransaction final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -75706,91 +77777,30 @@ class assignAppStoreTransaction final : public Function {
   }
 
  public:
-  /// App Store receipt.
-  bytes receipt_;
+  /// Information about the transaction.
+  object_ptr<StoreTransaction> transaction_;
   /// Transaction purpose.
   object_ptr<StorePaymentPurpose> purpose_;
 
   /**
-   * Default constructor for a function, which informs server about a purchase through App Store. For official applications only.
+   * Default constructor for a function, which informs server about an in-store purchase. For official applications only.
    *
    * Returns object_ptr<Ok>.
    */
-  assignAppStoreTransaction();
+  assignStoreTransaction();
 
   /**
-   * Creates a function, which informs server about a purchase through App Store. For official applications only.
+   * Creates a function, which informs server about an in-store purchase. For official applications only.
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] receipt_ App Store receipt.
+   * \param[in] transaction_ Information about the transaction.
    * \param[in] purpose_ Transaction purpose.
    */
-  assignAppStoreTransaction(bytes const &receipt_, object_ptr<StorePaymentPurpose> &&purpose_);
+  assignStoreTransaction(object_ptr<StoreTransaction> &&transaction_, object_ptr<StorePaymentPurpose> &&purpose_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -2030892112;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ok>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class StorePaymentPurpose;
-
-class ok;
-
-/**
- * Informs server about a purchase through Google Play. For official applications only.
- *
- * Returns object_ptr<Ok>.
- */
-class assignGooglePlayTransaction final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Application package name.
-  string package_name_;
-  /// Identifier of the purchased store product.
-  string store_product_id_;
-  /// Google Play purchase token.
-  string purchase_token_;
-  /// Transaction purpose.
-  object_ptr<StorePaymentPurpose> purpose_;
-
-  /**
-   * Default constructor for a function, which informs server about a purchase through Google Play. For official applications only.
-   *
-   * Returns object_ptr<Ok>.
-   */
-  assignGooglePlayTransaction();
-
-  /**
-   * Creates a function, which informs server about a purchase through Google Play. For official applications only.
-   *
-   * Returns object_ptr<Ok>.
-   *
-   * \param[in] package_name_ Application package name.
-   * \param[in] store_product_id_ Identifier of the purchased store product.
-   * \param[in] purchase_token_ Google Play purchase token.
-   * \param[in] purpose_ Transaction purpose.
-   */
-  assignGooglePlayTransaction(string const &package_name_, string const &store_product_id_, string const &purchase_token_, object_ptr<StorePaymentPurpose> &&purpose_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1992704860;
+  static const std::int32_t ID = -2046202900;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -75852,6 +77862,59 @@ class banChatMember final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -888111748;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Bans users from a group call not bound to a chat; requires groupCall.is_owned. Only the owner of the group call can invite the banned users back.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class banGroupCallParticipants final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// Identifiers of group call participants to ban; identifiers of unknown users from the update updateGroupCallParticipants can be also passed to the method.
+  array<int64> user_ids_;
+
+  /**
+   * Default constructor for a function, which bans users from a group call not bound to a chat; requires groupCall.is_owned. Only the owner of the group call can invite the banned users back.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  banGroupCallParticipants();
+
+  /**
+   * Creates a function, which bans users from a group call not bound to a chat; requires groupCall.is_owned. Only the owner of the group call can invite the banned users back.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] user_ids_ Identifiers of group call participants to ban; identifiers of unknown users from the update updateGroupCallParticipants can be also passed to the method.
+   */
+  banGroupCallParticipants(int32 group_call_id_, array<int64> &&user_ids_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 624883173;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -76026,12 +78089,62 @@ class canBotSendMessages final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class CanPostStoryResult;
+
+/**
+ * Checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
+ *
+ * Returns object_ptr<CanPostStoryResult>.
+ */
+class canPostStory final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
+  int53 chat_id_;
+
+  /**
+   * Default constructor for a function, which checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
+   *
+   * Returns object_ptr<CanPostStoryResult>.
+   */
+  canPostStory();
+
+  /**
+   * Creates a function, which checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
+   *
+   * Returns object_ptr<CanPostStoryResult>.
+   *
+   * \param[in] chat_id_ Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
+   */
+  explicit canPostStory(int53 chat_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 668621518;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<CanPostStoryResult>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class StorePaymentPurpose;
 
 class ok;
 
 /**
- * Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+ * Checks whether an in-store purchase is possible. Must be called before any in-store purchase. For official applications only.
  *
  * Returns object_ptr<Ok>.
  */
@@ -76049,14 +78162,14 @@ class canPurchaseFromStore final : public Function {
   object_ptr<StorePaymentPurpose> purpose_;
 
   /**
-   * Default constructor for a function, which checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+   * Default constructor for a function, which checks whether an in-store purchase is possible. Must be called before any in-store purchase. For official applications only.
    *
    * Returns object_ptr<Ok>.
    */
   canPurchaseFromStore();
 
   /**
-   * Creates a function, which checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+   * Creates a function, which checks whether an in-store purchase is possible. Must be called before any in-store purchase. For official applications only.
    *
    * Returns object_ptr<Ok>.
    *
@@ -76122,56 +78235,6 @@ class canSendMessageToUser final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<CanSendMessageToUserResult>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class CanSendStoryResult;
-
-/**
- * Checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
- *
- * Returns object_ptr<CanSendStoryResult>.
- */
-class canSendStory final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
-  int53 chat_id_;
-
-  /**
-   * Default constructor for a function, which checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
-   *
-   * Returns object_ptr<CanSendStoryResult>.
-   */
-  canSendStory();
-
-  /**
-   * Creates a function, which checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and channel chats.
-   *
-   * Returns object_ptr<CanSendStoryResult>.
-   *
-   * \param[in] chat_id_ Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
-   */
-  explicit canSendStory(int53 chat_id_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1226825365;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<CanSendStoryResult>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -76749,6 +78812,59 @@ class checkAuthenticationPasswordRecoveryCode final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -603309083;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Checks whether an in-store purchase of Telegram Premium is possible before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class checkAuthenticationPremiumPurchase final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// ISO 4217 currency code of the payment currency.
+  string currency_;
+  /// Paid amount, in the smallest units of the currency.
+  int53 amount_;
+
+  /**
+   * Default constructor for a function, which checks whether an in-store purchase of Telegram Premium is possible before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  checkAuthenticationPremiumPurchase();
+
+  /**
+   * Creates a function, which checks whether an in-store purchase of Telegram Premium is possible before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] currency_ ISO 4217 currency code of the payment currency.
+   * \param[in] amount_ Paid amount, in the smallest units of the currency.
+   */
+  checkAuthenticationPremiumPurchase(string const &currency_, int53 amount_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1588959934;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -78126,8 +80242,8 @@ class closeStory final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the story to close.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story to close.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
 
@@ -78143,13 +80259,13 @@ class closeStory final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story to close.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story to close.
    * \param[in] story_id_ The identifier of the story.
    */
-  closeStory(int53 story_sender_chat_id_, int32 story_id_);
+  closeStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1144852309;
+  static const std::int32_t ID = 1553967851;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -78550,8 +80666,6 @@ class createCall final : public Function {
   object_ptr<callProtocol> protocol_;
   /// Pass true to create a video call.
   bool is_video_;
-  /// Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none.
-  int32 group_call_id_;
 
   /**
    * Default constructor for a function, which creates a new call.
@@ -78568,12 +80682,11 @@ class createCall final : public Function {
    * \param[in] user_id_ Identifier of the user to be called.
    * \param[in] protocol_ The call protocols supported by the application.
    * \param[in] is_video_ Pass true to create a video call.
-   * \param[in] group_call_id_ Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none.
    */
-  createCall(int53 user_id_, object_ptr<callProtocol> &&protocol_, bool is_video_, int32 group_call_id_);
+  createCall(int53 user_id_, object_ptr<callProtocol> &&protocol_, bool is_video_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1270805351;
+  static const std::int32_t ID = -1104663024;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<callId>;
@@ -78872,12 +80985,14 @@ class createForumTopic final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class ok;
+class groupCallInfo;
+
+class groupCallJoinParameters;
 
 /**
- * Creates a group call from a one-to-one call.
+ * Creates a new group call that isn't bound to a chat.
  *
- * Returns object_ptr<Ok>.
+ * Returns object_ptr<GroupCallInfo>.
  */
 class createGroupCall final : public Function {
   /**
@@ -78889,30 +81004,30 @@ class createGroupCall final : public Function {
   }
 
  public:
-  /// Call identifier.
-  int32 call_id_;
+  /// Parameters to join the call; pass null to only create call link without joining the call.
+  object_ptr<groupCallJoinParameters> join_parameters_;
 
   /**
-   * Default constructor for a function, which creates a group call from a one-to-one call.
+   * Default constructor for a function, which creates a new group call that isn't bound to a chat.
    *
-   * Returns object_ptr<Ok>.
+   * Returns object_ptr<GroupCallInfo>.
    */
   createGroupCall();
 
   /**
-   * Creates a function, which creates a group call from a one-to-one call.
+   * Creates a function, which creates a new group call that isn't bound to a chat.
    *
-   * Returns object_ptr<Ok>.
+   * Returns object_ptr<GroupCallInfo>.
    *
-   * \param[in] call_id_ Call identifier.
+   * \param[in] join_parameters_ Parameters to join the call; pass null to only create call link without joining the call.
    */
-  explicit createGroupCall(int32 call_id_);
+  explicit createGroupCall(object_ptr<groupCallJoinParameters> &&join_parameters_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -2017962501;
+  static const std::int32_t ID = 1930068672;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ok>;
+  using ReturnType = object_ptr<groupCallInfo>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -79496,6 +81611,122 @@ class createVideoChat final : public Function {
 class ok;
 
 /**
+ * Declines an invitation to an active group call via messageGroupCall. Can be called both by the sender and the receiver of the invitation.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class declineGroupCallInvitation final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the chat with the message.
+  int53 chat_id_;
+  /// Identifier of the message of the type messageGroupCall.
+  int53 message_id_;
+
+  /**
+   * Default constructor for a function, which declines an invitation to an active group call via messageGroupCall. Can be called both by the sender and the receiver of the invitation.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  declineGroupCallInvitation();
+
+  /**
+   * Creates a function, which declines an invitation to an active group call via messageGroupCall. Can be called both by the sender and the receiver of the invitation.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] chat_id_ Identifier of the chat with the message.
+   * \param[in] message_id_ Identifier of the message of the type messageGroupCall.
+   */
+  declineGroupCallInvitation(int53 chat_id_, int53 message_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1843919377;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class GroupCallDataChannel;
+
+class MessageSender;
+
+class data;
+
+/**
+ * Decrypts group call data received by tgcalls.
+ *
+ * Returns object_ptr<Data>.
+ */
+class decryptGroupCallData final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier. The call must not be a video chat.
+  int32 group_call_id_;
+  /// Identifier of the group call participant, which sent the data.
+  object_ptr<MessageSender> participant_id_;
+  /// Data channel for which data was encrypted; pass null if unknown.
+  object_ptr<GroupCallDataChannel> data_channel_;
+  /// Data to decrypt.
+  bytes data_;
+
+  /**
+   * Default constructor for a function, which decrypts group call data received by tgcalls.
+   *
+   * Returns object_ptr<Data>.
+   */
+  decryptGroupCallData();
+
+  /**
+   * Creates a function, which decrypts group call data received by tgcalls.
+   *
+   * Returns object_ptr<Data>.
+   *
+   * \param[in] group_call_id_ Group call identifier. The call must not be a video chat.
+   * \param[in] participant_id_ Identifier of the group call participant, which sent the data.
+   * \param[in] data_channel_ Data channel for which data was encrypted; pass null if unknown.
+   * \param[in] data_ Data to decrypt.
+   */
+  decryptGroupCallData(int32 group_call_id_, object_ptr<MessageSender> &&participant_id_, object_ptr<GroupCallDataChannel> &&data_channel_, bytes const &data_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1781743076;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<data>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
  * Deletes the account of the current user, deleting all information associated with the user from the server. The phone number of the account can be used to create a new account. Can be called before authorization when the current authorization state is authorizationStateWaitPassword.
  *
  * Returns object_ptr<Ok>.
@@ -79793,6 +82024,112 @@ class deleteBusinessConnectedBot final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1633976747;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Deletes messages on behalf of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class deleteBusinessMessages final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection through which the messages were received.
+  string business_connection_id_;
+  /// Identifier of the messages.
+  array<int53> message_ids_;
+
+  /**
+   * Default constructor for a function, which deletes messages on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  deleteBusinessMessages();
+
+  /**
+   * Creates a function, which deletes messages on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection through which the messages were received.
+   * \param[in] message_ids_ Identifier of the messages.
+   */
+  deleteBusinessMessages(string const &business_connection_id_, array<int53> &&message_ids_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1425721828;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Deletes a story posted by the bot on behalf of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class deleteBusinessStory final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// Identifier of the story to delete.
+  int32 story_id_;
+
+  /**
+   * Default constructor for a function, which deletes a story posted by the bot on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  deleteBusinessStory();
+
+  /**
+   * Creates a function, which deletes a story posted by the bot on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] story_id_ Identifier of the story to delete.
+   */
+  deleteBusinessStory(string const &business_connection_id_, int32 story_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1024585042;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -81046,7 +83383,7 @@ class deleteStickerSet final : public Function {
 class ok;
 
 /**
- * Deletes a previously sent story. Can be called only if story.can_be_deleted == true.
+ * Deletes a previously posted story. Can be called only if story.can_be_deleted == true.
  *
  * Returns object_ptr<Ok>.
  */
@@ -81061,29 +83398,29 @@ class deleteStory final : public Function {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Identifier of the story to delete.
   int32 story_id_;
 
   /**
-   * Default constructor for a function, which deletes a previously sent story. Can be called only if story.can_be_deleted == true.
+   * Default constructor for a function, which deletes a previously posted story. Can be called only if story.can_be_deleted == true.
    *
    * Returns object_ptr<Ok>.
    */
   deleteStory();
 
   /**
-   * Creates a function, which deletes a previously sent story. Can be called only if story.can_be_deleted == true.
+   * Creates a function, which deletes a previously posted story. Can be called only if story.can_be_deleted == true.
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Identifier of the story to delete.
    */
-  deleteStory(int53 story_sender_chat_id_, int32 story_id_);
+  deleteStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1623871722;
+  static const std::int32_t ID = -2020144472;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -81245,6 +83582,8 @@ class discardCall final : public Function {
   int32 call_id_;
   /// Pass true if the user was disconnected.
   bool is_disconnected_;
+  /// If the call was upgraded to a group call, pass invite link to the group call.
+  string invite_link_;
   /// The call duration, in seconds.
   int32 duration_;
   /// Pass true if the call was a video call.
@@ -81266,14 +83605,15 @@ class discardCall final : public Function {
    *
    * \param[in] call_id_ Call identifier.
    * \param[in] is_disconnected_ Pass true if the user was disconnected.
+   * \param[in] invite_link_ If the call was upgraded to a group call, pass invite link to the group call.
    * \param[in] duration_ The call duration, in seconds.
    * \param[in] is_video_ Pass true if the call was a video call.
    * \param[in] connection_id_ Identifier of the connection used during the call.
    */
-  discardCall(int32 call_id_, bool is_disconnected_, int32 duration_, bool is_video_, int64 connection_id_);
+  discardCall(int32 call_id_, bool is_disconnected_, string const &invite_link_, int32 duration_, bool is_video_, int64 connection_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1784044162;
+  static const std::int32_t ID = -1545983346;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -81936,6 +84276,79 @@ class editBusinessMessageText final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<businessMessage>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class InputStoryContent;
+
+class StoryPrivacySettings;
+
+class formattedText;
+
+class inputStoryAreas;
+
+class story;
+
+/**
+ * Changes a story posted by the bot on behalf of a business account; for bots only.
+ *
+ * Returns object_ptr<Story>.
+ */
+class editBusinessStory final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the chat that posted the story.
+  int53 story_poster_chat_id_;
+  /// Identifier of the story to edit.
+  int32 story_id_;
+  /// New content of the story.
+  object_ptr<InputStoryContent> content_;
+  /// New clickable rectangle areas to be shown on the story media.
+  object_ptr<inputStoryAreas> areas_;
+  /// New story caption.
+  object_ptr<formattedText> caption_;
+  /// The new privacy settings for the story.
+  object_ptr<StoryPrivacySettings> privacy_settings_;
+
+  /**
+   * Default constructor for a function, which changes a story posted by the bot on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Story>.
+   */
+  editBusinessStory();
+
+  /**
+   * Creates a function, which changes a story posted by the bot on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Story>.
+   *
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_id_ Identifier of the story to edit.
+   * \param[in] content_ New content of the story.
+   * \param[in] areas_ New clickable rectangle areas to be shown on the story media.
+   * \param[in] caption_ New story caption.
+   * \param[in] privacy_settings_ The new privacy settings for the story.
+   */
+  editBusinessStory(int53 story_poster_chat_id_, int32 story_id_, object_ptr<InputStoryContent> &&content_, object_ptr<inputStoryAreas> &&areas_, object_ptr<formattedText> &&caption_, object_ptr<StoryPrivacySettings> &&privacy_settings_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 472538940;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<story>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -83180,7 +85593,7 @@ class editStory final : public Function {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Identifier of the story to edit.
   int32 story_id_;
   /// New content of the story; pass null to keep the current content.
@@ -83202,16 +85615,16 @@ class editStory final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Identifier of the story to edit.
    * \param[in] content_ New content of the story; pass null to keep the current content.
    * \param[in] areas_ New clickable rectangle areas to be shown on the story media; pass null to keep the current areas. Areas can't be edited if story content isn't changed.
    * \param[in] caption_ New story caption; pass null to keep the current caption.
    */
-  editStory(int53 story_sender_chat_id_, int32 story_id_, object_ptr<InputStoryContent> &&content_, object_ptr<inputStoryAreas> &&areas_, object_ptr<formattedText> &&caption_);
+  editStory(int53 story_poster_chat_id_, int32 story_id_, object_ptr<InputStoryContent> &&content_, object_ptr<inputStoryAreas> &&areas_, object_ptr<formattedText> &&caption_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1584013745;
+  static const std::int32_t ID = 355296788;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -83242,7 +85655,7 @@ class editStoryCover final : public Function {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Identifier of the story to edit.
   int32 story_id_;
   /// New timestamp of the frame, which will be used as video thumbnail.
@@ -83260,14 +85673,14 @@ class editStoryCover final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Identifier of the story to edit.
    * \param[in] cover_frame_timestamp_ New timestamp of the frame, which will be used as video thumbnail.
    */
-  editStoryCover(int53 story_sender_chat_id_, int32 story_id_, double cover_frame_timestamp_);
+  editStoryCover(int53 story_poster_chat_id_, int32 story_id_, double cover_frame_timestamp_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1423307701;
+  static const std::int32_t ID = -1035823266;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -83386,10 +85799,71 @@ class enableProxy final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class GroupCallDataChannel;
+
+class data;
+
+/**
+ * Encrypts group call data before sending them over network using tgcalls.
+ *
+ * Returns object_ptr<Data>.
+ */
+class encryptGroupCallData final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier. The call must not be a video chat.
+  int32 group_call_id_;
+  /// Data channel for which data is encrypted.
+  object_ptr<GroupCallDataChannel> data_channel_;
+  /// Data to encrypt.
+  bytes data_;
+  /// Size of data prefix that must be kept unencrypted.
+  int32 unencrypted_prefix_size_;
+
+  /**
+   * Default constructor for a function, which encrypts group call data before sending them over network using tgcalls.
+   *
+   * Returns object_ptr<Data>.
+   */
+  encryptGroupCallData();
+
+  /**
+   * Creates a function, which encrypts group call data before sending them over network using tgcalls.
+   *
+   * Returns object_ptr<Data>.
+   *
+   * \param[in] group_call_id_ Group call identifier. The call must not be a video chat.
+   * \param[in] data_channel_ Data channel for which data is encrypted.
+   * \param[in] data_ Data to encrypt.
+   * \param[in] unencrypted_prefix_size_ Size of data prefix that must be kept unencrypted.
+   */
+  encryptGroupCallData(int32 group_call_id_, object_ptr<GroupCallDataChannel> &&data_channel_, bytes const &data_, int32 unencrypted_prefix_size_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -377997690;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<data>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ok;
 
 /**
- * Ends a group call. Requires groupCall.can_be_managed.
+ * Ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
  *
  * Returns object_ptr<Ok>.
  */
@@ -83407,14 +85881,14 @@ class endGroupCall final : public Function {
   int32 group_call_id_;
 
   /**
-   * Default constructor for a function, which ends a group call. Requires groupCall.can_be_managed.
+   * Default constructor for a function, which ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
    *
    * Returns object_ptr<Ok>.
    */
   endGroupCall();
 
   /**
-   * Creates a function, which ends a group call. Requires groupCall.can_be_managed.
+   * Creates a function, which ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
    *
    * Returns object_ptr<Ok>.
    *
@@ -83439,7 +85913,7 @@ class endGroupCall final : public Function {
 class ok;
 
 /**
- * Ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+ * Ends recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
  *
  * Returns object_ptr<Ok>.
  */
@@ -83457,14 +85931,14 @@ class endGroupCallRecording final : public Function {
   int32 group_call_id_;
 
   /**
-   * Default constructor for a function, which ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+   * Default constructor for a function, which ends recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
    *
    * Returns object_ptr<Ok>.
    */
   endGroupCallRecording();
 
   /**
-   * Creates a function, which ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+   * Creates a function, which ends recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
    *
    * Returns object_ptr<Ok>.
    *
@@ -84331,12 +86805,12 @@ class getAvailableChatBoostSlots final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class gifts;
+class availableGifts;
 
 /**
  * Returns gifts that can be sent to other users and channel chats.
  *
- * Returns object_ptr<Gifts>.
+ * Returns object_ptr<AvailableGifts>.
  */
 class getAvailableGifts final : public Function {
   /**
@@ -84352,15 +86826,15 @@ class getAvailableGifts final : public Function {
   /**
    * Default constructor for a function, which returns gifts that can be sent to other users and channel chats.
    *
-   * Returns object_ptr<Gifts>.
+   * Returns object_ptr<AvailableGifts>.
    */
   getAvailableGifts();
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -153786901;
+  static const std::int32_t ID = -4559695;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<gifts>;
+  using ReturnType = object_ptr<availableGifts>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -84989,6 +87463,56 @@ class getBotSimilarBots final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<users>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class starAmount;
+
+/**
+ * Returns the amount of Telegram Stars owned by a business account; for bots only.
+ *
+ * Returns object_ptr<StarAmount>.
+ */
+class getBusinessAccountStarAmount final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+
+  /**
+   * Default constructor for a function, which returns the amount of Telegram Stars owned by a business account; for bots only.
+   *
+   * Returns object_ptr<StarAmount>.
+   */
+  getBusinessAccountStarAmount();
+
+  /**
+   * Creates a function, which returns the amount of Telegram Stars owned by a business account; for bots only.
+   *
+   * Returns object_ptr<StarAmount>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   */
+  explicit getBusinessAccountStarAmount(string const &business_connection_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1817136693;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<starAmount>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -87695,8 +90219,8 @@ class getChatStoryInteractions final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the story.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story.
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
   /// Pass the default heart reaction or a suggested reaction type to receive only interactions with the specified reaction type; pass null to receive all interactions; reactionTypePaid isn't supported.
@@ -87720,17 +90244,17 @@ class getChatStoryInteractions final : public Function {
    *
    * Returns object_ptr<StoryInteractions>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story.
    * \param[in] story_id_ Story identifier.
    * \param[in] reaction_type_ Pass the default heart reaction or a suggested reaction type to receive only interactions with the specified reaction type; pass null to receive all interactions; reactionTypePaid isn't supported.
    * \param[in] prefer_forwards_ Pass true to get forwards and reposts first, then reactions, then other views; pass false to get interactions sorted just by interaction date.
    * \param[in] offset_ Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
    * \param[in] limit_ The maximum number of story interactions to return.
    */
-  getChatStoryInteractions(int53 story_sender_chat_id_, int32 story_id_, object_ptr<ReactionType> &&reaction_type_, bool prefer_forwards_, string const &offset_, int32 limit_);
+  getChatStoryInteractions(int53 story_poster_chat_id_, int32 story_id_, object_ptr<ReactionType> &&reaction_type_, bool prefer_forwards_, string const &offset_, int32 limit_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -974359690;
+  static const std::int32_t ID = 354545268;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<storyInteractions>;
@@ -87851,11 +90375,11 @@ class getChatsForChatFolderInviteLink final : public Function {
 class chats;
 
 /**
- * Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be rechecked with canSendStory before actually trying to post a story there.
+ * Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be rechecked with canPostStory before actually trying to post a story there.
  *
  * Returns object_ptr<Chats>.
  */
-class getChatsToSendStories final : public Function {
+class getChatsToPostStories final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -87867,14 +90391,14 @@ class getChatsToSendStories final : public Function {
  public:
 
   /**
-   * Default constructor for a function, which returns supergroup and channel chats in which the current user has the right to post stories. The chats must be rechecked with canSendStory before actually trying to post a story there.
+   * Default constructor for a function, which returns supergroup and channel chats in which the current user has the right to post stories. The chats must be rechecked with canPostStory before actually trying to post a story there.
    *
    * Returns object_ptr<Chats>.
    */
-  getChatsToSendStories();
+  getChatsToPostStories();
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 586802084;
+  static const std::int32_t ID = 1893901427;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<chats>;
@@ -89954,14 +92478,16 @@ class getGroupCall final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class httpUrl;
+class InputGroupCall;
+
+class groupCallParticipants;
 
 /**
- * Returns invite link to a video chat in a public chat.
+ * Returns information about participants of a non-joined group call that is not bound to a chat.
  *
- * Returns object_ptr<HttpUrl>.
+ * Returns object_ptr<GroupCallParticipants>.
  */
-class getGroupCallInviteLink final : public Function {
+class getGroupCallParticipants final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -89971,147 +92497,33 @@ class getGroupCallInviteLink final : public Function {
   }
 
  public:
-  /// Group call identifier.
-  int32 group_call_id_;
-  /// Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited user to unmute themselves. Requires groupCall.can_be_managed group call flag.
-  bool can_self_unmute_;
+  /// The group call which participants will be returned.
+  object_ptr<InputGroupCall> input_group_call_;
+  /// The maximum number of participants to return; must be positive.
+  int32 limit_;
 
   /**
-   * Default constructor for a function, which returns invite link to a video chat in a public chat.
+   * Default constructor for a function, which returns information about participants of a non-joined group call that is not bound to a chat.
    *
-   * Returns object_ptr<HttpUrl>.
+   * Returns object_ptr<GroupCallParticipants>.
    */
-  getGroupCallInviteLink();
+  getGroupCallParticipants();
 
   /**
-   * Creates a function, which returns invite link to a video chat in a public chat.
+   * Creates a function, which returns information about participants of a non-joined group call that is not bound to a chat.
    *
-   * Returns object_ptr<HttpUrl>.
+   * Returns object_ptr<GroupCallParticipants>.
    *
-   * \param[in] group_call_id_ Group call identifier.
-   * \param[in] can_self_unmute_ Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited user to unmute themselves. Requires groupCall.can_be_managed group call flag.
+   * \param[in] input_group_call_ The group call which participants will be returned.
+   * \param[in] limit_ The maximum number of participants to return; must be positive.
    */
-  getGroupCallInviteLink(int32 group_call_id_, bool can_self_unmute_);
+  getGroupCallParticipants(object_ptr<InputGroupCall> &&input_group_call_, int32 limit_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 719407396;
+  static const std::int32_t ID = 1986739394;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<httpUrl>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class GroupCallVideoQuality;
-
-class filePart;
-
-/**
- * Returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
- *
- * Returns object_ptr<FilePart>.
- */
-class getGroupCallStreamSegment final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Group call identifier.
-  int32 group_call_id_;
-  /// Point in time when the stream segment begins; Unix timestamp in milliseconds.
-  int53 time_offset_;
-  /// Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
-  int32 scale_;
-  /// Identifier of an audio/video channel to get as received from tgcalls.
-  int32 channel_id_;
-  /// Video quality as received from tgcalls; pass null to get the worst available quality.
-  object_ptr<GroupCallVideoQuality> video_quality_;
-
-  /**
-   * Default constructor for a function, which returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
-   *
-   * Returns object_ptr<FilePart>.
-   */
-  getGroupCallStreamSegment();
-
-  /**
-   * Creates a function, which returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
-   *
-   * Returns object_ptr<FilePart>.
-   *
-   * \param[in] group_call_id_ Group call identifier.
-   * \param[in] time_offset_ Point in time when the stream segment begins; Unix timestamp in milliseconds.
-   * \param[in] scale_ Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
-   * \param[in] channel_id_ Identifier of an audio/video channel to get as received from tgcalls.
-   * \param[in] video_quality_ Video quality as received from tgcalls; pass null to get the worst available quality.
-   */
-  getGroupCallStreamSegment(int32 group_call_id_, int53 time_offset_, int32 scale_, int32 channel_id_, object_ptr<GroupCallVideoQuality> &&video_quality_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -2077959515;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<filePart>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class groupCallStreams;
-
-/**
- * Returns information about available group call streams.
- *
- * Returns object_ptr<GroupCallStreams>.
- */
-class getGroupCallStreams final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Group call identifier.
-  int32 group_call_id_;
-
-  /**
-   * Default constructor for a function, which returns information about available group call streams.
-   *
-   * Returns object_ptr<GroupCallStreams>.
-   */
-  getGroupCallStreams();
-
-  /**
-   * Creates a function, which returns information about available group call streams.
-   *
-   * Returns object_ptr<GroupCallStreams>.
-   *
-   * \param[in] group_call_id_ Group call identifier.
-   */
-  explicit getGroupCallStreams(int32 group_call_id_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1619226268;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<groupCallStreams>;
+  using ReturnType = object_ptr<groupCallParticipants>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -94021,6 +96433,8 @@ class getReceivedGifts final : public Function {
   }
 
  public:
+  /// Unique identifier of business connection on behalf of which to send the request; for bots only.
+  string business_connection_id_;
   /// Identifier of the gift receiver.
   object_ptr<MessageSender> owner_id_;
   /// Pass true to exclude gifts that aren't saved to the chat's profile page. Always true for gifts received by other users and channel chats without can_post_messages administrator right.
@@ -94052,6 +96466,7 @@ class getReceivedGifts final : public Function {
    *
    * Returns object_ptr<ReceivedGifts>.
    *
+   * \param[in] business_connection_id_ Unique identifier of business connection on behalf of which to send the request; for bots only.
    * \param[in] owner_id_ Identifier of the gift receiver.
    * \param[in] exclude_unsaved_ Pass true to exclude gifts that aren't saved to the chat's profile page. Always true for gifts received by other users and channel chats without can_post_messages administrator right.
    * \param[in] exclude_saved_ Pass true to exclude gifts that are saved to the chat's profile page. Always false for gifts received by other users and channel chats without can_post_messages administrator right.
@@ -94062,10 +96477,10 @@ class getReceivedGifts final : public Function {
    * \param[in] offset_ Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
    * \param[in] limit_ The maximum number of gifts to be returned; must be positive and can't be greater than 100. For optimal performance, the number of returned objects is chosen by TDLib and can be smaller than the specified limit.
    */
-  getReceivedGifts(object_ptr<MessageSender> &&owner_id_, bool exclude_unsaved_, bool exclude_saved_, bool exclude_unlimited_, bool exclude_limited_, bool exclude_upgraded_, bool sort_by_price_, string const &offset_, int32 limit_);
+  getReceivedGifts(string const &business_connection_id_, object_ptr<MessageSender> &&owner_id_, bool exclude_unsaved_, bool exclude_saved_, bool exclude_unlimited_, bool exclude_limited_, bool exclude_upgraded_, bool sort_by_price_, string const &offset_, int32 limit_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 224594611;
+  static const std::int32_t ID = -586538672;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<receivedGifts>;
@@ -94914,6 +97329,56 @@ class getScopeNotificationSettings final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<scopeNotificationSettings>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class sponsoredChats;
+
+/**
+ * Returns sponsored chats to be shown in the search results.
+ *
+ * Returns object_ptr<SponsoredChats>.
+ */
+class getSearchSponsoredChats final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Query the user searches for.
+  string query_;
+
+  /**
+   * Default constructor for a function, which returns sponsored chats to be shown in the search results.
+   *
+   * Returns object_ptr<SponsoredChats>.
+   */
+  getSearchSponsoredChats();
+
+  /**
+   * Creates a function, which returns sponsored chats to be shown in the search results.
+   *
+   * Returns object_ptr<SponsoredChats>.
+   *
+   * \param[in] query_ Query the user searches for.
+   */
+  explicit getSearchSponsoredChats(string const &query_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1568505164;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<sponsoredChats>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -95870,7 +98335,7 @@ class getStory final : public Function {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Story identifier.
   int32 story_id_;
   /// Pass true to get only locally available information without sending network requests.
@@ -95888,14 +98353,14 @@ class getStory final : public Function {
    *
    * Returns object_ptr<Story>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Story identifier.
    * \param[in] only_local_ Pass true to get only locally available information without sending network requests.
    */
-  getStory(int53 story_sender_chat_id_, int32 story_id_, bool only_local_);
+  getStory(int53 story_poster_chat_id_, int32 story_id_, bool only_local_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1903893624;
+  static const std::int32_t ID = -2011076366;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<story>;
@@ -96082,8 +98547,8 @@ class getStoryPublicForwards final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the story.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
   /// Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
@@ -96103,15 +98568,15 @@ class getStoryPublicForwards final : public Function {
    *
    * Returns object_ptr<PublicForwards>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story.
    * \param[in] story_id_ The identifier of the story.
    * \param[in] offset_ Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
    * \param[in] limit_ The maximum number of messages and stories to be returned; must be positive and can't be greater than 100. For optimal performance, the number of returned objects is chosen by TDLib and can be smaller than the specified limit.
    */
-  getStoryPublicForwards(int53 story_sender_chat_id_, int32 story_id_, string const &offset_, int32 limit_);
+  getStoryPublicForwards(int53 story_poster_chat_id_, int32 story_id_, string const &offset_, int32 limit_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1761074363;
+  static const std::int32_t ID = 1810378546;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<publicForwards>;
@@ -97513,10 +99978,63 @@ class getVideoChatAvailableParticipants final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class httpUrl;
+
+/**
+ * Returns invite link to a video chat in a public chat.
+ *
+ * Returns object_ptr<HttpUrl>.
+ */
+class getVideoChatInviteLink final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// Pass true if the invite link needs to contain an invite hash, passing which to joinVideoChat would allow the invited user to unmute themselves. Requires groupCall.can_be_managed right.
+  bool can_self_unmute_;
+
+  /**
+   * Default constructor for a function, which returns invite link to a video chat in a public chat.
+   *
+   * Returns object_ptr<HttpUrl>.
+   */
+  getVideoChatInviteLink();
+
+  /**
+   * Creates a function, which returns invite link to a video chat in a public chat.
+   *
+   * Returns object_ptr<HttpUrl>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] can_self_unmute_ Pass true if the invite link needs to contain an invite hash, passing which to joinVideoChat would allow the invited user to unmute themselves. Requires groupCall.can_be_managed right.
+   */
+  getVideoChatInviteLink(int32 group_call_id_, bool can_self_unmute_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1394707321;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<httpUrl>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class rtmpUrl;
 
 /**
- * Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
+ * Returns RTMP URL for streaming to the video chat of a chat; requires can_manage_video_chats administrator right.
  *
  * Returns object_ptr<RtmpUrl>.
  */
@@ -97534,14 +100052,14 @@ class getVideoChatRtmpUrl final : public Function {
   int53 chat_id_;
 
   /**
-   * Default constructor for a function, which returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
+   * Default constructor for a function, which returns RTMP URL for streaming to the video chat of a chat; requires can_manage_video_chats administrator right.
    *
    * Returns object_ptr<RtmpUrl>.
    */
   getVideoChatRtmpUrl();
 
   /**
-   * Creates a function, which returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
+   * Creates a function, which returns RTMP URL for streaming to the video chat of a chat; requires can_manage_video_chats administrator right.
    *
    * Returns object_ptr<RtmpUrl>.
    *
@@ -97554,6 +100072,120 @@ class getVideoChatRtmpUrl final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<rtmpUrl>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class GroupCallVideoQuality;
+
+class data;
+
+/**
+ * Returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
+ *
+ * Returns object_ptr<Data>.
+ */
+class getVideoChatStreamSegment final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// Point in time when the stream segment begins; Unix timestamp in milliseconds.
+  int53 time_offset_;
+  /// Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
+  int32 scale_;
+  /// Identifier of an audio/video channel to get as received from tgcalls.
+  int32 channel_id_;
+  /// Video quality as received from tgcalls; pass null to get the worst available quality.
+  object_ptr<GroupCallVideoQuality> video_quality_;
+
+  /**
+   * Default constructor for a function, which returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
+   *
+   * Returns object_ptr<Data>.
+   */
+  getVideoChatStreamSegment();
+
+  /**
+   * Creates a function, which returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
+   *
+   * Returns object_ptr<Data>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] time_offset_ Point in time when the stream segment begins; Unix timestamp in milliseconds.
+   * \param[in] scale_ Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
+   * \param[in] channel_id_ Identifier of an audio/video channel to get as received from tgcalls.
+   * \param[in] video_quality_ Video quality as received from tgcalls; pass null to get the worst available quality.
+   */
+  getVideoChatStreamSegment(int32 group_call_id_, int53 time_offset_, int32 scale_, int32 channel_id_, object_ptr<GroupCallVideoQuality> &&video_quality_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 773343220;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<data>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class videoChatStreams;
+
+/**
+ * Returns information about available video chat streams.
+ *
+ * Returns object_ptr<VideoChatStreams>.
+ */
+class getVideoChatStreams final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+
+  /**
+   * Default constructor for a function, which returns information about available video chat streams.
+   *
+   * Returns object_ptr<VideoChatStreams>.
+   */
+  getVideoChatStreams();
+
+  /**
+   * Creates a function, which returns information about available video chat streams.
+   *
+   * Returns object_ptr<VideoChatStreams>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   */
+  explicit getVideoChatStreams(int32 group_call_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 531757765;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<videoChatStreams>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -97791,6 +100423,67 @@ class getWebPageInstantView final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class formattedText;
+
+class ok;
+
+/**
+ * Allows to buy a Telegram Premium subscription for another user with payment in Telegram Stars; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class giftPremiumWithStars final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the user which will receive Telegram Premium.
+  int53 user_id_;
+  /// The number of Telegram Stars to pay for subscription.
+  int53 star_count_;
+  /// Number of months the Telegram Premium subscription will be active for the user.
+  int32 month_count_;
+  /// Text to show to the user receiving Telegram Premium; 0-getOption(&quot;gift_text_length_max&quot;) characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+  object_ptr<formattedText> text_;
+
+  /**
+   * Default constructor for a function, which allows to buy a Telegram Premium subscription for another user with payment in Telegram Stars; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  giftPremiumWithStars();
+
+  /**
+   * Creates a function, which allows to buy a Telegram Premium subscription for another user with payment in Telegram Stars; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] user_id_ Identifier of the user which will receive Telegram Premium.
+   * \param[in] star_count_ The number of Telegram Stars to pay for subscription.
+   * \param[in] month_count_ Number of months the Telegram Premium subscription will be active for the user.
+   * \param[in] text_ Text to show to the user receiving Telegram Premium; 0-getOption(&quot;gift_text_length_max&quot;) characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+   */
+  giftPremiumWithStars(int53 user_id_, int53 star_count_, int32 month_count_, object_ptr<formattedText> &&text_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -2058395432;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ok;
 
 /**
@@ -97992,14 +100685,70 @@ class importMessages final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class InviteGroupCallParticipantResult;
+
+/**
+ * Invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type messageGroupCall. The group call can have at most getOption(&quot;group_call_participant_count_max&quot;) participants.
+ *
+ * Returns object_ptr<InviteGroupCallParticipantResult>.
+ */
+class inviteGroupCallParticipant final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// User identifier.
+  int53 user_id_;
+  /// Pass true if the group call is a video call.
+  bool is_video_;
+
+  /**
+   * Default constructor for a function, which invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type messageGroupCall. The group call can have at most getOption(&quot;group_call_participant_count_max&quot;) participants.
+   *
+   * Returns object_ptr<InviteGroupCallParticipantResult>.
+   */
+  inviteGroupCallParticipant();
+
+  /**
+   * Creates a function, which invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type messageGroupCall. The group call can have at most getOption(&quot;group_call_participant_count_max&quot;) participants.
+   *
+   * Returns object_ptr<InviteGroupCallParticipantResult>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] user_id_ User identifier.
+   * \param[in] is_video_ Pass true if the group call is a video call.
+   */
+  inviteGroupCallParticipant(int32 group_call_id_, int53 user_id_, bool is_video_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -631535414;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<InviteGroupCallParticipantResult>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ok;
 
 /**
- * Invites users to an active group call. Sends a service message of type messageInviteVideoChatParticipants for video chats.
+ * Invites users to an active video chat. Sends a service message of the type messageInviteVideoChatParticipants to the chat bound to the group call.
  *
  * Returns object_ptr<Ok>.
  */
-class inviteGroupCallParticipants final : public Function {
+class inviteVideoChatParticipants final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -98015,24 +100764,24 @@ class inviteGroupCallParticipants final : public Function {
   array<int53> user_ids_;
 
   /**
-   * Default constructor for a function, which invites users to an active group call. Sends a service message of type messageInviteVideoChatParticipants for video chats.
+   * Default constructor for a function, which invites users to an active video chat. Sends a service message of the type messageInviteVideoChatParticipants to the chat bound to the group call.
    *
    * Returns object_ptr<Ok>.
    */
-  inviteGroupCallParticipants();
+  inviteVideoChatParticipants();
 
   /**
-   * Creates a function, which invites users to an active group call. Sends a service message of type messageInviteVideoChatParticipants for video chats.
+   * Creates a function, which invites users to an active video chat. Sends a service message of the type messageInviteVideoChatParticipants to the chat bound to the group call.
    *
    * Returns object_ptr<Ok>.
    *
    * \param[in] group_call_id_ Group call identifier.
    * \param[in] user_ids_ User identifiers. At most 10 users can be invited simultaneously.
    */
-  inviteGroupCallParticipants(int32 group_call_id_, array<int53> &&user_ids_);
+  inviteVideoChatParticipants(int32 group_call_id_, array<int53> &&user_ids_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1867097679;
+  static const std::int32_t ID = -473149298;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -98145,16 +100894,75 @@ class joinChatByInviteLink final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class InputGroupCall;
+
+class groupCallInfo;
+
+class groupCallJoinParameters;
+
+/**
+ * Joins a group call that is not bound to a chat.
+ *
+ * Returns object_ptr<GroupCallInfo>.
+ */
+class joinGroupCall final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The group call to join.
+  object_ptr<InputGroupCall> input_group_call_;
+  /// Parameters to join the call.
+  object_ptr<groupCallJoinParameters> join_parameters_;
+
+  /**
+   * Default constructor for a function, which joins a group call that is not bound to a chat.
+   *
+   * Returns object_ptr<GroupCallInfo>.
+   */
+  joinGroupCall();
+
+  /**
+   * Creates a function, which joins a group call that is not bound to a chat.
+   *
+   * Returns object_ptr<GroupCallInfo>.
+   *
+   * \param[in] input_group_call_ The group call to join.
+   * \param[in] join_parameters_ Parameters to join the call.
+   */
+  joinGroupCall(object_ptr<InputGroupCall> &&input_group_call_, object_ptr<groupCallJoinParameters> &&join_parameters_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -2026079917;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<groupCallInfo>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class MessageSender;
+
+class groupCallJoinParameters;
 
 class text;
 
 /**
- * Joins an active group call. Returns join response payload for tgcalls.
+ * Joins an active video chat. Returns join response payload for tgcalls.
  *
  * Returns object_ptr<Text>.
  */
-class joinGroupCall final : public Function {
+class joinVideoChat final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -98168,44 +100976,32 @@ class joinGroupCall final : public Function {
   int32 group_call_id_;
   /// Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats only.
   object_ptr<MessageSender> participant_id_;
-  /// Caller audio channel synchronization source identifier; received from tgcalls.
-  int32 audio_source_id_;
-  /// Group call join payload; received from tgcalls.
-  string payload_;
-  /// Pass true to join the call with muted microphone.
-  bool is_muted_;
-  /// Pass true if the user's video is enabled.
-  bool is_my_video_enabled_;
-  /// If non-empty, invite hash to be used to join the group call without being muted by administrators.
+  /// Parameters to join the call.
+  object_ptr<groupCallJoinParameters> join_parameters_;
+  /// Invite hash as received from internalLinkTypeVideoChat.
   string invite_hash_;
-  /// Fingerprint of the encryption key for E2E group calls not bound to a chat; pass 0 for voice chats.
-  int64 key_fingerprint_;
 
   /**
-   * Default constructor for a function, which joins an active group call. Returns join response payload for tgcalls.
+   * Default constructor for a function, which joins an active video chat. Returns join response payload for tgcalls.
    *
    * Returns object_ptr<Text>.
    */
-  joinGroupCall();
+  joinVideoChat();
 
   /**
-   * Creates a function, which joins an active group call. Returns join response payload for tgcalls.
+   * Creates a function, which joins an active video chat. Returns join response payload for tgcalls.
    *
    * Returns object_ptr<Text>.
    *
    * \param[in] group_call_id_ Group call identifier.
    * \param[in] participant_id_ Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats only.
-   * \param[in] audio_source_id_ Caller audio channel synchronization source identifier; received from tgcalls.
-   * \param[in] payload_ Group call join payload; received from tgcalls.
-   * \param[in] is_muted_ Pass true to join the call with muted microphone.
-   * \param[in] is_my_video_enabled_ Pass true if the user's video is enabled.
-   * \param[in] invite_hash_ If non-empty, invite hash to be used to join the group call without being muted by administrators.
-   * \param[in] key_fingerprint_ Fingerprint of the encryption key for E2E group calls not bound to a chat; pass 0 for voice chats.
+   * \param[in] join_parameters_ Parameters to join the call.
+   * \param[in] invite_hash_ Invite hash as received from internalLinkTypeVideoChat.
    */
-  joinGroupCall(int32 group_call_id_, object_ptr<MessageSender> &&participant_id_, int32 audio_source_id_, string const &payload_, bool is_muted_, bool is_my_video_enabled_, string const &invite_hash_, int64 key_fingerprint_);
+  joinVideoChat(int32 group_call_id_, object_ptr<MessageSender> &&participant_id_, object_ptr<groupCallJoinParameters> &&join_parameters_, string const &invite_hash_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1600024255;
+  static const std::int32_t ID = 1322989999;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<text>;
@@ -98384,7 +101180,7 @@ class StoryList;
 class ok;
 
 /**
- * Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_sender_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
+ * Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
  *
  * Returns object_ptr<Ok>.
  */
@@ -98402,14 +101198,14 @@ class loadActiveStories final : public Function {
   object_ptr<StoryList> story_list_;
 
   /**
-   * Default constructor for a function, which loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_sender_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
+   * Default constructor for a function, which loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
    *
    * Returns object_ptr<Ok>.
    */
   loadActiveStories();
 
   /**
-   * Creates a function, which loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_sender_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
+   * Creates a function, which loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all active stories have been loaded.
    *
    * Returns object_ptr<Ok>.
    *
@@ -98929,6 +101725,56 @@ class openMessageContent final : public Function {
 class ok;
 
 /**
+ * Informs TDLib that the user opened a sponsored chat.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class openSponsoredChat final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of the sponsored chat.
+  int53 sponsored_chat_unique_id_;
+
+  /**
+   * Default constructor for a function, which informs TDLib that the user opened a sponsored chat.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  openSponsoredChat();
+
+  /**
+   * Creates a function, which informs TDLib that the user opened a sponsored chat.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] sponsored_chat_unique_id_ Unique identifier of the sponsored chat.
+   */
+  explicit openSponsoredChat(int53 sponsored_chat_unique_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 865985573;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
  * Informs TDLib that a story is opened and is being viewed by the user.
  *
  * Returns object_ptr<Ok>.
@@ -98943,8 +101789,8 @@ class openStory final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the opened story.
-  int53 story_sender_chat_id_;
+  /// The identifier of the chat that posted the opened story.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
 
@@ -98960,13 +101806,13 @@ class openStory final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the opened story.
+   * \param[in] story_poster_chat_id_ The identifier of the chat that posted the opened story.
    * \param[in] story_id_ The identifier of the story.
    */
-  openStory(int53 story_sender_chat_id_, int32 story_id_);
+  openStory(int53 story_poster_chat_id_, int32 story_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -824542083;
+  static const std::int32_t ID = -696723005;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -99329,6 +102175,90 @@ class pingProxy final : public Function {
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<seconds>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class InputStoryContent;
+
+class StoryPrivacySettings;
+
+class formattedText;
+
+class inputStoryAreas;
+
+class story;
+
+class storyFullId;
+
+/**
+ * Posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+ *
+ * Returns object_ptr<Story>.
+ */
+class postStory final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
+  int53 chat_id_;
+  /// Content of the story.
+  object_ptr<InputStoryContent> content_;
+  /// Clickable rectangle areas to be shown on the story media; pass null if none.
+  object_ptr<inputStoryAreas> areas_;
+  /// Story caption; pass null to use an empty caption; 0-getOption(&quot;story_caption_length_max&quot;) characters; can have entities only if getOption(&quot;can_use_text_entities_in_story_caption&quot;).
+  object_ptr<formattedText> caption_;
+  /// The privacy settings for the story; ignored for stories posted on behalf of supergroup and channel chats.
+  object_ptr<StoryPrivacySettings> privacy_settings_;
+  /// Period after which the story is moved to archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise.
+  int32 active_period_;
+  /// Full identifier of the original story, which content was used to create the story; pass null if the story isn't repost of another story.
+  object_ptr<storyFullId> from_story_full_id_;
+  /// Pass true to keep the story accessible after expiration.
+  bool is_posted_to_chat_page_;
+  /// Pass true if the content of the story must be protected from forwarding and screenshotting.
+  bool protect_content_;
+
+  /**
+   * Default constructor for a function, which posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+   *
+   * Returns object_ptr<Story>.
+   */
+  postStory();
+
+  /**
+   * Creates a function, which posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+   *
+   * Returns object_ptr<Story>.
+   *
+   * \param[in] chat_id_ Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
+   * \param[in] content_ Content of the story.
+   * \param[in] areas_ Clickable rectangle areas to be shown on the story media; pass null if none.
+   * \param[in] caption_ Story caption; pass null to use an empty caption; 0-getOption(&quot;story_caption_length_max&quot;) characters; can have entities only if getOption(&quot;can_use_text_entities_in_story_caption&quot;).
+   * \param[in] privacy_settings_ The privacy settings for the story; ignored for stories posted on behalf of supergroup and channel chats.
+   * \param[in] active_period_ Period after which the story is moved to archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise.
+   * \param[in] from_story_full_id_ Full identifier of the original story, which content was used to create the story; pass null if the story isn't repost of another story.
+   * \param[in] is_posted_to_chat_page_ Pass true to keep the story accessible after expiration.
+   * \param[in] protect_content_ Pass true if the content of the story must be protected from forwarding and screenshotting.
+   */
+  postStory(int53 chat_id_, object_ptr<InputStoryContent> &&content_, object_ptr<inputStoryAreas> &&areas_, object_ptr<formattedText> &&caption_, object_ptr<StoryPrivacySettings> &&privacy_settings_, int32 active_period_, object_ptr<storyFullId> &&from_story_full_id_, bool is_posted_to_chat_page_, bool protect_content_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -257605513;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<story>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -99875,6 +102805,62 @@ class readAllMessageThreadReactions final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class ok;
+
+/**
+ * Reads a message on behalf of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class readBusinessMessage final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection through which the message was received.
+  string business_connection_id_;
+  /// The chat the message belongs to.
+  int53 chat_id_;
+  /// Identifier of the message.
+  int53 message_id_;
+
+  /**
+   * Default constructor for a function, which reads a message on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  readBusinessMessage();
+
+  /**
+   * Creates a function, which reads a message on behalf of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection through which the message was received.
+   * \param[in] chat_id_ The chat the message belongs to.
+   * \param[in] message_id_ Identifier of the message.
+   */
+  readBusinessMessage(string const &business_connection_id_, int53 chat_id_, int53 message_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1723531538;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ChatList;
 
 class ok;
@@ -99927,12 +102913,12 @@ class readChatList final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class filePart;
+class data;
 
 /**
  * Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
  *
- * Returns object_ptr<FilePart>.
+ * Returns object_ptr<Data>.
  */
 class readFilePart final : public Function {
   /**
@@ -99954,14 +102940,14 @@ class readFilePart final : public Function {
   /**
    * Default constructor for a function, which reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
    *
-   * Returns object_ptr<FilePart>.
+   * Returns object_ptr<Data>.
    */
   readFilePart();
 
   /**
    * Creates a function, which reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
    *
-   * Returns object_ptr<FilePart>.
+   * Returns object_ptr<Data>.
    *
    * \param[in] file_id_ Identifier of the file. The file must be located in the TDLib file cache.
    * \param[in] offset_ The offset from which to read the file.
@@ -99970,10 +102956,10 @@ class readFilePart final : public Function {
   readFilePart(int32 file_id_, int53 offset_, int53 count_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 906798861;
+  static const std::int32_t ID = -174576822;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<filePart>;
+  using ReturnType = object_ptr<data>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -101948,7 +104934,7 @@ class replaceStickerInSet final : public Function {
 class rtmpUrl;
 
 /**
- * Replaces the current RTMP URL for streaming to the chat; requires owner privileges.
+ * Replaces the current RTMP URL for streaming to the video chat of a chat; requires owner privileges in the chat.
  *
  * Returns object_ptr<RtmpUrl>.
  */
@@ -101966,14 +104952,14 @@ class replaceVideoChatRtmpUrl final : public Function {
   int53 chat_id_;
 
   /**
-   * Default constructor for a function, which replaces the current RTMP URL for streaming to the chat; requires owner privileges.
+   * Default constructor for a function, which replaces the current RTMP URL for streaming to the video chat of a chat; requires owner privileges in the chat.
    *
    * Returns object_ptr<RtmpUrl>.
    */
   replaceVideoChatRtmpUrl();
 
   /**
-   * Creates a function, which replaces the current RTMP URL for streaming to the chat; requires owner privileges.
+   * Creates a function, which replaces the current RTMP URL for streaming to the video chat of a chat; requires owner privileges in the chat.
    *
    * Returns object_ptr<RtmpUrl>.
    *
@@ -102165,12 +105151,12 @@ class reportChatPhoto final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class ReportChatSponsoredMessageResult;
+class ReportSponsoredResult;
 
 /**
  * Reports a sponsored message to Telegram moderators.
  *
- * Returns object_ptr<ReportChatSponsoredMessageResult>.
+ * Returns object_ptr<ReportSponsoredResult>.
  */
 class reportChatSponsoredMessage final : public Function {
   /**
@@ -102192,14 +105178,14 @@ class reportChatSponsoredMessage final : public Function {
   /**
    * Default constructor for a function, which reports a sponsored message to Telegram moderators.
    *
-   * Returns object_ptr<ReportChatSponsoredMessageResult>.
+   * Returns object_ptr<ReportSponsoredResult>.
    */
   reportChatSponsoredMessage();
 
   /**
    * Creates a function, which reports a sponsored message to Telegram moderators.
    *
-   * Returns object_ptr<ReportChatSponsoredMessageResult>.
+   * Returns object_ptr<ReportSponsoredResult>.
    *
    * \param[in] chat_id_ Chat identifier of the sponsored message.
    * \param[in] message_id_ Identifier of the sponsored message.
@@ -102208,10 +105194,10 @@ class reportChatSponsoredMessage final : public Function {
   reportChatSponsoredMessage(int53 chat_id_, int53 message_id_, bytes const &option_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -868330562;
+  static const std::int32_t ID = -979984820;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ReportChatSponsoredMessageResult>;
+  using ReturnType = object_ptr<ReportSponsoredResult>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -102329,6 +105315,59 @@ class reportPhoneNumberCodeMissing final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class ReportSponsoredResult;
+
+/**
+ * Reports a sponsored chat to Telegram moderators.
+ *
+ * Returns object_ptr<ReportSponsoredResult>.
+ */
+class reportSponsoredChat final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of the sponsored chat.
+  int53 sponsored_chat_unique_id_;
+  /// Option identifier chosen by the user; leave empty for the initial request.
+  bytes option_id_;
+
+  /**
+   * Default constructor for a function, which reports a sponsored chat to Telegram moderators.
+   *
+   * Returns object_ptr<ReportSponsoredResult>.
+   */
+  reportSponsoredChat();
+
+  /**
+   * Creates a function, which reports a sponsored chat to Telegram moderators.
+   *
+   * Returns object_ptr<ReportSponsoredResult>.
+   *
+   * \param[in] sponsored_chat_unique_id_ Unique identifier of the sponsored chat.
+   * \param[in] option_id_ Option identifier chosen by the user; leave empty for the initial request.
+   */
+  reportSponsoredChat(int53 sponsored_chat_unique_id_, bytes const &option_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -902673019;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ReportSponsoredResult>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class ReportStoryResult;
 
 /**
@@ -102346,8 +105385,8 @@ class reportStory final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the story to report.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story to report.
+  int53 story_poster_chat_id_;
   /// The identifier of the story to report.
   int32 story_id_;
   /// Option identifier chosen by the user; leave empty for the initial request.
@@ -102367,15 +105406,15 @@ class reportStory final : public Function {
    *
    * Returns object_ptr<ReportStoryResult>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story to report.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story to report.
    * \param[in] story_id_ The identifier of the story to report.
    * \param[in] option_id_ Option identifier chosen by the user; leave empty for the initial request.
    * \param[in] text_ Additional report details; 0-1024 characters; leave empty for the initial request.
    */
-  reportStory(int53 story_sender_chat_id_, int32 story_id_, bytes const &option_id_, string const &text_);
+  reportStory(int53 story_poster_chat_id_, int32 story_id_, bytes const &option_id_, string const &text_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 2027844368;
+  static const std::int32_t ID = 1823256372;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ReportStoryResult>;
@@ -102575,7 +105614,7 @@ class requestPasswordRecovery final : public Function {
 class ok;
 
 /**
- * Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+ * Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
  *
  * Returns object_ptr<Ok>.
  */
@@ -102593,14 +105632,14 @@ class requestQrCodeAuthentication final : public Function {
   array<int53> other_user_ids_;
 
   /**
-   * Default constructor for a function, which requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+   * Default constructor for a function, which requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
    *
    * Returns object_ptr<Ok>.
    */
   requestQrCodeAuthentication();
 
   /**
-   * Creates a function, which requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+   * Creates a function, which requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
    *
    * Returns object_ptr<Ok>.
    *
@@ -103205,7 +106244,7 @@ class revokeChatInviteLink final : public Function {
 class ok;
 
 /**
- * Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+ * Revokes invite link for a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
  *
  * Returns object_ptr<Ok>.
  */
@@ -103223,14 +106262,14 @@ class revokeGroupCallInviteLink final : public Function {
   int32 group_call_id_;
 
   /**
-   * Default constructor for a function, which revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+   * Default constructor for a function, which revokes invite link for a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
    *
    * Returns object_ptr<Ok>.
    */
   revokeGroupCallInviteLink();
 
   /**
-   * Creates a function, which revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+   * Creates a function, which revokes invite link for a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
    *
    * Returns object_ptr<Ok>.
    *
@@ -103486,7 +106525,7 @@ class searchBackground final : public Function {
 class foundMessages;
 
 /**
- * Searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+ * Searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
  *
  * Returns object_ptr<FoundMessages>.
  */
@@ -103508,14 +106547,14 @@ class searchCallMessages final : public Function {
   bool only_missed_;
 
   /**
-   * Default constructor for a function, which searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+   * Default constructor for a function, which searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
    *
    * Returns object_ptr<FoundMessages>.
    */
   searchCallMessages();
 
   /**
-   * Creates a function, which searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+   * Creates a function, which searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
    *
    * Returns object_ptr<FoundMessages>.
    *
@@ -104058,6 +107097,72 @@ class searchFileDownloads final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
+class GiftForResaleOrder;
+
+class UpgradedGiftAttributeId;
+
+class giftsForResale;
+
+/**
+ * Returns upgraded gifts that can be bought from other owners.
+ *
+ * Returns object_ptr<GiftsForResale>.
+ */
+class searchGiftsForResale final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the regular gift that was upgraded to a unique gift.
+  int64 gift_id_;
+  /// Order in which the results will be sorted.
+  object_ptr<GiftForResaleOrder> order_;
+  /// Attributes used to filter received gifts. If multiple attributes of the same type are specified, then all of them are allowed. If none attributes of specific type are specified, then all values for this attribute type are allowed.
+  array<object_ptr<UpgradedGiftAttributeId>> attributes_;
+  /// Offset of the first entry to return as received from the previous request with the same order and attributes; use empty string to get the first chunk of results.
+  string offset_;
+  /// The maximum number of gifts to return.
+  int32 limit_;
+
+  /**
+   * Default constructor for a function, which returns upgraded gifts that can be bought from other owners.
+   *
+   * Returns object_ptr<GiftsForResale>.
+   */
+  searchGiftsForResale();
+
+  /**
+   * Creates a function, which returns upgraded gifts that can be bought from other owners.
+   *
+   * Returns object_ptr<GiftsForResale>.
+   *
+   * \param[in] gift_id_ Identifier of the regular gift that was upgraded to a unique gift.
+   * \param[in] order_ Order in which the results will be sorted.
+   * \param[in] attributes_ Attributes used to filter received gifts. If multiple attributes of the same type are specified, then all of them are allowed. If none attributes of specific type are specified, then all values for this attribute type are allowed.
+   * \param[in] offset_ Offset of the first entry to return as received from the previous request with the same order and attributes; use empty string to get the first chunk of results.
+   * \param[in] limit_ The maximum number of gifts to return.
+   */
+  searchGiftsForResale(int64 gift_id_, object_ptr<GiftForResaleOrder> &&order_, array<object_ptr<UpgradedGiftAttributeId>> &&attributes_, string const &offset_, int32 limit_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1659300894;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<giftsForResale>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
 class hashtags;
 
 /**
@@ -104531,7 +107636,7 @@ class searchPublicStoriesByTag final : public Function {
 
  public:
   /// Identifier of the chat that posted the stories to search for; pass 0 to search stories in all chats.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Hashtag or cashtag to search for.
   string tag_;
   /// Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
@@ -104551,15 +107656,15 @@ class searchPublicStoriesByTag final : public Function {
    *
    * Returns object_ptr<FoundStories>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the stories to search for; pass 0 to search stories in all chats.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the stories to search for; pass 0 to search stories in all chats.
    * \param[in] tag_ Hashtag or cashtag to search for.
    * \param[in] offset_ Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results.
    * \param[in] limit_ The maximum number of stories to be returned; up to 100. For optimal performance, the number of returned stories is chosen by TDLib and can be smaller than the specified limit.
    */
-  searchPublicStoriesByTag(int53 story_sender_chat_id_, string const &tag_, string const &offset_, int32 limit_);
+  searchPublicStoriesByTag(int53 story_poster_chat_id_, string const &tag_, string const &offset_, int32 limit_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1563792893;
+  static const std::int32_t ID = 1778102602;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<foundStories>;
@@ -105280,6 +108385,8 @@ class sellGift final : public Function {
   }
 
  public:
+  /// Unique identifier of business connection on behalf of which to send the request; for bots only.
+  string business_connection_id_;
   /// Identifier of the gift.
   string received_gift_id_;
 
@@ -105295,12 +108402,13 @@ class sellGift final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
+   * \param[in] business_connection_id_ Unique identifier of business connection on behalf of which to send the request; for bots only.
    * \param[in] received_gift_id_ Identifier of the gift.
    */
-  explicit sellGift(string const &received_gift_id_);
+  sellGift(string const &business_connection_id_, string const &received_gift_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1046653967;
+  static const std::int32_t ID = -298298375;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -106523,24 +109631,16 @@ class sendQuickReplyShortcutMessages final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class InputStoryContent;
+class MessageSender;
 
-class StoryPrivacySettings;
-
-class formattedText;
-
-class inputStoryAreas;
-
-class story;
-
-class storyFullId;
+class ok;
 
 /**
- * Sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+ * Sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current user must be transferred using transferGift and can't be passed to the method.
  *
- * Returns object_ptr<Story>.
+ * Returns object_ptr<Ok>.
  */
-class sendStory final : public Function {
+class sendResoldGift final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -106550,54 +109650,36 @@ class sendStory final : public Function {
   }
 
  public:
-  /// Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
-  int53 chat_id_;
-  /// Content of the story.
-  object_ptr<InputStoryContent> content_;
-  /// Clickable rectangle areas to be shown on the story media; pass null if none.
-  object_ptr<inputStoryAreas> areas_;
-  /// Story caption; pass null to use an empty caption; 0-getOption(&quot;story_caption_length_max&quot;) characters; can have entities only if getOption(&quot;can_use_text_entities_in_story_caption&quot;).
-  object_ptr<formattedText> caption_;
-  /// The privacy settings for the story; ignored for stories sent to supergroup and channel chats.
-  object_ptr<StoryPrivacySettings> privacy_settings_;
-  /// Period after which the story is moved to archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise.
-  int32 active_period_;
-  /// Full identifier of the original story, which content was used to create the story; pass null if the story isn't repost of another story.
-  object_ptr<storyFullId> from_story_full_id_;
-  /// Pass true to keep the story accessible after expiration.
-  bool is_posted_to_chat_page_;
-  /// Pass true if the content of the story must be protected from forwarding and screenshotting.
-  bool protect_content_;
+  /// Name of the upgraded gift to send.
+  string gift_name_;
+  /// Identifier of the user or the channel chat that will receive the gift.
+  object_ptr<MessageSender> owner_id_;
+  /// The amount of Telegram Stars required to pay for the gift.
+  int53 star_count_;
 
   /**
-   * Default constructor for a function, which sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+   * Default constructor for a function, which sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current user must be transferred using transferGift and can't be passed to the method.
    *
-   * Returns object_ptr<Story>.
+   * Returns object_ptr<Ok>.
    */
-  sendStory();
+  sendResoldGift();
 
   /**
-   * Creates a function, which sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary story.
+   * Creates a function, which sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current user must be transferred using transferGift and can't be passed to the method.
    *
-   * Returns object_ptr<Story>.
+   * Returns object_ptr<Ok>.
    *
-   * \param[in] chat_id_ Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
-   * \param[in] content_ Content of the story.
-   * \param[in] areas_ Clickable rectangle areas to be shown on the story media; pass null if none.
-   * \param[in] caption_ Story caption; pass null to use an empty caption; 0-getOption(&quot;story_caption_length_max&quot;) characters; can have entities only if getOption(&quot;can_use_text_entities_in_story_caption&quot;).
-   * \param[in] privacy_settings_ The privacy settings for the story; ignored for stories sent to supergroup and channel chats.
-   * \param[in] active_period_ Period after which the story is moved to archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise.
-   * \param[in] from_story_full_id_ Full identifier of the original story, which content was used to create the story; pass null if the story isn't repost of another story.
-   * \param[in] is_posted_to_chat_page_ Pass true to keep the story accessible after expiration.
-   * \param[in] protect_content_ Pass true if the content of the story must be protected from forwarding and screenshotting.
+   * \param[in] gift_name_ Name of the upgraded gift to send.
+   * \param[in] owner_id_ Identifier of the user or the channel chat that will receive the gift.
+   * \param[in] star_count_ The amount of Telegram Stars required to pay for the gift.
    */
-  sendStory(int53 chat_id_, object_ptr<InputStoryContent> &&content_, object_ptr<inputStoryAreas> &&areas_, object_ptr<formattedText> &&caption_, object_ptr<StoryPrivacySettings> &&privacy_settings_, int32 active_period_, object_ptr<storyFullId> &&from_story_full_id_, bool is_posted_to_chat_page_, bool protect_content_);
+  sendResoldGift(string const &gift_name_, object_ptr<MessageSender> &&owner_id_, int53 star_count_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -424987902;
+  static const std::int32_t ID = -1284812948;
 
   /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<story>;
+  using ReturnType = object_ptr<ok>;
 
   /**
    * Helper function for to_string method. Appends string representation of the object to the storer.
@@ -107034,7 +110116,7 @@ class ok;
 class phoneNumberAuthenticationSettings;
 
 /**
- * Sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+ * Sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
  *
  * Returns object_ptr<Ok>.
  */
@@ -107054,14 +110136,14 @@ class setAuthenticationPhoneNumber final : public Function {
   object_ptr<phoneNumberAuthenticationSettings> settings_;
 
   /**
-   * Default constructor for a function, which sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+   * Default constructor for a function, which sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
    *
    * Returns object_ptr<Ok>.
    */
   setAuthenticationPhoneNumber();
 
   /**
-   * Creates a function, which sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+   * Creates a function, which sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or authorizationStateWaitPassword.
    *
    * Returns object_ptr<Ok>.
    *
@@ -107072,6 +110154,67 @@ class setAuthenticationPhoneNumber final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 868276259;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class StoreTransaction;
+
+class ok;
+
+/**
+ * Informs server about an in-store purchase of Telegram Premium before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setAuthenticationPremiumPurchaseTransaction final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Information about the transaction.
+  object_ptr<StoreTransaction> transaction_;
+  /// Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
+  bool is_restore_;
+  /// ISO 4217 currency code of the payment currency.
+  string currency_;
+  /// Paid amount, in the smallest units of the currency.
+  int53 amount_;
+
+  /**
+   * Default constructor for a function, which informs server about an in-store purchase of Telegram Premium before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setAuthenticationPremiumPurchaseTransaction();
+
+  /**
+   * Creates a function, which informs server about an in-store purchase of Telegram Premium before authorization. Works only when the current authorization state is authorizationStateWaitPremiumPurchase.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] transaction_ Information about the transaction.
+   * \param[in] is_restore_ Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
+   * \param[in] currency_ ISO 4217 currency code of the payment currency.
+   * \param[in] amount_ Paid amount, in the smallest units of the currency.
+   */
+  setAuthenticationPremiumPurchaseTransaction(object_ptr<StoreTransaction> &&transaction_, bool is_restore_, string const &currency_, int53 amount_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -450986887;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -107564,6 +110707,281 @@ class setBotUpdatesStatus final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1154926191;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Changes the bio of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setBusinessAccountBio final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// The new value of the bio; 0-getOption(&quot;bio_length_max&quot;) characters without line feeds.
+  string bio_;
+
+  /**
+   * Default constructor for a function, which changes the bio of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setBusinessAccountBio();
+
+  /**
+   * Creates a function, which changes the bio of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] bio_ The new value of the bio; 0-getOption(&quot;bio_length_max&quot;) characters without line feeds.
+   */
+  setBusinessAccountBio(string const &business_connection_id_, string const &bio_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1698538041;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class giftSettings;
+
+class ok;
+
+/**
+ * Changes settings for gift receiving of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setBusinessAccountGiftSettings final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// The new settings.
+  object_ptr<giftSettings> settings_;
+
+  /**
+   * Default constructor for a function, which changes settings for gift receiving of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setBusinessAccountGiftSettings();
+
+  /**
+   * Creates a function, which changes settings for gift receiving of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] settings_ The new settings.
+   */
+  setBusinessAccountGiftSettings(string const &business_connection_id_, object_ptr<giftSettings> &&settings_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1757763090;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Changes the first and last name of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setBusinessAccountName final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// The new value of the first name for the business account; 1-64 characters.
+  string first_name_;
+  /// The new value of the optional last name for the business account; 0-64 characters.
+  string last_name_;
+
+  /**
+   * Default constructor for a function, which changes the first and last name of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setBusinessAccountName();
+
+  /**
+   * Creates a function, which changes the first and last name of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] first_name_ The new value of the first name for the business account; 1-64 characters.
+   * \param[in] last_name_ The new value of the optional last name for the business account; 0-64 characters.
+   */
+  setBusinessAccountName(string const &business_connection_id_, string const &first_name_, string const &last_name_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 999582546;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class InputChatPhoto;
+
+class ok;
+
+/**
+ * Changes a profile photo of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setBusinessAccountProfilePhoto final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// Profile photo to set; pass null to remove the photo.
+  object_ptr<InputChatPhoto> photo_;
+  /// Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
+  bool is_public_;
+
+  /**
+   * Default constructor for a function, which changes a profile photo of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setBusinessAccountProfilePhoto();
+
+  /**
+   * Creates a function, which changes a profile photo of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] photo_ Profile photo to set; pass null to remove the photo.
+   * \param[in] is_public_ Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
+   */
+  setBusinessAccountProfilePhoto(string const &business_connection_id_, object_ptr<InputChatPhoto> &&photo_, bool is_public_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1174440149;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Changes the editable username of a business account; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setBusinessAccountUsername final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// The new value of the username.
+  string username_;
+
+  /**
+   * Default constructor for a function, which changes the editable username of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setBusinessAccountUsername();
+
+  /**
+   * Creates a function, which changes the editable username of a business account; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] username_ The new value of the username.
+   */
+  setBusinessAccountUsername(string const &business_connection_id_, string const &username_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1520126367;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -110042,7 +113460,112 @@ class setGameScore final : public Function {
 class ok;
 
 /**
- * Informs TDLib that speaking state of a participant of an active group has changed.
+ * Changes resale price of a unique gift owned by the current user.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setGiftResalePrice final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Identifier of the unique gift.
+  string received_gift_id_;
+  /// The new price for the unique gift; 0 or getOption(&quot;gift_resale_star_count_min&quot;)-getOption(&quot;gift_resale_star_count_max&quot;). Pass 0 to disallow gift resale. The current user will receive getOption(&quot;gift_resale_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for the gift.
+  int53 resale_star_count_;
+
+  /**
+   * Default constructor for a function, which changes resale price of a unique gift owned by the current user.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setGiftResalePrice();
+
+  /**
+   * Creates a function, which changes resale price of a unique gift owned by the current user.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] received_gift_id_ Identifier of the unique gift.
+   * \param[in] resale_star_count_ The new price for the unique gift; 0 or getOption(&quot;gift_resale_star_count_min&quot;)-getOption(&quot;gift_resale_star_count_max&quot;). Pass 0 to disallow gift resale. The current user will receive getOption(&quot;gift_resale_earnings_per_mille&quot;) Telegram Stars for each 1000 Telegram Stars paid for the gift.
+   */
+  setGiftResalePrice(string const &received_gift_id_, int53 resale_star_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -1430492787;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class giftSettings;
+
+class ok;
+
+/**
+ * Changes settings for gift receiving for the current user.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setGiftSettings final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The new settings.
+  object_ptr<giftSettings> settings_;
+
+  /**
+   * Default constructor for a function, which changes settings for gift receiving for the current user.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setGiftSettings();
+
+  /**
+   * Creates a function, which changes settings for gift receiving for the current user.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] settings_ The new settings.
+   */
+  explicit setGiftSettings(object_ptr<giftSettings> &&settings_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -519330046;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Informs TDLib that speaking state of a participant of an active group call has changed.
  *
  * Returns object_ptr<Ok>.
  */
@@ -110064,14 +113587,14 @@ class setGroupCallParticipantIsSpeaking final : public Function {
   bool is_speaking_;
 
   /**
-   * Default constructor for a function, which informs TDLib that speaking state of a participant of an active group has changed.
+   * Default constructor for a function, which informs TDLib that speaking state of a participant of an active group call has changed.
    *
    * Returns object_ptr<Ok>.
    */
   setGroupCallParticipantIsSpeaking();
 
   /**
-   * Creates a function, which informs TDLib that speaking state of a participant of an active group has changed.
+   * Creates a function, which informs TDLib that speaking state of a participant of an active group call has changed.
    *
    * Returns object_ptr<Ok>.
    *
@@ -110100,7 +113623,7 @@ class MessageSender;
 class ok;
 
 /**
- * Changes volume level of a participant of an active group call. If the current user can manage the group call, then the participant's volume level will be changed for all users with the default volume level.
+ * Changes volume level of a participant of an active group call. If the current user can manage the group call or is the owner of the group call, then the participant's volume level will be changed for all users with the default volume level.
  *
  * Returns object_ptr<Ok>.
  */
@@ -110122,14 +113645,14 @@ class setGroupCallParticipantVolumeLevel final : public Function {
   int32 volume_level_;
 
   /**
-   * Default constructor for a function, which changes volume level of a participant of an active group call. If the current user can manage the group call, then the participant's volume level will be changed for all users with the default volume level.
+   * Default constructor for a function, which changes volume level of a participant of an active group call. If the current user can manage the group call or is the owner of the group call, then the participant's volume level will be changed for all users with the default volume level.
    *
    * Returns object_ptr<Ok>.
    */
   setGroupCallParticipantVolumeLevel();
 
   /**
-   * Creates a function, which changes volume level of a participant of an active group call. If the current user can manage the group call, then the participant's volume level will be changed for all users with the default volume level.
+   * Creates a function, which changes volume level of a participant of an active group call. If the current user can manage the group call or is the owner of the group call, then the participant's volume level will be changed for all users with the default volume level.
    *
    * Returns object_ptr<Ok>.
    *
@@ -110141,59 +113664,6 @@ class setGroupCallParticipantVolumeLevel final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = -1753769944;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ok>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class ok;
-
-/**
- * Sets group call title. Requires groupCall.can_be_managed group call flag.
- *
- * Returns object_ptr<Ok>.
- */
-class setGroupCallTitle final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Group call identifier.
-  int32 group_call_id_;
-  /// New group call title; 1-64 characters.
-  string title_;
-
-  /**
-   * Default constructor for a function, which sets group call title. Requires groupCall.can_be_managed group call flag.
-   *
-   * Returns object_ptr<Ok>.
-   */
-  setGroupCallTitle();
-
-  /**
-   * Creates a function, which sets group call title. Requires groupCall.can_be_managed group call flag.
-   *
-   * Returns object_ptr<Ok>.
-   *
-   * \param[in] group_call_id_ Group call identifier.
-   * \param[in] title_ New group call title; 1-64 characters.
-   */
-  setGroupCallTitle(int32 group_call_id_, string const &title_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1228825139;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -111647,7 +115117,7 @@ class setProfilePhoto final : public Function {
  public:
   /// Profile photo to set.
   object_ptr<InputChatPhoto> photo_;
-  /// Pass true to set a public photo, which will be visible even the main photo is hidden by privacy settings.
+  /// Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
   bool is_public_;
 
   /**
@@ -111663,7 +115133,7 @@ class setProfilePhoto final : public Function {
    * Returns object_ptr<Ok>.
    *
    * \param[in] photo_ Profile photo to set.
-   * \param[in] is_public_ Pass true to set a public photo, which will be visible even the main photo is hidden by privacy settings.
+   * \param[in] is_public_ Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
    */
   setProfilePhoto(object_ptr<InputChatPhoto> &&photo_, bool is_public_);
 
@@ -112415,8 +115885,8 @@ class setStoryReaction final : public Function {
   }
 
  public:
-  /// The identifier of the sender of the story.
-  int53 story_sender_chat_id_;
+  /// The identifier of the poster of the story.
+  int53 story_poster_chat_id_;
   /// The identifier of the story.
   int32 story_id_;
   /// Type of the reaction to set; pass null to remove the reaction. Custom emoji reactions can be used only by Telegram Premium users. Paid reactions can't be set.
@@ -112436,15 +115906,15 @@ class setStoryReaction final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ The identifier of the sender of the story.
+   * \param[in] story_poster_chat_id_ The identifier of the poster of the story.
    * \param[in] story_id_ The identifier of the story.
    * \param[in] reaction_type_ Type of the reaction to set; pass null to remove the reaction. Custom emoji reactions can be used only by Telegram Premium users. Paid reactions can't be set.
    * \param[in] update_recent_reactions_ Pass true if the reaction needs to be added to recent reactions.
    */
-  setStoryReaction(int53 story_sender_chat_id_, int32 story_id_, object_ptr<ReactionType> &&reaction_type_, bool update_recent_reactions_);
+  setStoryReaction(int53 story_poster_chat_id_, int32 story_id_, object_ptr<ReactionType> &&reaction_type_, bool update_recent_reactions_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -1400156249;
+  static const std::int32_t ID = 250731529;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -113088,6 +116558,59 @@ class setVideoChatDefaultParticipant final : public Function {
 class ok;
 
 /**
+ * Sets title of a video chat; requires groupCall.can_be_managed right.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class setVideoChatTitle final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// New group call title; 1-64 characters.
+  string title_;
+
+  /**
+   * Default constructor for a function, which sets title of a video chat; requires groupCall.can_be_managed right.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  setVideoChatTitle();
+
+  /**
+   * Creates a function, which sets title of a video chat; requires groupCall.can_be_managed right.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] title_ New group call title; 1-64 characters.
+   */
+  setVideoChatTitle(int32 group_call_id_, string const &title_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1915482994;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
  * Shares a chat after pressing a keyboardButtonTypeRequestChat button with the bot.
  *
  * Returns object_ptr<Ok>.
@@ -113262,7 +116785,7 @@ class shareUsersWithBot final : public Function {
 class ok;
 
 /**
- * Starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+ * Starts recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
  *
  * Returns object_ptr<Ok>.
  */
@@ -113286,14 +116809,14 @@ class startGroupCallRecording final : public Function {
   bool use_portrait_orientation_;
 
   /**
-   * Default constructor for a function, which starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+   * Default constructor for a function, which starts recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
    *
    * Returns object_ptr<Ok>.
    */
   startGroupCallRecording();
 
   /**
-   * Creates a function, which starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+   * Creates a function, which starts recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
    *
    * Returns object_ptr<Ok>.
    *
@@ -113377,11 +116900,11 @@ class startGroupCallScreenSharing final : public Function {
 class ok;
 
 /**
- * Starts a scheduled group call.
+ * Starts a scheduled video chat.
  *
  * Returns object_ptr<Ok>.
  */
-class startScheduledGroupCall final : public Function {
+class startScheduledVideoChat final : public Function {
   /**
    * Returns identifier uniquely determining a type of the object.
    * \return this->ID.
@@ -113391,27 +116914,27 @@ class startScheduledGroupCall final : public Function {
   }
 
  public:
-  /// Group call identifier.
+  /// Group call identifier of the video chat.
   int32 group_call_id_;
 
   /**
-   * Default constructor for a function, which starts a scheduled group call.
+   * Default constructor for a function, which starts a scheduled video chat.
    *
    * Returns object_ptr<Ok>.
    */
-  startScheduledGroupCall();
+  startScheduledVideoChat();
 
   /**
-   * Creates a function, which starts a scheduled group call.
+   * Creates a function, which starts a scheduled video chat.
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] group_call_id_ Group call identifier of the video chat.
    */
-  explicit startScheduledGroupCall(int32 group_call_id_);
+  explicit startScheduledVideoChat(int32 group_call_id_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1519938838;
+  static const std::int32_t ID = -1300829822;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -115329,59 +118852,6 @@ class toggleGiftIsSaved final : public Function {
 class ok;
 
 /**
- * Toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
- *
- * Returns object_ptr<Ok>.
- */
-class toggleGroupCallEnabledStartNotification final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Group call identifier.
-  int32 group_call_id_;
-  /// New value of the enabled_start_notification setting.
-  bool enabled_start_notification_;
-
-  /**
-   * Default constructor for a function, which toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
-   *
-   * Returns object_ptr<Ok>.
-   */
-  toggleGroupCallEnabledStartNotification();
-
-  /**
-   * Creates a function, which toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
-   *
-   * Returns object_ptr<Ok>.
-   *
-   * \param[in] group_call_id_ Group call identifier.
-   * \param[in] enabled_start_notification_ New value of the enabled_start_notification setting.
-   */
-  toggleGroupCallEnabledStartNotification(int32 group_call_id_, bool enabled_start_notification_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 707839826;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ok>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
-class ok;
-
-/**
  * Toggles whether current user's video is enabled.
  *
  * Returns object_ptr<Ok>.
@@ -115485,65 +118955,12 @@ class toggleGroupCallIsMyVideoPaused final : public Function {
   void store(TlStorerToString &s, const char *field_name) const final;
 };
 
-class ok;
-
-/**
- * Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_toggle_mute_new_participants group call flag.
- *
- * Returns object_ptr<Ok>.
- */
-class toggleGroupCallMuteNewParticipants final : public Function {
-  /**
-   * Returns identifier uniquely determining a type of the object.
-   * \return this->ID.
-   */
-  std::int32_t get_id() const final {
-    return ID;
-  }
-
- public:
-  /// Group call identifier.
-  int32 group_call_id_;
-  /// New value of the mute_new_participants setting.
-  bool mute_new_participants_;
-
-  /**
-   * Default constructor for a function, which toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_toggle_mute_new_participants group call flag.
-   *
-   * Returns object_ptr<Ok>.
-   */
-  toggleGroupCallMuteNewParticipants();
-
-  /**
-   * Creates a function, which toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_toggle_mute_new_participants group call flag.
-   *
-   * Returns object_ptr<Ok>.
-   *
-   * \param[in] group_call_id_ Group call identifier.
-   * \param[in] mute_new_participants_ New value of the mute_new_participants setting.
-   */
-  toggleGroupCallMuteNewParticipants(int32 group_call_id_, bool mute_new_participants_);
-
-  /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 284082626;
-
-  /// Typedef for the type returned by the function.
-  using ReturnType = object_ptr<ok>;
-
-  /**
-   * Helper function for to_string method. Appends string representation of the object to the storer.
-   * \param[in] s Storer to which object string representation will be appended.
-   * \param[in] field_name Object field_name if applicable.
-   */
-  void store(TlStorerToString &s, const char *field_name) const final;
-};
-
 class MessageSender;
 
 class ok;
 
 /**
- * Toggles whether a group call participant hand is rased.
+ * Toggles whether a group call participant hand is rased; for video chats only.
  *
  * Returns object_ptr<Ok>.
  */
@@ -115561,24 +118978,24 @@ class toggleGroupCallParticipantIsHandRaised final : public Function {
   int32 group_call_id_;
   /// Participant identifier.
   object_ptr<MessageSender> participant_id_;
-  /// Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed group call flag to lower other's hand.
+  /// Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed right to lower other's hand.
   bool is_hand_raised_;
 
   /**
-   * Default constructor for a function, which toggles whether a group call participant hand is rased.
+   * Default constructor for a function, which toggles whether a group call participant hand is rased; for video chats only.
    *
    * Returns object_ptr<Ok>.
    */
   toggleGroupCallParticipantIsHandRaised();
 
   /**
-   * Creates a function, which toggles whether a group call participant hand is rased.
+   * Creates a function, which toggles whether a group call participant hand is rased; for video chats only.
    *
    * Returns object_ptr<Ok>.
    *
    * \param[in] group_call_id_ Group call identifier.
    * \param[in] participant_id_ Participant identifier.
-   * \param[in] is_hand_raised_ Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed group call flag to lower other's hand.
+   * \param[in] is_hand_raised_ Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed right to lower other's hand.
    */
   toggleGroupCallParticipantIsHandRaised(int32 group_call_id_, object_ptr<MessageSender> &&participant_id_, bool is_hand_raised_);
 
@@ -115934,7 +119351,7 @@ class toggleStoryIsPostedToChatPage final : public Function {
 
  public:
   /// Identifier of the chat that posted the story.
-  int53 story_sender_chat_id_;
+  int53 story_poster_chat_id_;
   /// Identifier of the story.
   int32 story_id_;
   /// Pass true to make the story accessible after expiration; pass false to make it private.
@@ -115952,14 +119369,14 @@ class toggleStoryIsPostedToChatPage final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
-   * \param[in] story_sender_chat_id_ Identifier of the chat that posted the story.
+   * \param[in] story_poster_chat_id_ Identifier of the chat that posted the story.
    * \param[in] story_id_ Identifier of the story.
    * \param[in] is_posted_to_chat_page_ Pass true to make the story accessible after expiration; pass false to make it private.
    */
-  toggleStoryIsPostedToChatPage(int53 story_sender_chat_id_, int32 story_id_, bool is_posted_to_chat_page_);
+  toggleStoryIsPostedToChatPage(int53 story_poster_chat_id_, int32 story_id_, bool is_posted_to_chat_page_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = -300987649;
+  static const std::int32_t ID = -2141806228;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -116066,6 +119483,59 @@ class toggleSupergroupHasAggressiveAntiSpamEnabled final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 1748956943;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Toggles whether messages are automatically translated in the channel chat; requires can_change_info administrator right in the channel. The chat must have at least chatBoostFeatures.min_automatic_translation_boost_level boost level to enable automatic translation.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class toggleSupergroupHasAutomaticTranslation final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// The identifier of the channel.
+  int53 supergroup_id_;
+  /// The new value of has_automatic_translation.
+  bool has_automatic_translation_;
+
+  /**
+   * Default constructor for a function, which toggles whether messages are automatically translated in the channel chat; requires can_change_info administrator right in the channel. The chat must have at least chatBoostFeatures.min_automatic_translation_boost_level boost level to enable automatic translation.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  toggleSupergroupHasAutomaticTranslation();
+
+  /**
+   * Creates a function, which toggles whether messages are automatically translated in the channel chat; requires can_change_info administrator right in the channel. The chat must have at least chatBoostFeatures.min_automatic_translation_boost_level boost level to enable automatic translation.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] supergroup_id_ The identifier of the channel.
+   * \param[in] has_automatic_translation_ The new value of has_automatic_translation.
+   */
+  toggleSupergroupHasAutomaticTranslation(int53 supergroup_id_, bool has_automatic_translation_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = -184993048;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -116561,6 +120031,165 @@ class toggleUsernameIsActive final : public Function {
 class ok;
 
 /**
+ * Toggles whether the current user will receive a notification when the video chat starts; for scheduled video chats only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class toggleVideoChatEnabledStartNotification final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// New value of the enabled_start_notification setting.
+  bool enabled_start_notification_;
+
+  /**
+   * Default constructor for a function, which toggles whether the current user will receive a notification when the video chat starts; for scheduled video chats only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  toggleVideoChatEnabledStartNotification();
+
+  /**
+   * Creates a function, which toggles whether the current user will receive a notification when the video chat starts; for scheduled video chats only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] enabled_start_notification_ New value of the enabled_start_notification setting.
+   */
+  toggleVideoChatEnabledStartNotification(int32 group_call_id_, bool enabled_start_notification_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1851489086;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Toggles whether new participants of a video chat can be unmuted only by administrators of the video chat. Requires groupCall.can_toggle_mute_new_participants right.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class toggleVideoChatMuteNewParticipants final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Group call identifier.
+  int32 group_call_id_;
+  /// New value of the mute_new_participants setting.
+  bool mute_new_participants_;
+
+  /**
+   * Default constructor for a function, which toggles whether new participants of a video chat can be unmuted only by administrators of the video chat. Requires groupCall.can_toggle_mute_new_participants right.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  toggleVideoChatMuteNewParticipants();
+
+  /**
+   * Creates a function, which toggles whether new participants of a video chat can be unmuted only by administrators of the video chat. Requires groupCall.can_toggle_mute_new_participants right.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] group_call_id_ Group call identifier.
+   * \param[in] mute_new_participants_ New value of the mute_new_participants setting.
+   */
+  toggleVideoChatMuteNewParticipants(int32 group_call_id_, bool mute_new_participants_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 987023756;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Transfer Telegram Stars from the business account to the business bot; for bots only.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class transferBusinessAccountStars final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of business connection.
+  string business_connection_id_;
+  /// Number of Telegram Stars to transfer.
+  int53 star_count_;
+
+  /**
+   * Default constructor for a function, which transfer Telegram Stars from the business account to the business bot; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  transferBusinessAccountStars();
+
+  /**
+   * Creates a function, which transfer Telegram Stars from the business account to the business bot; for bots only.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] business_connection_id_ Unique identifier of business connection.
+   * \param[in] star_count_ Number of Telegram Stars to transfer.
+   */
+  transferBusinessAccountStars(string const &business_connection_id_, int53 star_count_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 732562464;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
  * Changes the owner of a chat; requires owner privileges in the chat. Use the method canTransferOwnership to check whether the ownership can be transferred from the current session. Available only for supergroups and channel chats.
  *
  * Returns object_ptr<Ok>.
@@ -116633,6 +120262,8 @@ class transferGift final : public Function {
   }
 
  public:
+  /// Unique identifier of business connection on behalf of which to send the request; for bots only.
+  string business_connection_id_;
   /// Identifier of the gift.
   string received_gift_id_;
   /// Identifier of the user or the channel chat that will receive the gift.
@@ -116652,14 +120283,15 @@ class transferGift final : public Function {
    *
    * Returns object_ptr<Ok>.
    *
+   * \param[in] business_connection_id_ Unique identifier of business connection on behalf of which to send the request; for bots only.
    * \param[in] received_gift_id_ Identifier of the gift.
    * \param[in] new_owner_id_ Identifier of the user or the channel chat that will receive the gift.
    * \param[in] star_count_ The amount of Telegram Stars required to pay for the transfer.
    */
-  transferGift(string const &received_gift_id_, object_ptr<MessageSender> &&new_owner_id_, int53 star_count_);
+  transferGift(string const &business_connection_id_, string const &received_gift_id_, object_ptr<MessageSender> &&new_owner_id_, int53 star_count_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1658538791;
+  static const std::int32_t ID = -1167293126;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
@@ -117004,6 +120636,8 @@ class upgradeGift final : public Function {
   }
 
  public:
+  /// Unique identifier of business connection on behalf of which to send the request; for bots only.
+  string business_connection_id_;
   /// Identifier of the gift.
   string received_gift_id_;
   /// Pass true to keep the original gift text, sender and receiver in the upgraded gift.
@@ -117023,14 +120657,15 @@ class upgradeGift final : public Function {
    *
    * Returns object_ptr<UpgradeGiftResult>.
    *
+   * \param[in] business_connection_id_ Unique identifier of business connection on behalf of which to send the request; for bots only.
    * \param[in] received_gift_id_ Identifier of the gift.
    * \param[in] keep_original_details_ Pass true to keep the original gift text, sender and receiver in the upgraded gift.
    * \param[in] star_count_ The amount of Telegram Stars required to pay for the upgrade. It the gift has prepaid_upgrade_star_count &gt; 0, then pass 0, otherwise, pass gift.upgrade_star_count.
    */
-  upgradeGift(string const &received_gift_id_, bool keep_original_details_, int53 star_count_);
+  upgradeGift(string const &business_connection_id_, string const &received_gift_id_, bool keep_original_details_, int53 star_count_);
 
   /// Identifier uniquely determining a type of the object.
-  static const std::int32_t ID = 1191312523;
+  static const std::int32_t ID = -1782136103;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<upgradeGiftResult>;
@@ -117264,6 +120899,56 @@ class viewPremiumFeature final : public Function {
 
   /// Identifier uniquely determining a type of the object.
   static const std::int32_t ID = 192950706;
+
+  /// Typedef for the type returned by the function.
+  using ReturnType = object_ptr<ok>;
+
+  /**
+   * Helper function for to_string method. Appends string representation of the object to the storer.
+   * \param[in] s Storer to which object string representation will be appended.
+   * \param[in] field_name Object field_name if applicable.
+   */
+  void store(TlStorerToString &s, const char *field_name) const final;
+};
+
+class ok;
+
+/**
+ * Informs TDLib that the user fully viewed a sponsored chat.
+ *
+ * Returns object_ptr<Ok>.
+ */
+class viewSponsoredChat final : public Function {
+  /**
+   * Returns identifier uniquely determining a type of the object.
+   * \return this->ID.
+   */
+  std::int32_t get_id() const final {
+    return ID;
+  }
+
+ public:
+  /// Unique identifier of the sponsored chat.
+  int53 sponsored_chat_unique_id_;
+
+  /**
+   * Default constructor for a function, which informs TDLib that the user fully viewed a sponsored chat.
+   *
+   * Returns object_ptr<Ok>.
+   */
+  viewSponsoredChat();
+
+  /**
+   * Creates a function, which informs TDLib that the user fully viewed a sponsored chat.
+   *
+   * Returns object_ptr<Ok>.
+   *
+   * \param[in] sponsored_chat_unique_id_ Unique identifier of the sponsored chat.
+   */
+  explicit viewSponsoredChat(int53 sponsored_chat_unique_id_);
+
+  /// Identifier uniquely determining a type of the object.
+  static const std::int32_t ID = 1722644778;
 
   /// Typedef for the type returned by the function.
   using ReturnType = object_ptr<ok>;
