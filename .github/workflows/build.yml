@@ -8,10 +8,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      AUTH_STRING: ${{ secrets.AUTH_STRING_00 }}
-      MESSAGE_LINK: ${{ secrets.MESSAGE_LINK }}
-      CHAT_ID: ${{ secrets.CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
 
