@@ -2,7 +2,7 @@ prefix=/home/runner/work/build-tdlib/td
 
 Name: tdjson_static
 Description: Telegram Library - JSON interface (static)
-Version: 1.8.49
+Version: 1.8.56
 
 CFlags: -I"${prefix}/include"
 Libs: -L"${prefix}/lib" -ltdjson_static
