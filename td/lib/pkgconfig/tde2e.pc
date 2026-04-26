@@ -2,7 +2,7 @@ prefix=/home/runner/work/build-tdlib/td
 
 Name: tde2e
 Description: Telegram Library - E2E
-Version: 1.8.56
+Version: 1.8.63
 
 CFlags: -I"${prefix}/include"
 Libs: -L"${prefix}/lib" -ltde2e
